@@ -1,0 +1,29 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Background and related works}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Motivation}{chapter.1}% 3
+\BOOKMARK [0][-]{chapter.2}{Aims and Objectives}{}% 4
+\BOOKMARK [0][-]{chapter.3}{Design}{}% 5
+\BOOKMARK [1][-]{section.3.1}{Basic assumptions}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.2}{Overall design}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.3}{Basic components}{chapter.3}% 8
+\BOOKMARK [2][-]{subsection.3.3.1}{Data collector design}{section.3.3}% 9
+\BOOKMARK [2][-]{subsection.3.3.2}{Data preprocessor design}{section.3.3}% 10
+\BOOKMARK [2][-]{subsection.3.3.3}{Model design}{section.3.3}% 11
+\BOOKMARK [2][-]{subsection.3.3.4}{Evaluation layer design}{section.3.3}% 12
+\BOOKMARK [2][-]{subsection.3.3.5}{Visualization design}{section.3.3}% 13
+\BOOKMARK [0][-]{chapter.4}{Data collection and processing}{}% 14
+\BOOKMARK [1][-]{section.4.1}{Social media dataset}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.2}{Benchmark}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.3}{Data collection}{chapter.4}% 17
+\BOOKMARK [2][-]{subsection.4.3.1}{Twitter dataset collection}{section.4.3}% 18
+\BOOKMARK [2][-]{subsection.4.3.2}{Fluview dataset collection}{section.4.3}% 19
+\BOOKMARK [1][-]{section.4.4}{Data Preprocessing}{chapter.4}% 20
+\BOOKMARK [2][-]{subsection.4.4.1}{Unify data structure}{section.4.4}% 21
+\BOOKMARK [2][-]{subsection.4.4.2}{Manually screening}{section.4.4}% 22
+\BOOKMARK [2][-]{subsection.4.4.3}{Keywords search}{section.4.4}% 23
+\BOOKMARK [2][-]{subsection.4.4.4}{Supervised classification}{section.4.4}% 24
+\BOOKMARK [0][-]{chapter.5}{Progress}{}% 25
+\BOOKMARK [1][-]{section.5.1}{Project management}{chapter.5}% 26
+\BOOKMARK [1][-]{section.5.2}{Conclusion and Future work}{chapter.5}% 27
+\BOOKMARK [0][-]{Item.34}{Bibliography}{}% 28
+\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 29

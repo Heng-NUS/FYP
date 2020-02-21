@@ -1,0 +1,23 @@
+This chapter covers the progress made so far and the remaining tasks needed to be done.
+\section{Project management}
+This section records the weekly progress of this project so far, starting from Oct 20, 2019. Following is the progress list ranked by chronological order:
+\begin{itemize}
+    \item Oct 27, 2019: Searched and read 13 papers related to our project, having a basic idea in mind. Wrote some sketch of functions that will be used in our implementation.
+    \item Nov 03, 2019: Searched and downloaded alternative twitter dataset. Implemented functions that can batch process the downloaded files (unzip the whole directory recursively). Built a preliminary exclusion dictionary used to filter out irrelevant tweets. Implemented functions that can batch filter the unzipped twitter json files. Prepared and past the Gre exam. 
+    \item Nov 10, 2019: Searched and collected CDC dataset. Implemented functions that can process the CDC file. Wrote interim report (Data collection section). Searched and read papers related to filtering tweets. Finished coursework 1 of Computer Graphics.
+    \item Nov 17, 2019: Wrote interim report (Data collection and Design section), Implemented functions used to regularize our dataset. Set filtering rules, implemented functions used to label our dataset, and manully labeled 1000 tweets.
+    \item Nov 24, 2019: Found the filtered dataset contains few samples, and can hardly be used to analyze. Therefore, the topic was changed slightly based on the dataset itself. Wrote interim report of Computer Graphics project.
+    \item Dec 01, 2019: Finished coursework2 of Computer Graphics, implemented functions for Computer Graphics project.
+    \item Dec 08, 2019: Finished coursework2 of Computing Ethics, built 3D scene for Computer Graphics project.
+    \item Dec 15, 2019: Finished the Computer Graphics project.
+\end{itemize} 
+\section{Conclusion and Future work}
+So far, our project is at the end of the first stage. We collected the one social media dataset of Twitter and one benchmark dataset from CDC. Our programme is implemented with various functions to process them, including keyword search, unifying data structure, data regularization, etc. However, we found that the data volume after preprocessing may not be able to support our initial design (the percentage of useful data is less than 1/100000, after second round filtering, the number could be much lower), even though we have more than one billion metadata. Therefore, the next work is changing our initial plan slightly based on current dataset to ensure we have convincing data volume for experiment. This could be done by: (1) changing our filtering method, relaxing the filtering criteria; (2) changing the topic (but still related to healthcare); (3) collecting more data. For the second choice, the system design may change slightly based on the final topic. Generally, the remaining tasks includes:
+\begin{enumerate}
+    \item Find new topic/dataset/preprocessing method to aquire enough training data.
+    \item Re-design some components of our system based on the changes
+    \item Re-implement some functions (mostly related to preprocessing) based on the changes.
+    \item Implement the remaining components of our algorithm based on the new design (if re-designed)
+    \item Design experiment methods and implement functions for evaluation.
+    \item Write final report
+\end{enumerate}

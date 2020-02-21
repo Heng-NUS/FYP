@@ -1,0 +1,51 @@
+%-- coding: UTF-8 --
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{sectsty} % Enables custom section titles
+\include{thesis.preamble}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]   
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+\graphicspath{ {images/} }
+
+\begin{document}
+\title{Social Media Analytics for Healthcare Surveillance \\using Text Mining}
+\author{Yuyang Liu}
+\submitdate{Oct 2019}
+\degree{BSc Computer Science}
+\studentid{16522049}
+\supervisor{Heng Yu}
+\maketitle
+
+%\tableofcontents %创建目录
+\chapter{Background information and motivation}
+\input{chapters/chapter01}
+ 
+\chapter{Aims and Objectives}
+\input{chapters/chapter02}
+ 
+\chapter{Project Plan}
+\input{chapters/chapter03}
+ 
+
+% \newpage
+% \section{Background information and motivation}
+
+% \newpage
+% \section{Aims and Objectives}
+
+% \newpage
+% \section{Project Plan}
+
+% \newpage
+% \section{References}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{acm}
+\bibliography{bibliography/bibliography}
+
+\end{document}

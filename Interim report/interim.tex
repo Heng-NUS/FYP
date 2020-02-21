@@ -1,0 +1,58 @@
+%-- coding: UTF-8 --
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{sectsty} % Enables custom section titles
+\include{thesis.preamble}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]   
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true, %Colours links instead of ugly boxes
+  urlcolor = blue, %Colour for external hyperlinks
+  linkcolor = blue, %Colour of internal links
+  citecolor = red %Colour of citations
+}
+\graphicspath{ {images/} }
+
+\begin{document}
+\title{Social Media Analytics for Healthcare Surveillance \\using Text Mining}
+\author{Yuyang Liu}
+\submitdate{Oct 2019}
+\degree{BSc Computer Science}
+\studentid{16522049}
+\supervisor{Heng Yu}
+\normallinespacing
+\maketitle
+
+\tableofcontents %创建目录
+\body
+\chapter{Introduction} %chapter01
+\input{chapters/introduction}
+ 
+\chapter{Aims and Objectives}
+\input{chapters/aims}
+ 
+\chapter{Design}
+\input{chapters/design}
+
+\chapter{Data collection and processing}
+\input{chapters/data}
+
+%\chapter{Experiment and evaluation}
+
+\chapter{Progress}
+\input{chapters/progress}
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{acm}
+\bibliography{bibliography/bibliography}
+\addcontentsline{toc}{chapter}{Appendix}
+
+\end{document}

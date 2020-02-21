@@ -1,0 +1,4 @@
+{
+    "include_words":["fever", "cough", "feverish", "sore throat", "runny nose", "stuffy nose", "headache", "Nasal congestion", "diarrhea", "bluish lips", "bluish face", "dehydration", "flu", "influenza", "catarrh", "common cold", "coughing", "feverous", "h1n1", "h5n1", "epidemic", "cholera", "ebola", "measles", "flu vaccine", "flu shot", "flu jab"],
+    "exclude_words":["Wizkid", "tattoo fever", "baby fever", "fever pitch"]
+}

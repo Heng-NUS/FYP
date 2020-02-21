@@ -1,0 +1,70 @@
+\begin{thebibliography}{10}
+
+\bibitem{andreu2015big}
+{\sc Andreu-Perez, J., Poon, C.~C., Merrifield, R.~D., Wong, S.~T., and Yang,
+  G.-Z.}
+\newblock Big data for health.
+\newblock {\em IEEE journal of biomedical and health informatics 19}, 4 (2015),
+  1193--1208.
+
+\bibitem{chen2017disease}
+{\sc Chen, M., Hao, Y., Hwang, K., Wang, L., and Wang, L.}
+\newblock Disease prediction by machine learning over big data from healthcare
+  communities.
+\newblock {\em Ieee Access 5\/} (2017), 8869--8879.
+
+\bibitem{chen2017reality}
+{\sc Chen, Y., Crespi, N., Ortiz, A.~M., and Shu, L.}
+\newblock Reality mining: A prediction algorithm for disease dynamics based on
+  mobile big data.
+\newblock {\em Information Sciences 379\/} (2017), 82--93.
+
+\bibitem{denecke2009valuable}
+{\sc Denecke, K., and Nejdl, W.}
+\newblock How valuable is medical social media data? content analysis of the
+  medical web.
+\newblock {\em Information Sciences 179}, 12 (2009), 1870--1880.
+
+\bibitem{elkin2017network}
+{\sc Elkin, L.~S., Topal, K., and Bebek, G.}
+\newblock Network based model of social media big data predicts contagious
+  disease diffusion.
+\newblock {\em Information discovery and delivery 45}, 3 (2017), 110--120.
+
+\bibitem{ginsberg2009detecting}
+{\sc Ginsberg, J., Mohebbi, M.~H., Patel, R.~S., Brammer, L., Smolinski, M.~S.,
+  and Brilliant, L.}
+\newblock Detecting influenza epidemics using search engine query data.
+\newblock {\em Nature 457}, 7232 (2009), 1012.
+
+\bibitem{lee2013real}
+{\sc Lee, K., Agrawal, A., and Choudhary, A.}
+\newblock Real-time disease surveillance using twitter data: demonstration on
+  flu and cancer.
+\newblock In {\em Proceedings of the 19th ACM SIGKDD international conference
+  on Knowledge discovery and data mining\/} (2013), ACM, pp.~1474--1477.
+
+\bibitem{sadilek2012predicting}
+{\sc Sadilek, A., Kautz, H., and Silenzio, V.}
+\newblock Predicting disease transmission from geo-tagged micro-blog data.
+\newblock In {\em Twenty-Sixth AAAI Conference on Artificial Intelligence\/}
+  (2012).
+
+\bibitem{salathe2011assessing}
+{\sc Salath{\'e}, M., and Khandelwal, S.}
+\newblock Assessing vaccination sentiments with online social media:
+  implications for infectious disease dynamics and control.
+\newblock {\em PLoS computational biology 7}, 10 (2011), e1002199.
+
+\bibitem{schmidt2012trending}
+{\sc Schmidt, C.~W.}
+\newblock Trending now: using social media to predict and track disease
+  outbreaks, 2012.
+
+\bibitem{signorini2011use}
+{\sc Signorini, A., Segre, A.~M., and Polgreen, P.~M.}
+\newblock The use of twitter to track levels of disease activity and public
+  concern in the us during the influenza a h1n1 pandemic.
+\newblock {\em PloS one 6}, 5 (2011), e19467.
+
+\end{thebibliography}
