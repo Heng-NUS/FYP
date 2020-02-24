@@ -19,11 +19,22 @@
 \BOOKMARK [2][-]{subsection.4.3.2}{Fluview dataset collection}{section.4.3}% 19
 \BOOKMARK [1][-]{section.4.4}{Data Preprocessing}{chapter.4}% 20
 \BOOKMARK [2][-]{subsection.4.4.1}{Unify data structure}{section.4.4}% 21
-\BOOKMARK [2][-]{subsection.4.4.2}{Manually screening}{section.4.4}% 22
-\BOOKMARK [2][-]{subsection.4.4.3}{Keywords search}{section.4.4}% 23
-\BOOKMARK [2][-]{subsection.4.4.4}{Supervised classification}{section.4.4}% 24
-\BOOKMARK [0][-]{chapter.5}{Progress}{}% 25
-\BOOKMARK [1][-]{section.5.1}{Project management}{chapter.5}% 26
-\BOOKMARK [1][-]{section.5.2}{Conclusion and Future work}{chapter.5}% 27
-\BOOKMARK [0][-]{Item.34}{Bibliography}{}% 28
-\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 29
+\BOOKMARK [2][-]{subsection.4.4.2}{Text regularization}{section.4.4}% 22
+\BOOKMARK [2][-]{subsection.4.4.3}{Manually screening}{section.4.4}% 23
+\BOOKMARK [2][-]{subsection.4.4.4}{Keywords search}{section.4.4}% 24
+\BOOKMARK [2][-]{subsection.4.4.5}{Topical model}{section.4.4}% 25
+\BOOKMARK [2][-]{subsection.4.4.6}{Supervised classification}{section.4.4}% 26
+\BOOKMARK [0][-]{chapter.5}{Potential ethical issues}{}% 27
+\BOOKMARK [1][-]{section.5.1}{Ethical Issues}{chapter.5}% 28
+\BOOKMARK [2][-]{subsection.5.1.1}{Privacy Issues}{section.5.1}% 29
+\BOOKMARK [2][-]{subsection.5.1.2}{Trust, Safety and Reliability Issues}{section.5.1}% 30
+\BOOKMARK [2][-]{subsection.5.1.3}{Vulnerable Groups Issues}{section.5.1}% 31
+\BOOKMARK [1][-]{section.5.2}{Evaluation and Analysis}{chapter.5}% 32
+\BOOKMARK [2][-]{subsection.5.2.1}{Privacy Analysis}{section.5.2}% 33
+\BOOKMARK [2][-]{subsection.5.2.2}{Reliability Analysis}{section.5.2}% 34
+\BOOKMARK [2][-]{subsection.5.2.3}{Vulnerable Groups Analysis}{section.5.2}% 35
+\BOOKMARK [0][-]{chapter.6}{Progress}{}% 36
+\BOOKMARK [1][-]{section.6.1}{Project management}{chapter.6}% 37
+\BOOKMARK [1][-]{section.6.2}{Conclusion and Future work}{chapter.6}% 38
+\BOOKMARK [0][-]{Item.42}{Bibliography}{}% 39
+\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 40

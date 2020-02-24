@@ -1,5 +1,15 @@
 \begin{thebibliography}{10}
 
+\bibitem{ACM_C}
+{\sc {ACM}}.
+\newblock Acm code of ethics and professional conduct.
+\newblock \url{https://www.acm.org/code-of-ethics}, 2019.
+\newblock Accessed December 30, 2019.
+
+\bibitem{alexander2007deontological}
+{\sc Alexander, L., and Moore, M.}
+\newblock Deontological ethics (2007).
+
 \bibitem{andreu2015big}
 {\sc Andreu-Perez, J., Poon, C.~C., Merrifield, R.~D., Wong, S.~T., and Yang,
   G.-Z.}
@@ -13,6 +23,16 @@
 \newblock In {\em Proceedings of the conference on empirical methods in natural
   language processing\/} (2011), Association for Computational Linguistics,
   pp.~1568--1576.
+
+\bibitem{birsch2004moral}
+{\sc Birsch, D.}
+\newblock Moral responsibility for harm caused by computer system failures.
+\newblock {\em Ethics and Information Technology 6}, 4 (2004), 233--245.
+
+\bibitem{burkell2014facebook}
+{\sc Burkell, J., Fortier, A., Wong, L. L. Y.~C., and Simpson, J.~L.}
+\newblock Facebook: Public space, or private space?
+\newblock {\em Information, Communication \& Society 17}, 8 (2014), 974--985.
 
 \bibitem{cambridge}
 {\sc {Cambridge Dictionary}}.
@@ -74,6 +94,11 @@
   unstructured data}.
 \newblock Cambridge university press, 2007.
 
+\bibitem{felt2008privacy}
+{\sc Felt, A., and Evans, D.}
+\newblock Privacy protection for social networking platforms.
+\newblock Citeseer.
+
 \bibitem{ginsberg2009detecting}
 {\sc Ginsberg, J., Mohebbi, M.~H., Patel, R.~S., Brammer, L., Smolinski, M.~S.,
   and Brilliant, L.}
@@ -95,6 +120,13 @@
 {\sc {Internet Archive}}.
 \newblock \url{https://archive.org/}, 2019.
 \newblock Accessed December 8, 2019.
+
+\bibitem{archive_pri}
+{\sc {Internet Archive}}.
+\newblock Internet archive's terms of use, privacy policy, and copyright
+  policy.
+\newblock \url{https://archive.org/about/terms.php}, 2019.
+\newblock Accessed December 30, 2019.
 
 \bibitem{jivani2011comparative}
 {\sc Jivani, A.~G., et~al.}
@@ -126,6 +158,12 @@
   flu and cancer.
 \newblock In {\em Proceedings of the 19th ACM SIGKDD international conference
   on Knowledge discovery and data mining\/} (2013), ACM, pp.~1474--1477.
+
+\bibitem{mill2016utilitarianism}
+{\sc Mill, J.~S.}
+\newblock Utilitarianism.
+\newblock In {\em Seven masterpieces of philosophy}. Routledge, 2016,
+  pp.~337--383.
 
 \bibitem{omary2010machine}
 {\sc Omary, Z., and Mtenzi, F.}
@@ -169,11 +207,27 @@
   concern in the us during the influenza a h1n1 pandemic.
 \newblock {\em PloS one 6}, 5 (2011), e19467.
 
+\bibitem{smith2012big}
+{\sc Smith, M., Szongott, C., Henne, B., and Von~Voigt, G.}
+\newblock Big data privacy issues in public social media.
+\newblock In {\em 2012 6th IEEE International Conference on Digital Ecosystems
+  and Technologies (DEST)\/} (2012), IEEE, pp.~1--6.
+
+\bibitem{solove2007ven}
+{\sc Solove, D.~J.}
+\newblock I've got nothing to hide and other misunderstandings of privacy.
+\newblock {\em San Diego L. Rev. 44\/} (2007), 745.
+
 \bibitem{pytho_emo}
 {\sc {Taehoon Kim and Kevin Wurster}}.
 \newblock emoji 0.5.4.
 \newblock \url{https://pypi.org/project/emoji/}, 2019.
 \newblock Accessed December 15, 2019.
+
+\bibitem{tankard2012big}
+{\sc Tankard, C.}
+\newblock Big data security.
+\newblock {\em Network security 2012}, 7 (2012), 5--8.
 
 \bibitem{twitter_dev}
 {\sc {Twitter}}.
@@ -182,6 +236,12 @@
   \url{https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json},
   2019.
 \newblock Accessed December 17, 2019.
+
+\bibitem{twitter_pri}
+{\sc {Twitter}}.
+\newblock Twitter privacy policy.
+\newblock \url{https://twitter.com/en/privacy}, 2019.
+\newblock Accessed December 30, 2019.
 
 \bibitem{emo_list}
 {\sc {unicode.org}}.

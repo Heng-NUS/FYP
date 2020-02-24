@@ -71,49 +71,8 @@ According twitter's official document \cite{twitter_dev}, there are two classes 
     \label{fig:twitter_place}
 \end{figure}
 
-\subsection{Manually screening}
-\label{sec:Manually screening}
-We have more than 4 million tweets per day in our dataset, it's obviously not all of them are relevant to our task. Based on our initial design, we only accept tweets written in English. While reviewing on the dataset, we found that there are massive retweets in it (8312846 of 21694196, roughly 38\%). Defined by Twitter\cite{twitter_dev}, retweeting is forwarding content wrote by other users (like forwarding an email). Although retweets can be used in some tasks such as sentiment analysis (mainly focus the counts of being retweeted) \cite{perdana2018combining}, we don't think it will contribute to our prediction. As stated by \cite{kim2016competitive}, retweets don't have user's own view and should be removed in data cleaning. We need tweets that can show the health condition of the user or of people the user cares. In addition, retweets don't have any geographical information \cite{twitter_dev}, which is the key component in our diffusion modeling. Therefore, we decided to exclude all retweets.\\
-\\
-Since Twitter dataset contains massive tweets which are irrelevant to flu, before we analyze the data, further filtration is required. We adopt two steps to filter out irrelevant data, keywords search and supervised classification. Following sections are the details of these two methods.
-
-\subsection{Keywords search}
-\label{sec:Keywords search}
-To filter out irrelevant data, \cite{aramaki2011twitter} used a simple word look-up of ``influenza'',which we think may lose massive valuable data. In inspired by \cite{lamb2013separating,lampos2010flu}, we first create a word list related to flu based on Flu Symptoms \cite{cdc.symp} Cambridge Dictionary \cite{cambridge} and relatedwords.org \cite{relatedwords.org}. The complete word list can be seen in table \ref{tab:words list}, note that not all the words from the sources are added to our list. Professional terms are excluded since they are hardly used in colloquialism. Words that are wildly used in other scenarios (such as chill, cold) and phrases that contain keywords in our list (such as asian influenza) are not added. We then filter tweets according to the list (ignore case). In this step, we initially adopted a relatively lose filtering strategy: accept tweets containing any string in our list. The filtering result shows that the majority of the filtered tweets are irrelevant to diseases. The possible reasons can be that people will use such words even when they are healthy, and some words are substring of other words (such as chill Achill, flu influence).
-\begin{table}[!htbp]
-    \centering
-    \hspace{0.5cm}
-    \begin{tabular}{p{90pt}p{320pt}}
-        Source & Word list \\ \hline
-        \href{https://www.cdc.gov/flu/symptoms/symptoms.htm}{CDC} &  fever, feverish, sore throat, runny nose, stuffy nose, headache, nasal congestion, diarrhea, bluish lips, bluish face, dehydration\\ \hline
-        \href{https://dictionary.cambridge.org/us/topics/disease-and-illness/colds-and-flu/}{Dictionary} & flu, catarrh, cough, common cold, influenza, sniffle, snuffle\\ \hline
-        \href{https://relatedwords.org/relatedto/flu}{relatedwords.org} & h1n1, h5n1, coughing, cholera, ebola, epidemic, feverous, measles \\ \hline
-    \end{tabular}
-    \caption{Inclusion list}
-    \label{tab:words list}
-\end{table}
-\\
-Table \ref{tab:filtering} shows the number of tweets after keywords filtering in the first 5 days in Oct 2018. 
-\begin{table}[!htbp]
-    \centering
-    \hspace{0.5cm}
-    \begin{tabular}{ccc}
-        Date & Original & Filtered \\ \hline
-        2018/10/01 & 4317376 & 5984 \\
-        2018/10/02 & 4349129 & 5740 \\
-        2018/10/03 & 4417333 & 5415 \\
-        2018/10/04 & 4337327 & 5676 \\
-        2018/10/05 & 4273031 & 5190 \\
-    \end{tabular}
-    \caption{Tweet counts after filtering}
-    \label{tab:filtering}
-\end{table}
-
-\subsection{Supervised classification}
-\label{sec:Supervised classification}
-To overcome the drawbacks of first round filtration, further filtration is required. \cite{elkin2017network} created another exclusion dictionary containing keywords and phrases indicating tweets should not be included in the filtered dataset, such as "sick and tired". But their experiment shows the accuracy of their method is roughly 70\%, which we think is relatively lower than our requirement. This result can result from their choice of exclusion words and their dataset.  Since we want to get a higer filtering accuracy, we decide to use a machine learning based classification method \cite{aramaki2011twitter}. We labeled our dataset, and trained a binary classifier. Following are our detailed methods:
-\begin{enumerate}
-    \item Text regularization: As mentioned in our design (section 3.2.2), the original text is unstructured, which can not be put in to our model directly and hard for labeling. In addition, each dataset has its own structure, meaning that there is no common regularization rule can be applied to all tasks. Here our regularization rule is built on the observation of our dataset and on our experience. Followings are common formats we observed and removed (or modified) in our dataset, expressed in regular expression (Python version):
+\subsection{Text regularization}
+As mentioned in our design (section 3.2.2), the original text is unstructured, which can not be put in to our model directly and hard for labeling. In addition, each dataset has its own structure, meaning that there is no common regularization rule can be applied to all tasks. Here our regularization rule is built on the observation of our dataset and on our experience. Followings are common formats we observed and removed (or modified) in our dataset, expressed in regular expression (Python version):
     \begin{itemize}
         \item retweet: retweeting is a way of forwarding content to others (like forwarding an email). It starts with a ``RT \@'' pattern. As we mentioned in section \ref{sec:Manually screening}, we removed all retweets.
         \item @ and \# Tags: in social media, @ refers to a person/group in a conversation, and the \# refers to a topic of conversation. Their regular expression are ``\@+[\verb|\|S]*'' and ``\#+[\verb|\|S]*'' respectively. In our preliminary filtered dataset, we found that some topics contain words in our inclusion list, such as \#ALDUBFever4ever. We exclude them. 
@@ -129,6 +88,67 @@ To overcome the drawbacks of first round filtration, further filtration is requi
         ``[a-zA-Z0-9\_.+-]+\@[a-zA-Z0-9-]+\verb|\|.[a-zA-Z0-9-.]+\$''
         \item html entities: a html entity can be regarded as escape characters used in html (eg. \&quot; represents ``'' sign). We use the Python's standard library ``html'' to translate it.
     \end{itemize}
+    In addition, for next steps, all the text are in lower case.
+
+\subsection{Manually screening}
+\label{sec:Manually screening}
+We have more than 4 million tweets per day in our dataset, it's obviously not all of them are relevant to our task. Based on our initial design, we only accept tweets written in English. While reviewing on the dataset, we found that there are massive retweets in it (8312846 of 21694196, roughly 38\%). Defined by Twitter\cite{twitter_dev}, retweeting is forwarding content wrote by other users (like forwarding an email). Although retweets can be used in some tasks such as sentiment analysis (mainly focus the counts of being retweeted) \cite{perdana2018combining}, we don't think it will contribute to our prediction. As stated by \cite{kim2016competitive}, retweets don't have user's own view and should be removed in data cleaning. We need tweets that can show the health condition of the user or of people the user cares. In addition, retweets don't have any geographical information \cite{twitter_dev}, which is the key component in our diffusion modeling. Therefore, we decided to exclude all retweets.\\ In addition, we exclude all non-English tweets. Table \ref{tab:manual} shows the result of manually screening operated on all tweets created at January 2018 in our metadata. Original data amount is 134704400, nearly 13.87\% are retweets, and 23.40\% are English. After screening, roughly 10.22\% tweets were left.
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{cccc}
+        Original & Filtered & Retweets & English\\ \hline
+        134704400 & 13643710 & 18682273 & 32325983
+    \end{tabular}
+    \caption{Result of Manually filtering}
+    \label{tab:manual}
+\end{table}
+\\
+Since Twitter dataset contains massive tweets which are irrelevant to flu, before we analyze the data, further filtration is required. We adopt two steps to filter out irrelevant data, keywords search and supervised classification. Following sections are the details of these two methods.
+
+\subsection{Keywords search}
+\label{sec:Keywords search}
+To filter out irrelevant data, \cite{aramaki2011twitter} used a simple word look-up of ``influenza'',which we think may lose massive valuable data. In inspired by \cite{lamb2013separating,lampos2010flu}, we first create a word list related to flu based on Flu Symptoms \cite{cdc.symp} Cambridge Dictionary \cite{cambridge} and relatedwords.org \cite{relatedwords.org}. The complete word list can be seen in table \ref{tab:words list}, note that not all the words from the sources are added to our list. Professional terms are excluded since they are hardly used in colloquialism. Words that are wildly used in other scenarios (such as chill, cold) and phrases that contain keywords in our list (such as asian influenza) are not added. We then filter tweets according to the list (ignore case). In this step, we initially adopted a relatively lose filtering strategy: accept tweets containing any string in our list. 
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{p{90pt}p{320pt}}
+        Source & Word list \\ \hline
+        \href{https://www.cdc.gov/flu/symptoms/symptoms.htm}{CDC} &  fever, feverish, sore throat, runny nose, stuffy nose, headache, nasal congestion, diarrhea, bluish lips, bluish face, dehydration\\ \hline
+        \href{https://dictionary.cambridge.org/us/topics/disease-and-illness/colds-and-flu/}{Dictionary} & flu, catarrh, cough, common cold, influenza, sniffle, snuffle\\ \hline
+        \href{https://relatedwords.org/relatedto/flu}{relatedwords.org} & h1n1, h5n1, coughing, cholera, ebola, epidemic, feverous, measles \\ \hline
+    \end{tabular}
+    \caption{Inclusion list}
+    \label{tab:words list}
+\end{table}
+\\
+Table \ref{tab:filtering} shows the number of tweets after keywords filtering in the first 5 days in Oct 2018 (retweets are included), and the filtered result operated on tweets created in Jan 2018 (without retweets). 
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{ccc}
+        Date & Original & Filtered \\ \hline
+        2018/10/01 & 4317376 & 5984 \\
+        2018/10/02 & 4349129 & 5740 \\
+        2018/10/03 & 4417333 & 5415 \\
+        2018/10/04 & 4337327 & 5676 \\
+        2018/10/05 & 4273031 & 5190 \\
+        2018/01 & 134704400 & 37519 \\
+    \end{tabular}
+    \caption{Tweet counts after filtering}
+    \label{tab:filtering}
+\end{table}
+\\\\
+We found that the majority of the filtered tweets are irrelevant to diseases. The possible reasons can be that people will use such words even when they are healthy, and some words are substring of other words (such as chill Achill, flu influence). Another probelm found after this step is that the volume of filtered data is less than our expection. When retweets are included, nearly 0.129\% data are left. Exclude retweets, the percentage drops to 0.0279\% (although the experiment doesn't operate on a same sample). Note that in our initial design, we will use geo-tagged tweets (tweets with geographic information) created at certain regions, meaning that the percentage of our target data could be much lower (less than 0.01\%). Under such condition, we need massive data to get a reliable estimation (i.e. to get 10000 filtered data, at least 100000000 metadata are required). For research, it's impractical, and we decide to change the initial design.
+
+\subsection{Topical model}
+Topics related to healthcare surveillance are massive, and based on the experimental results shown in section \ref{sec:Keywords search}, we cannot guarantee the metadata contain enough tweets of topic chosen by us. 
+
+
+\subsection{Supervised classification}
+\label{sec:Supervised classification}
+To overcome the drawbacks of first round filtration, further filtration is required. \cite{elkin2017network} created another exclusion dictionary containing keywords and phrases indicating tweets should not be included in the filtered dataset, such as "sick and tired". But their experiment shows the accuracy of their method is roughly 70\%, which we think is relatively lower than our requirement. This result can result from their choice of exclusion words and their dataset.  Since we want to get a higer filtering accuracy, we decide to use a machine learning based classification method \cite{aramaki2011twitter}. We labeled our dataset, and trained a binary classifier. Following are our detailed methods:
+\begin{enumerate}
     \item Data labeling (classification): as mentioned before, we want to our classifier can tell wether a tweet is relevant to flu, therefore, we adopt a simple binary labeling strategy. We write a piece code and manually labeled the regularized data 1 and 0 (1 means it indeed relates to flu). While labeling, we found that some tweets can't be told wether they are truly related to flu, such as ``Coughing!'', ``i'm chilling'. And since in our first filtering (section \ref{sec:Keywords search}), we adopt a relatively loose rule, which accepts tweet that containing any string (word) in our inclusion dictionary, no matter the word is indeed a sub-string of another word (eg. flu and influence), the majority of filtered tweets (roughly 83\%, 450 of 540) are toally irrelevant to flu. In addition, some tweets are flu-related, but don't show signs of catching a flu, such as ``Just had my flu jab!''. All the problems mentioned above increase the difficulty of labeling. While we have more than a billion raw data, we decide to change our initial design and set a strict standard in filtering. Followings are our specific labeling rules: 
     \begin{itemize}
         \item tweets that don't contain any exact word in our word list will be excluded (eg. tweet containg ``feverfew'' and no other keywords won't be accepted even it has string ``fever'')
