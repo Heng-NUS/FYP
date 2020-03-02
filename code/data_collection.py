@@ -281,13 +281,16 @@ class text_pro(object):
 		r1 = u'RT @.*?: |#+[^\s]*|@+[^\s]*|^RT\s'  # exclude RT , @...:, #..., \n
 		r2 = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+' # http(s)
 		r3 = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$' #e-mail
-		r4 = '\s+'
+		r4 = '\s+' #multiple empty chars
 		r5 = 'http[s]?:.*? '
+		r6 = '[^A-Za-z0-9_\s]'  # not alphabet number and _
 		sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5
 		text = html.unescape(text)
 		text = re.sub(sub_rule, "", text)
 		text = emoji.demojize(text, delimiters=('emo_', ' '))
+		text = re.sub(r6, ' ', text)
 		text = re.sub(r4, ' ', text)
+		text = text.lower()
 		return text
 	
 	def regularize_json(in_path, out_path):
@@ -432,12 +435,44 @@ class text_pro(object):
 				json.dump(read_log, log, indent=4)
 						
 	def process_tweets(self, path):
+		
 		with open(path, 'r', encoding='utf-8') as file:
 			for line in file:
 				data = json.loads(line, encoding='utf-8')
 				text = data['text']
 				self.regularize(text)
-	
+
+	def tokenize(self, path):
+		'''tokenize text'''
+		pass
+
+def text_only(in_file, out_file):
+	'''save extracted text to out_file'''
+	with open(in_file, 'r', encoding='utf-8') as in_f, open(out_file, 'a', encoding='utf-8') as out_f:
+		for line in in_f:
+			if line != "\n":
+				try:
+					data = json.loads(line)
+				except IOError:
+					print("Can't read ", in_path)
+				else:
+					text = text_pro.regularize(data['text'])
+					out_text = (text + "\n")
+					#out_text = data['text']
+					out_f.write(out_text)
+
+def text_only_tree(in_dir, out_dir):
+	if not os.path.exists(in_dir):
+		print('no such file')
+		exit(0)
+	else:
+		path_list = find_suffix("json", in_dir)
+		if not os.path.exists(out_dir):
+			os.mkdir(out_dir)
+		for in_file in path_list:
+			file_name = in_file.split('_')[-1]
+			out_file = os.path.join(out_dir, file_name[:2] + ".txt")
+			text_only(in_file, out_file)
 
 class CDC_preprocessor(object):
 	"""preprocess CDC data"""
@@ -472,10 +507,17 @@ out_dir = './Data/dataset'
 # cdc = CDC_preprocessor()
 # cdc.get_information(cdc_in_path, cdc_out_path)
 
+'''unzip files recursively'''
 # tar_path = "/Volumes/NonBee5/Twitter/2018/01/"
 # unzip_tree(tar_path, "bz2", tar_path)
 
-
+'''labeling'''
 # data_path = './Data/dataset/2018/10/2018_10_05.json'
 # out_name = './Data/twitter.json'
 # text_pro.label_file(data_path, out_name)
+
+input_file = './Data/dataset/2018/01/2018_01_12.json'
+out_dir = 'testData'
+
+# text_only(input_file, out_file)
+text_only_tree('./Data/dataset/2018/01', out_dir)
