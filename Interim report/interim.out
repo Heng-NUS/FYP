@@ -11,7 +11,7 @@
 \BOOKMARK [2][-]{subsection.3.3.3}{Model design}{section.3.3}% 11
 \BOOKMARK [2][-]{subsection.3.3.4}{Evaluation layer design}{section.3.3}% 12
 \BOOKMARK [2][-]{subsection.3.3.5}{Visualization design}{section.3.3}% 13
-\BOOKMARK [0][-]{chapter.4}{Data collection and processing}{}% 14
+\BOOKMARK [0][-]{chapter.4}{Signal extraction}{}% 14
 \BOOKMARK [1][-]{section.4.1}{Social media dataset}{chapter.4}% 15
 \BOOKMARK [1][-]{section.4.2}{Benchmark}{chapter.4}% 16
 \BOOKMARK [1][-]{section.4.3}{Data collection}{chapter.4}% 17
@@ -22,19 +22,20 @@
 \BOOKMARK [2][-]{subsection.4.4.2}{Text regularization}{section.4.4}% 22
 \BOOKMARK [2][-]{subsection.4.4.3}{Manually screening}{section.4.4}% 23
 \BOOKMARK [2][-]{subsection.4.4.4}{Keywords search}{section.4.4}% 24
-\BOOKMARK [2][-]{subsection.4.4.5}{Topical model}{section.4.4}% 25
-\BOOKMARK [2][-]{subsection.4.4.6}{Supervised classification}{section.4.4}% 26
-\BOOKMARK [0][-]{chapter.5}{Potential ethical issues}{}% 27
-\BOOKMARK [1][-]{section.5.1}{Ethical Issues}{chapter.5}% 28
-\BOOKMARK [2][-]{subsection.5.1.1}{Privacy Issues}{section.5.1}% 29
-\BOOKMARK [2][-]{subsection.5.1.2}{Trust, Safety and Reliability Issues}{section.5.1}% 30
-\BOOKMARK [2][-]{subsection.5.1.3}{Vulnerable Groups Issues}{section.5.1}% 31
-\BOOKMARK [1][-]{section.5.2}{Evaluation and Analysis}{chapter.5}% 32
-\BOOKMARK [2][-]{subsection.5.2.1}{Privacy Analysis}{section.5.2}% 33
-\BOOKMARK [2][-]{subsection.5.2.2}{Reliability Analysis}{section.5.2}% 34
-\BOOKMARK [2][-]{subsection.5.2.3}{Vulnerable Groups Analysis}{section.5.2}% 35
-\BOOKMARK [0][-]{chapter.6}{Progress}{}% 36
-\BOOKMARK [1][-]{section.6.1}{Project management}{chapter.6}% 37
-\BOOKMARK [1][-]{section.6.2}{Conclusion and Future work}{chapter.6}% 38
-\BOOKMARK [0][-]{Item.42}{Bibliography}{}% 39
-\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 40
+\BOOKMARK [2][-]{subsection.4.4.5}{Supervised classification}{section.4.4}% 25
+\BOOKMARK [1][-]{section.4.5}{Healthcare topics uncovering}{chapter.4}% 26
+\BOOKMARK [0][-]{chapter.5}{Modeling}{}% 27
+\BOOKMARK [0][-]{chapter.6}{Potential ethical issues}{}% 28
+\BOOKMARK [1][-]{section.6.1}{Ethical Issues}{chapter.6}% 29
+\BOOKMARK [2][-]{subsection.6.1.1}{Privacy Issues}{section.6.1}% 30
+\BOOKMARK [2][-]{subsection.6.1.2}{Trust, Safety and Reliability Issues}{section.6.1}% 31
+\BOOKMARK [2][-]{subsection.6.1.3}{Vulnerable Groups Issues}{section.6.1}% 32
+\BOOKMARK [1][-]{section.6.2}{Evaluation and Analysis}{chapter.6}% 33
+\BOOKMARK [2][-]{subsection.6.2.1}{Privacy Analysis}{section.6.2}% 34
+\BOOKMARK [2][-]{subsection.6.2.2}{Reliability Analysis}{section.6.2}% 35
+\BOOKMARK [2][-]{subsection.6.2.3}{Vulnerable Groups Analysis}{section.6.2}% 36
+\BOOKMARK [0][-]{chapter.7}{Progress}{}% 37
+\BOOKMARK [1][-]{section.7.1}{Project management}{chapter.7}% 38
+\BOOKMARK [1][-]{section.7.2}{Conclusion and Future work}{chapter.7}% 39
+\BOOKMARK [0][-]{Item.42}{Bibliography}{}% 40
+\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 41

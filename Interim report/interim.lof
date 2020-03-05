@@ -8,8 +8,10 @@
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Influenza Season Week 43 ending Oct 26, 2019, Source: \href {https://www.cdc.gov/flu/weekly/index.htm\#ILIActivityMap}{Fluview}}}{15}{figure.4.1}% 
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Screenshot of Archive's Twitter data}}{16}{figure.4.2}% 
 \contentsline {figure}{\numberline {4.3}{\ignorespaces Screenshot of Fluview's report}}{16}{figure.4.3}% 
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Screenshot of unified structure of social media dataset}}{17}{figure.4.4}% 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{18}{figure.4.5}% 
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Example of using emoji library}}{19}{figure.4.6}% 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Common pipeline of text preprocessing}}{17}{figure.4.4}% 
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of unified structure of social media dataset}}{18}{figure.4.5}% 
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{18}{figure.4.6}% 
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Example of using emoji library}}{20}{figure.4.7}% 
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -50,7 +50,14 @@ Our data structure is a cut-down version of it, where ``URL'' and ``WEBSITE'' co
 
 \section{Data Preprocessing}
 \label{sec:Preprocessing}
-Data preprocessing is the first stage of a typical text classification framework. According to experiment conducted by \cite{uysal2014impact}, different combination of preprocessing methods can influence the accuracy of prediction. However, there is no best combination for all tasks. Some strategies can improve classification success of certain tasks while lower that of others. Following sections represent our preprocessing methods designed for this project.
+Data preprocessing is the first stage of a typical text classification framework. According to experiment conducted by \cite{uysal2014impact}, different combination of preprocessing methods can influence the accuracy of prediction. However, there is no best combination for all tasks. Some strategies can improve classification success of certain tasks while lower that of others.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[height=3in]{pipeline.jpg}
+    \caption{Common pipeline of text preprocessing}
+    \label{fig:pipeline}
+\end{figure} 
+Figure \ref{fig:pipeline} shows some common steps used in NLP for preprocessing textual data. Following sections represent our preprocessing methods designed for this project.
 \subsection{Unify data structure}
 \label{sec:Unify data structure}
 In section \ref{sec:Data collector design}, we mentioned a unified data structure of our datasets. The aim of this stage is to unify and regularize all the metadata before analysis. \\
@@ -87,12 +94,13 @@ As mentioned in our design (section 3.2.2), the original text is unstructured, w
         \item e-mail address: we exclude e-mail address in our data, whose regex(can match most e-mail addresses) is:
         ``[a-zA-Z0-9\_.+-]+\@[a-zA-Z0-9-]+\verb|\|.[a-zA-Z0-9-.]+\$''
         \item html entities: a html entity can be regarded as escape characters used in html (eg. \&quot; represents ``'' sign). We use the Python's standard library ``html'' to translate it.
+        \item non-Latin characters: characters that are not in Latin are meaningless, we exclude them with regex ``[\^A-Za-z0-9\_]'' 
     \end{itemize}
     In addition, for next steps, all the text are in lower case.
 
 \subsection{Manually screening}
 \label{sec:Manually screening}
-We have more than 4 million tweets per day in our dataset, it's obviously not all of them are relevant to our task. Based on our initial design, we only accept tweets written in English. While reviewing on the dataset, we found that there are massive retweets in it (8312846 of 21694196, roughly 38\%). Defined by Twitter\cite{twitter_dev}, retweeting is forwarding content wrote by other users (like forwarding an email). Although retweets can be used in some tasks such as sentiment analysis (mainly focus the counts of being retweeted) \cite{perdana2018combining}, we don't think it will contribute to our prediction. As stated by \cite{kim2016competitive}, retweets don't have user's own view and should be removed in data cleaning. We need tweets that can show the health condition of the user or of people the user cares. In addition, retweets don't have any geographical information \cite{twitter_dev}, which is the key component in our diffusion modeling. Therefore, we decided to exclude all retweets.\\ In addition, we exclude all non-English tweets. Table \ref{tab:manual} shows the result of manually screening operated on all tweets created at January 2018 in our metadata. Original data amount is 134704400, nearly 13.87\% are retweets, and 23.40\% are English. After screening, roughly 10.22\% tweets were left.
+We have more than 4 million tweets per day in our dataset, it's obviously not all of them are relevant to our task. Based on our initial design, we only accept tweets written in English. While reviewing on the dataset, we found that there are massive retweets in it (8312846 of 21694196, roughly 38\%). Defined by Twitter\cite{twitter_dev}, retweeting is forwarding content wrote by other users (like forwarding an email). Although retweets can be used in some tasks such as sentiment analysis (mainly focus the counts of being retweeted) \cite{perdana2018combining}, we don't think it will contribute to our prediction. As stated by \cite{kim2016competitive}, retweets don't have user's own view and should be removed in data cleaning. We need tweets that can show the health condition of the user or of people the user cares. In addition, retweets don't have any geographical information \cite{twitter_dev}, which is the key component in our diffusion modeling. Therefore, we decided to exclude all retweets.\\ Furthermore, we exclude all non-English tweets by the tag contained in metadata. Table \ref{tab:manual} shows the result of manually screening operated on all tweets created at January 2018 in our metadata. Original data amount is 134704400, nearly 13.87\% are retweets, and 23.40\% are English. After screening, roughly 10.22\% tweets were left.
 \begin{table}[!htbp]
     \centering
     \hspace{0.5cm}
@@ -139,11 +147,7 @@ Table \ref{tab:filtering} shows the number of tweets after keywords filtering in
     \label{tab:filtering}
 \end{table}
 \\\\
-We found that the majority of the filtered tweets are irrelevant to diseases. The possible reasons can be that people will use such words even when they are healthy, and some words are substring of other words (such as chill Achill, flu influence). Another probelm found after this step is that the volume of filtered data is less than our expection. When retweets are included, nearly 0.129\% data are left. Exclude retweets, the percentage drops to 0.0279\% (although the experiment doesn't operate on a same sample). Note that in our initial design, we will use geo-tagged tweets (tweets with geographic information) created at certain regions, meaning that the percentage of our target data could be much lower (less than 0.01\%). Under such condition, we need massive data to get a reliable estimation (i.e. to get 10000 filtered data, at least 100000000 metadata are required). For research, it's impractical, and we decide to change the initial design.
-
-\subsection{Topical model}
-Topics related to healthcare surveillance are massive, and based on the experimental results shown in section \ref{sec:Keywords search}, we cannot guarantee the metadata contain enough tweets of topic chosen by us. 
-
+We found that the majority of the filtered tweets are irrelevant to diseases. The possible reasons can be that people will use such words even when they are healthy, and some words are substring of other words (such as chill Achill, flu influence). Another probelm found after this step is that the volume of filtered data is less than our expectation. When retweets are included, nearly 0.129\% data are left. Exclude retweets, the percentage drops to 0.0279\% (although the experiment doesn't operate on a same sample). Note that in our initial design, we will use geo-tagged tweets (tweets with geographic information) created at certain regions, meaning that the percentage of our target data could be much lower (less than 0.01\%). Under such condition, we need massive data to get a reliable estimation (i.e. to get 10000 filtered data, at least 100000000 metadata are required). For research, it's impractical, and we decide to change the initial design.
 
 \subsection{Supervised classification}
 \label{sec:Supervised classification}
@@ -163,3 +167,12 @@ To overcome the drawbacks of first round filtration, further filtration is requi
     All the examples given above come from our dataset. Note that this standard is still not precise enough and can't guarantee all the data are correctly labeled, since the classification result highly depends on individuals who label the data. To minimize such difference brought by manual work, we built a exclusion list based on our deliberate review on the dataset during labeling, and labeled tweet containing word in the list 0.
     \item Stop words elimination: stop-words are words that are not regarded as keywords in text mining. Examples are: is, am, did, a, an, the, ect. Exclude stop-words can reduce the length of the text and dimensionality of term space\cite{vijayarani2015preprocessing}. There are four stop-word removal methods: (1) manually define the removal list; (2) Zipf' law based methods, which removes the most frequent and least frequent words; (3) Mutual information method (MI), a supervised method that can evaluate the discrimination power of a term for classification; (4) Term Based Random Sampling (TBRS), which is based on a term's importance \cite{jivani2011comparative}. 
 \end{enumerate}
+
+\section{Healthcare topics uncovering}
+\label{sec:uncoverig}
+Based on the experimental results shown in section \ref{sec:Keywords search}, we conclude that our metadata may contain insufficient tweets related to flu that can help us to built a reliable model. The reasons could be: (1) our keywords list is incomplete; (2) the metadata is collected randomly from all tweets, and contains few flu-related data coincidentally; (3) the sample we used in experimental contains few flu-related data coincidentally; (4) the data volume we examined is too samll and can't represents the general trending. 
+Since the metadata contains more than billions of tweets, 
+Topics related to healthcare surveillance are massive, and based on the experimental results shown in section \ref{sec:Keywords search}, we cannot guarantee the metadata contain enough tweets of topic chosen by us. Therefore, we decide to use topic model techniques to uncover some health related topics. 
+Probabilistic latent semantic analysis (PLSA) \cite{hofmann1999probabilistic} and Latent Dirichlet Allocation (LDA) \cite{blei2003latent} are two well-known conventional algorithms of information retrieval, but their performance may decrease when running on short document such as tweets because of data sparsity probelm. Twitter-LDA model \cite{zhao2011comparing} is a relative new algorithm for solving this probelm. However, it requires a word distribution of users (tracking all tweets published by a single user). Our dataset mainly focus on text rather than users, meaning that we cannot run Twitter-LDA on our data. Therefore, we adopt the online version of Biterm Topic Model (BTM) \cite{yan2013biterm, cheng2014btm}, which models the word co-occurrence patterns and gets a better retrieval result than LDA and PLSA on short text. The original implementation can be found on \href{https://github.com/xiaohuiyan/OnlineBTM}{GitHub}. \\
+
+To get meaningful words referring to an extracted topic, we exclude stop words listed by NLTK (The Natural Language Toolkit) \cite{journals/corr/cs-CL-0205028}.

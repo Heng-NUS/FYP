@@ -29,6 +29,11 @@
 \newblock Moral responsibility for harm caused by computer system failures.
 \newblock {\em Ethics and Information Technology 6}, 4 (2004), 233--245.
 
+\bibitem{blei2003latent}
+{\sc Blei, D.~M., Ng, A.~Y., and Jordan, M.~I.}
+\newblock Latent dirichlet allocation.
+\newblock {\em Journal of machine Learning research 3}, Jan (2003), 993--1022.
+
 \bibitem{burkell2014facebook}
 {\sc Burkell, J., Fortier, A., Wong, L. L. Y.~C., and Simpson, J.~L.}
 \newblock Facebook: Public space, or private space?
@@ -70,6 +75,12 @@
 \newblock Reality mining: A prediction algorithm for disease dynamics based on
   mobile big data.
 \newblock {\em Information Sciences 379\/} (2017), 82--93.
+
+\bibitem{cheng2014btm}
+{\sc Cheng, X., Yan, X., Lan, Y., and Guo, J.}
+\newblock Btm: Topic modeling over short texts.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering 26}, 12
+  (2014), 2928--2941.
 
 \bibitem{Chollet:2017:DLP:3203489}
 {\sc Chollet, F.}
@@ -116,6 +127,13 @@
   discovery}.
 \newblock Morgan Kaufmann, 2002.
 
+\bibitem{hofmann1999probabilistic}
+{\sc Hofmann, T.}
+\newblock Probabilistic latent semantic indexing.
+\newblock In {\em Proceedings of the 22nd annual international ACM SIGIR
+  conference on Research and development in information retrieval\/} (1999),
+  pp.~50--57.
+
 \bibitem{archive}
 {\sc {Internet Archive}}.
 \newblock \url{https://archive.org/}, 2019.
@@ -158,6 +176,11 @@
   flu and cancer.
 \newblock In {\em Proceedings of the 19th ACM SIGKDD international conference
   on Knowledge discovery and data mining\/} (2013), ACM, pp.~1474--1477.
+
+\bibitem{journals/corr/cs-CL-0205028}
+{\sc Loper, E., and Bird, S.}
+\newblock Nltk: The natural language toolkit.
+\newblock {\em CoRR cs.CL/0205028\/} (2002).
 
 \bibitem{mill2016utilitarianism}
 {\sc Mill, J.~S.}
@@ -259,6 +282,18 @@
 \newblock Preprocessing techniques for text mining-an overview.
 \newblock {\em International Journal of Computer Science \& Communication
   Networks 5}, 1 (2015), 7--16.
+
+\bibitem{yan2013biterm}
+{\sc Yan, X., Guo, J., Lan, Y., and Cheng, X.}
+\newblock A biterm topic model for short texts.
+\newblock In {\em Proceedings of the 22nd international conference on World
+  Wide Web\/} (2013), pp.~1445--1456.
+
+\bibitem{zhao2011comparing}
+{\sc Zhao, W.~X., Jiang, J., Weng, J., He, J., Lim, E.-P., Yan, H., and Li, X.}
+\newblock Comparing twitter and traditional media using topic models.
+\newblock In {\em European conference on information retrieval\/} (2011),
+  Springer, pp.~338--349.
 
 \bibitem{serban2019real}
 {\sc Șerban, O., Thapen, N., Maginnis, B., Hankin, C., and Foot, V.}
