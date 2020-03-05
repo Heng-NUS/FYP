@@ -28,12 +28,12 @@ def load_word_list(word_list_path):
 
 word_list_path = './Filter_rule/word_list.json'
 WORD_LIST = load_word_list(word_list_path)
-
+STOP_WORDS = stopwords.words('english')
 
 def find_suffix(suffix, dir_path):
     '''find all files ending with suffix in directory'''
     if not os.path.exists(dir_path):
-        print('no such file')
+        print("Can't find", dir_path)
         exit(0)
     name_buffer = []
     for file in os.listdir(dir_path):
@@ -109,7 +109,7 @@ def tar_unzip(file_path, out_path=None):
 def unzip_tree(dir_path, zip_type, out_dir=None):
     '''unzip all files in this dir recursively'''
     if not os.path.exists(dir_path):
-        print('no such file')
+        print("Can't find", dir_path)
         exit(0)
     else:
         path_list = find_suffix(zip_type, dir_path)
@@ -191,11 +191,11 @@ class archive(object):
             self.ex_rule += new_words
         self.ex_rule = self.ex_rule[:-1]
 
-        stop_words = stopwords.words('english')
-        for x in stop_words:
-            new_words = "(?:^|\W)" + x + "(?:$|\W)|"
-            self.stop_rule += new_words  # stop words exclusion
-        self.stop_rule = self.stop_rule[:-1]
+        # stop_words = stopwords.words('english')
+        # for x in stop_words:
+        #     new_words = "(?:^|\W)" + x + "(?:$|\W)|"
+        #     self.stop_rule += new_words  # stop words exclusion
+        # self.stop_rule = self.stop_rule[:-1]
 
     def buffer_to_json(self, out_dir, out_buffer):
         '''save buffer to json file'''
@@ -228,13 +228,6 @@ class archive(object):
 
             del content
 
-    def exclude_stop_word(self, text):
-        '''exclude words in stop word list'''
-        text = re.sub(self.stop_rule, text, ' ', flags=re.IGNORECASE)
-        text = re.sub(self.stop_rule, text, ' ', flags=re.IGNORECASE)
-        # excluding twice is required
-        return text
-
     def regularize(self, text):
         '''return the regularized text'''
 
@@ -262,11 +255,15 @@ class archive(object):
                 ret_buffer = {}
                 ret_size = 0
 
+                lang_count = 0
+
                 for f in file:
                     data = json.loads(f)
                     ori_count += 1
                     if 'lang' not in data or data['lang'] != language:
                         continue
+                    else: 
+                        lang_count += 1
 
                     if 'text' in data and (ignore_geo or data['user']['geo_enabled']):
                         text = data['text']
@@ -278,9 +275,7 @@ class archive(object):
 
                         if "RT @" in text:
                             retweet += 1
-                            if not ret:
-                                continue  # exclude Retweets if needed
-                            else:
+                            if ret:
                                 if date not in ret_buffer:
                                     ret_buffer[date] = {}
                                 else:
@@ -297,34 +292,34 @@ class archive(object):
                                         retweet_dir, ret_buffer)
                                     ret_size = 0
                                     ret_buffer.clear()
+                            # save retweets to a single file if needed
 
-                        #text = self.exclude_stop_word(text)
-                        # exclude stop words
-                        text = self.regularize(text)
-                        # regularize text
+                        else: # not retweet
+                            text = self.regularize(text)
+                            # regularize text
 
-                        if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
-                            continue
-                            # if not in inclusion list or in exclusion list, skip it
+                            if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
+                                continue
+                                # if not in inclusion list or in exclusion list, skip it
 
-                        location = data['user']['location']
-                        coordinates = data['coordinates']
-                        place = data['place']
-                        created_at = date
-                        selected_data = dict(created_at=created_at, text=text,
-                                             location=location, coordinates=coordinates, place=place)
-                        if date not in out_buffer:
-                            out_buffer[date] = []
-                        out_buffer[date].append(selected_data)
-                        extracted += 1
-                        size_count += 1
-                        if size_count >= max_buffer_size:
-                            # write the buffer
-                            self.buffer_to_json(out_dir, out_buffer)
-                            size_count = 0
-                            out_buffer.clear()
+                            location = data['user']['location']
+                            coordinates = data['coordinates']
+                            place = data['place']
+                            created_at = date
+                            selected_data = dict(created_at=created_at, text=text,
+                                                location=location, coordinates=coordinates, place=place)
+                            if date not in out_buffer:
+                                out_buffer[date] = []
+                            out_buffer[date].append(selected_data)
+                            extracted += 1
+                            size_count += 1
+                            if size_count >= max_buffer_size:
+                                # write the buffer
+                                self.buffer_to_json(out_dir, out_buffer)
+                                size_count = 0
+                                out_buffer.clear()
 
-                        del data
+                            del data
 
                     else:
                         del data
@@ -340,11 +335,11 @@ class archive(object):
         endt = time.clock()
 
         print("ori:", ori_count, "ret:",
-              retweet, "extracted", extracted)
+              retweet, "extracted:", extracted, "language:", lang_count)
         print("Processing time: %s s"%(endt - start) )
-        return (ori_count - 1, extracted, retweet)
+        return (ori_count - 1, extracted, retweet, lang_count)
 
-    def filter_dirs(self, dir_path, out_dir, ignore_geo=True, language='en', ret=True, keywords=False):
+    def filter_dirs(self, dir_path, out_dir, ignore_geo=True, language='en', ret=False, keywords=False):
         '''process all json files in directroy'''
         path_list = find_suffix('json', dir_path)
         if not os.path.exists(out_dir):
@@ -352,27 +347,26 @@ class archive(object):
         ori_count = 0
         extracted = 0
         retweet = 0
+        lang_count = 0
+        start_time = time.clock()
         for file_path in path_list:
-            (ori, ext, ret) = self.filter_tweets(
+            (ori, ext, ret, lang) = self.filter_tweets(
                 file_path, out_dir, ignore_geo, language, ret, keywords)
             ori_count += ori
             extracted += ext
             retweet += ret
-        print(dir_path, "ori:", ori_count, "ret:",
-              retweet, "extracted", extracted)
+            lang_count += lang
+        end_time = time.clock()
 
+        print(dir_path, "ori:", ori_count, "ret:",
+              retweet, "extracted:", extracted, "language:", lang_count)
+        print('Processing time:', end_time-start_time)
 
 class text_pro(object):
     """procoss textual data"""
 
     def __init__(self):
         super(text_pro, self).__init__()
-        self.stop_rule = ""
-        stop_words = stopwords.words('english')
-        for x in stop_words:
-            new_words = "(?:^|\W)" + x + "(?:$|\W)|"
-            self.stop_rule += new_words  # stop words exclusion
-        self.stop_rule = self.stop_rule[:-1]
 
     def regularize(text):
         '''return the regularized text'''
@@ -548,6 +542,23 @@ class text_pro(object):
         '''tokenize a text'''
         return word_tokenize(text)
 
+    def exclude_stop_word(text):
+        '''exclude the stop words from text'''
+        r1 = '[0-9]'
+        text = re.sub(r1, " ", text)
+
+        tokens = word_tokenize(text)
+        filtered = [word for word in tokens if word not in STOP_WORDS and 'emo_' not in word]
+        text = " ".join(filtered)
+
+        tokens = word_tokenize(text)
+        if len(tokens) <= 2:
+            return 1
+        filtered = [word for word in tokens if word not in STOP_WORDS and len(word) > 1]
+        text = " ".join(filtered)
+
+        return text
+
 
 
 def text_only(in_file, out_file):
@@ -560,7 +571,9 @@ def text_only(in_file, out_file):
                 except IOError:
                     print("Can't read ", in_file)
                 else:
-                    text = text_pro.regularize(data['text'])
+                    text = data['text']
+                    text = text_pro.exclude_stop_word(text)
+                    if text == 1: continue
                     out_text = (text + "\n")
                     #out_text = data['text']
                     out_f.write(out_text)
@@ -568,15 +581,21 @@ def text_only(in_file, out_file):
 
 def text_only_tree(in_dir, out_dir):
     if not os.path.exists(in_dir):
-        print('no such file')
+        print("Can't find", in_dir)
         exit(0)
     else:
         path_list = find_suffix("json", in_dir)
         if not os.path.exists(out_dir):
-            os.mkdir(out_dir)
+            os.makedirs(out_dir)
         for in_file in path_list:
-            file_name = in_file.split('_')[-1]
-            out_file = os.path.join(out_dir, file_name[:2] + ".txt")
+            date = in_file.split('_')
+            file_name = date[-1]
+            sub_out_dir = os.path.join(out_dir, date[-2])
+
+            if not os.path.exists(sub_out_dir):
+                os.makedirs(sub_out_dir)
+
+            out_file = os.path.join(sub_out_dir, file_name[:2] + ".txt")
             text_only(in_file, out_file)
 
    
@@ -612,42 +631,52 @@ class Visualization(object):
         file_list = find_suffix('json', in_dir)
         for file in file_list:
             with open(file, 'r', encoding='utf-8') as f:
+                temp = ""
                 for line in f:
-                    data = json.loads(line, encoding='utf-8')
-                    for text, value in data.items():
-                        if text not in record:
-                            record[text] = value
-                        else:
-                            record[text] += value
-        rank_result = sorted(record.items(), lambda x: x[1], reverse=True)
+                    if line == '\n':
+                        continue
+                    else:
+                        temp += line
+
+                    if '}\n' in line:
+                        data = json.loads(temp, encoding='utf-8')
+                        for text, value in data.items():
+                            if text not in record:
+                                record[text] = value
+                            else:
+                                record[text] += value
+                        temp = ""
+
+        rank_result = sorted(record.items(), key=lambda x: x[1], reverse=True)
         return rank_result
-        
-input_path = "/Volumes/Data/Twitter/2018/01/01"
-out_dir = './Data/topic'
-acv = archive()
-acv.filter_dirs(input_path, out_dir)
 
-# data_count(input_path,func = 'line')
 
-# unzip_tree("/Volumes/NonBee5/Twitter/2018")
+if __name__ == "__main__":
 
-'''save preprocessed cdc'''
-# cdc_in_path = '/Users/NonBee/Desktop/FYP/code/Data/cdc/StateDatabySeason59_58,57.csv'
-# cdc_out_path = './Data/dataset/'
-# cdc = CDC_preprocessor()
-# cdc.get_information(cdc_in_path, cdc_out_path)
+    input_path = "/Volumes/Data/Twitter/2018/01/01"
+    out_dir = './Data/topic'
+    # acv = archive()
+    # acv.filter_dirs(input_path, out_dir)
 
-'''unzip files recursively'''
-# tar_path = "/Volumes/NonBee5/Twitter/2018/01/"
-# unzip_tree(tar_path, "bz2", tar_path)
+    # data_count(input_path,func = 'line')
 
-'''labeling'''
-# data_path = './Data/dataset/2018/10/2018_10_05.json'
-# out_name = './Data/twitter.json'
-# text_pro.label_file(data_path, out_name)
+    # unzip_tree("/Volumes/NonBee5/Twitter/2018")
 
-# input_file = './Data/dataset/2018/01/2018_01_12.json'
-# out_dir = 'testData'
+    '''save preprocessed cdc'''
+    # cdc_in_path = '/Users/NonBee/Desktop/FYP/code/Data/cdc/StateDatabySeason59_58,57.csv'
+    # cdc_out_path = './Data/dataset/'
+    # cdc = CDC_preprocessor()
+    # cdc.get_information(cdc_in_path, cdc_out_path)
 
-# text_only(input_file, out_file)
-# text_only_tree('./Data/dataset/2018/01', out_dir)
+    '''unzip files recursively'''
+    tar_path = "/Volumes/Data1/Twitter/2018/02"
+    unzip_tree(tar_path, "bz2", tar_path)
+
+    '''labeling'''
+    # data_path = './Data/dataset/2018/10/2018_10_05.json'
+    # out_name = './Data/twitter.json'
+    # text_pro.label_file(data_path, out_name)
+
+    # out_dir = 'testData'
+    # in_dir = './Data/topics/2018/01/'
+    # text_only_tree(in_dir, out_dir)
