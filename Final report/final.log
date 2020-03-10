@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.16)  5 MAR 2020 11:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.16)  5 MAR 2020 20:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -554,13 +554,13 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 65.
 Here is how much of TeX's memory you used:
  6830 strings out of 492616
  101921 string characters out of 6129480
- 208131 words of memory out of 5000000
+ 207131 words of memory out of 5000000
  10423 multiletter control sequences out of 15000+600000
  10894 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  29i,11n,43p,1490b,466s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on "/Users/NonBee/Desktop/FYP/Final report/final.pdf" (49 pages, 1778422 bytes).
+Output written on "/Users/NonBee/Desktop/FYP/Final report/final.pdf" (49 pages, 1778604 bytes).
 PDF statistics:
  793 PDF objects out of 1000 (max. 8388607)
  703 compressed objects within 8 object streams
