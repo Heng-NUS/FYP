@@ -87,6 +87,12 @@
 \newblock {\em Deep Learning with Python}, 1st~ed.
 \newblock Manning Publications Co., Greenwich, CT, USA, 2017.
 
+\bibitem{culotta2010towards}
+{\sc Culotta, A.}
+\newblock Towards detecting influenza epidemics by analyzing twitter messages.
+\newblock In {\em Proceedings of the first workshop on social media
+  analytics\/} (2010), pp.~115--122.
+
 \bibitem{denecke2009valuable}
 {\sc Denecke, K., and Nejdl, W.}
 \newblock How valuable is medical social media data? content analysis of the
@@ -194,6 +200,17 @@
   the performance estimators in supervised learning.
 \newblock {\em International Journal for Infonomics (IJI) 3}, 3 (2010).
 
+\bibitem{paul2011you}
+{\sc Paul, M.~J., and Dredze, M.}
+\newblock You are what you tweet: Analyzing twitter for public health.
+\newblock In {\em Fifth International AAAI Conference on Weblogs and Social
+  Media\/} (2011).
+
+\bibitem{paul2014discovering}
+{\sc Paul, M.~J., and Dredze, M.}
+\newblock Discovering health topics in social media using topic models.
+\newblock {\em PloS one 9}, 8 (2014).
+
 \bibitem{perdana2018combining}
 {\sc Perdana, R.~S., and Pinandito, A.}
 \newblock Combining likes-retweet analysis and naive bayes classifier within
@@ -251,6 +268,13 @@
 {\sc Tankard, C.}
 \newblock Big data security.
 \newblock {\em Network security 2012}, 7 (2012), 5--8.
+
+\bibitem{tuarob2013discovering}
+{\sc Tuarob, S., Tucker, C.~S., Salathe, M., and Ram, N.}
+\newblock Discovering health-related knowledge in social media using ensembles
+  of heterogeneous features.
+\newblock In {\em Proceedings of the 22nd ACM international conference on
+  Information \& Knowledge Management\/} (2013), pp.~1685--1690.
 
 \bibitem{twitter_dev}
 {\sc {Twitter}}.

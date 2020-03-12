@@ -358,8 +358,11 @@ class archive(object):
             lang_count += lang
         end_time = time.clock()
 
-        print(dir_path, "ori:", ori_count, "ret:",
-              retweet, "extracted:", extracted, "language:", lang_count)
+        log = dir_path + " ori: " + str(ori_count) + " ret: " + str(
+            retweet) + " language: " + str(lang_count) + " extracted: " + str(extracted) + '\n'
+        with open('logs.txt', 'a', encoding='utf-8') as f:
+            f.write(log)
+        print(log)
         print('Processing time:', end_time-start_time)
 
 class text_pro(object):
@@ -653,10 +656,10 @@ class Visualization(object):
 
 if __name__ == "__main__":
 
-    input_path = "/Volumes/Data/Twitter/2018/01/01"
-    out_dir = './Data/topic'
+    # input_path = "/Volumes/Data/Twitter/2018/02"
+    # out_dir = '/Volumes/White/Data/tweets'
     # acv = archive()
-    # acv.filter_dirs(input_path, out_dir)
+    # acv.filter_dirs(input_path, out_dir, ret=True)
 
     # data_count(input_path,func = 'line')
 
@@ -669,8 +672,8 @@ if __name__ == "__main__":
     # cdc.get_information(cdc_in_path, cdc_out_path)
 
     '''unzip files recursively'''
-    tar_path = "/Volumes/Data1/Twitter/2018/02"
-    unzip_tree(tar_path, "bz2", tar_path)
+    # tar_path = "/Volumes/Data1/Twitter/2018/02"
+    # unzip_tree(tar_path, "bz2", tar_path)
 
     '''labeling'''
     # data_path = './Data/dataset/2018/10/2018_10_05.json'

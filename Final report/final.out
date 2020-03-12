@@ -21,9 +21,9 @@
 \BOOKMARK [2][-]{subsection.4.4.1}{Unify data structure}{section.4.4}% 21
 \BOOKMARK [2][-]{subsection.4.4.2}{Text regularization}{section.4.4}% 22
 \BOOKMARK [2][-]{subsection.4.4.3}{Manually screening}{section.4.4}% 23
-\BOOKMARK [2][-]{subsection.4.4.4}{Keywords search}{section.4.4}% 24
-\BOOKMARK [2][-]{subsection.4.4.5}{Supervised classification}{section.4.4}% 25
-\BOOKMARK [1][-]{section.4.5}{Healthcare topics uncovering}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.5}{Healthcare topics uncovering}{chapter.4}% 24
+\BOOKMARK [2][-]{subsection.4.5.1}{Keywords search}{section.4.5}% 25
+\BOOKMARK [2][-]{subsection.4.5.2}{Supervised classification}{section.4.5}% 26
 \BOOKMARK [0][-]{chapter.5}{Modeling}{}% 27
 \BOOKMARK [0][-]{chapter.6}{Evaluation}{}% 28
 \BOOKMARK [0][-]{chapter.7}{Potential ethical issues}{}% 29
