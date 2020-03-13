@@ -672,7 +672,7 @@ if __name__ == "__main__":
     # cdc.get_information(cdc_in_path, cdc_out_path)
 
     '''unzip files recursively'''
-    # tar_path = "/Volumes/Data1/Twitter/2018/02"
+    # tar_path = "/Volumes/Data/Twitter/2018/04"
     # unzip_tree(tar_path, "bz2", tar_path)
 
     '''labeling'''

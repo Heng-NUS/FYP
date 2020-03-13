@@ -224,6 +224,12 @@
 \newblock \url{https://relatedwords.org/relatedto/flu}, 2019.
 \newblock Accessed December 18, 2019.
 
+\bibitem{sadilek2012modeling}
+{\sc Sadilek, A., Kautz, H., and Silenzio, V.}
+\newblock Modeling spread of disease from social interactions.
+\newblock In {\em Sixth International AAAI Conference on Weblogs and Social
+  Media\/} (2012).
+
 \bibitem{sadilek2012predicting}
 {\sc Sadilek, A., Kautz, H., and Silenzio, V.}
 \newblock Predicting disease transmission from geo-tagged micro-blog data.
@@ -246,6 +252,13 @@
 \newblock The use of twitter to track levels of disease activity and public
   concern in the us during the influenza a h1n1 pandemic.
 \newblock {\em PloS one 6}, 5 (2011), e19467.
+
+\bibitem{sloan}
+{\sc Sloan~L, M.~J.}
+\newblock Who tweets with their location? understanding the relationship
+  between demographic characteristics and the use of geoservices and geotagging
+  on twitter.
+\newblock {\em PloS one 10}, 11 (2015).
 
 \bibitem{smith2012big}
 {\sc Smith, M., Szongott, C., Henne, B., and Von~Voigt, G.}

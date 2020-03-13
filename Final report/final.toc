@@ -22,8 +22,9 @@
 \contentsline {subsection}{\numberline {4.4.2}Text regularization}{19}{subsection.4.4.2}% 
 \contentsline {subsection}{\numberline {4.4.3}Manually screening}{20}{subsection.4.4.3}% 
 \contentsline {section}{\numberline {4.5}Healthcare topics uncovering}{21}{section.4.5}% 
-\contentsline {subsection}{\numberline {4.5.1}Keywords search}{21}{subsection.4.5.1}% 
+\contentsline {subsection}{\numberline {4.5.1}Keywords search}{22}{subsection.4.5.1}% 
 \contentsline {subsection}{\numberline {4.5.2}Supervised classification}{23}{subsection.4.5.2}% 
+\contentsline {subsection}{\numberline {4.5.3}Topic modeling}{26}{subsection.4.5.3}% 
 \contentsline {chapter}{\numberline {5}Modeling}{27}{chapter.5}% 
 \contentsline {chapter}{\numberline {6}Evaluation}{28}{chapter.6}% 
 \contentsline {chapter}{\numberline {7}Potential ethical issues}{29}{chapter.7}% 
@@ -39,4 +40,4 @@
 \contentsline {section}{\numberline {8.1}Project management}{36}{section.8.1}% 
 \contentsline {section}{\numberline {8.2}Conclusion and Future work}{37}{section.8.2}% 
 \contentsline {chapter}{Bibliography}{38}{Item.42}% 
-\contentsline {chapter}{Appendix}{44}{chapter*.5}% 
+\contentsline {chapter}{Appendix}{45}{chapter*.5}% 
