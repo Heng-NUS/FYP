@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.16)  13 MAR 2020 18:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.16)  14 MAR 2020 17:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -498,12 +498,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 122--154
 
  []
 
-[22] [23] [24])
+[22] [23] [24] [25])
 Underfull \hbox (badness 10000) in paragraph at lines 178--47
 
  []
 
-[25] [26]
+[26]
 Chapter 5.
 [27
 
@@ -530,14 +530,14 @@ Chapter 8.
 (/Users/NonBee/Desktop/FYP/Final report/chapters/progress.tex [36
 
 ] [37]) (/Users/NonBee/Desktop/FYP/Final report/final.bbl [38]
-Underfull \hbox (badness 10000) in paragraph at lines 43--48
+Underfull \hbox (badness 10000) in paragraph at lines 48--53
 []\OT1/cmr/m/sc/12 Cambridge Dic-tio-nary\OT1/cmr/m/n/12 .  [][]$\OT1/cmtt/m/n/12 https : / / dictionary . cambridge . org / us / topics /
  []
 
 [39
 
 ] [40] [41] [42] [43]
-Underfull \hbox (badness 1062) in paragraph at lines 293--299
+Underfull \hbox (badness 1062) in paragraph at lines 298--304
 []\OT1/cmr/m/sc/12 Twitter\OT1/cmr/m/n/12 .  Tweet ob-jects.  [][]$\OT1/cmtt/m/n/12 https : / / developer . twitter . com / en / docs / tweets /
  []
 
@@ -553,18 +553,18 @@ Package rerunfilecheck Info: File `final.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 65.
  ) 
 Here is how much of TeX's memory you used:
- 6847 strings out of 492616
- 102217 string characters out of 6129480
- 207449 words of memory out of 5000000
- 10431 multiletter control sequences out of 15000+600000
+ 6849 strings out of 492616
+ 102254 string characters out of 6129480
+ 207487 words of memory out of 5000000
+ 10432 multiletter control sequences out of 15000+600000
  10894 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,11n,43p,2188b,464s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,11n,43p,2384b,464s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on "/Users/NonBee/Desktop/FYP/Final report/final.pdf" (51 pages, 1782755 bytes).
+Output written on "/Users/NonBee/Desktop/FYP/Final report/final.pdf" (51 pages, 1784185 bytes).
 PDF statistics:
- 824 PDF objects out of 1000 (max. 8388607)
- 732 compressed objects within 8 object streams
- 204 named destinations out of 1000 (max. 500000)
+ 829 PDF objects out of 1000 (max. 8388607)
+ 737 compressed objects within 8 object streams
+ 205 named destinations out of 1000 (max. 500000)
  400 words of extra memory for PDF output out of 10000 (max. 10000000)
 

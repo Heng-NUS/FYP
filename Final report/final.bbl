@@ -24,6 +24,11 @@
   language processing\/} (2011), Association for Computational Linguistics,
   pp.~1568--1576.
 
+\bibitem{baeza1999modern}
+{\sc Baeza-Yates, R., Ribeiro-Neto, B., et~al.}
+\newblock {\em Modern information retrieval}, vol.~463.
+\newblock ACM press New York, 1999.
+
 \bibitem{birsch2004moral}
 {\sc Birsch, D.}
 \newblock Moral responsibility for harm caused by computer system failures.

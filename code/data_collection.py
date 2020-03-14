@@ -297,6 +297,9 @@ class archive(object):
                         else: # not retweet
                             text = self.regularize(text)
                             # regularize text
+                            if len(text.split()) < 3: 
+                                continue
+                            # exclude text that has less than three words
 
                             if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
                                 continue
@@ -423,7 +426,7 @@ class text_pro(object):
     def label_data(data):
         '''label single data'''
         print(data['text'] + "\n")
-        label = input("Relevant to ful? ")
+        label = input("Relevant to health? ")
         while label != '' and label != ' ':
             label = input("Enter: 0 Space: 1 ")
         if label == '':
@@ -672,8 +675,8 @@ if __name__ == "__main__":
     # cdc.get_information(cdc_in_path, cdc_out_path)
 
     '''unzip files recursively'''
-    # tar_path = "/Volumes/Data/Twitter/2018/04"
-    # unzip_tree(tar_path, "bz2", tar_path)
+    tar_path = "/Volumes/Data/Twitter/2018/10"
+    unzip_tree(tar_path, "bz2", tar_path)
 
     '''labeling'''
     # data_path = './Data/dataset/2018/10/2018_10_05.json'
