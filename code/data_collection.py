@@ -30,6 +30,7 @@ word_list_path = './Filter_rule/word_list.json'
 WORD_LIST = load_word_list(word_list_path)
 STOP_WORDS = stopwords.words('english')
 
+
 def find_suffix(suffix, dir_path):
     '''find all files ending with suffix in directory'''
     if not os.path.exists(dir_path):
@@ -176,6 +177,7 @@ class archive(object):
         super(archive, self).__init__()
         self.include_list = WORD_LIST['include_words']
         self.seclude_list = WORD_LIST['exclude_words']
+        self.phrases = WORD_LIST['phrases']
         self.in_rule = ""
         self.ex_rule = ""
         self.stop_rule = ""
@@ -223,7 +225,7 @@ class archive(object):
                 os.makedirs(date_dir)
             out_path = os.path.join(date_dir, file_name)
 
-            with open(out_path, 'a', encoding='utf-8') as out_file:            
+            with open(out_path, 'a', encoding='utf-8') as out_file:
                 out_file.write(json.dumps(content, indent=4) + '\n')
 
             del content
@@ -232,6 +234,104 @@ class archive(object):
         '''return the regularized text'''
 
         return text_pro.regularize(text)
+
+    def keywords_search(self, text):
+        temp = text.split()
+        Found = False
+        for w in self.include_list:
+            if w.lower() in temp:
+                Found = True
+                break
+        if not Found:
+            for phrase in self.phrases:
+                if phrase.lower() in text:
+                    Found = True
+                    break
+        return Found
+
+    def keywords_flitering(self, path, out_dir):
+        '''select out all useful tweets from a single json file and save them to a file'''
+        print("Keywords flitering:", path)
+        start = time.clock()
+        name = path.split('/')[-1]
+
+        ori_count = 0  # record the original number
+        extracted = 0  # record the extracted number
+
+        if name[0] != ".":
+            with open(path, 'r', encoding='utf-8') as file:
+                max_buffer_size = 5000
+                out_buffer = {}
+                size_count = 0
+
+                for f in file:
+                    data = {}
+                    try:
+                        data = json.loads(f)
+                    except:
+                        continue
+                    ori_count += 1
+
+                    if 'text' in data:
+                        text = data['text']
+                        date = data['created_at']
+
+                        temp = text.split()
+                        if len(temp) < 3:
+                            continue
+                        # exclude text that has less than three words
+                        # if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
+                        #     continue
+                        if not self.keywords_search(text):
+                            continue
+                        # if not in inclusion list or in phrases list, skip it
+
+                        if date not in out_buffer:
+                            out_buffer[date] = []
+                        out_buffer[date].append(data)
+                        extracted += 1
+                        size_count += 1
+                        if size_count >= max_buffer_size:
+                            # write the buffer
+                            self.buffer_to_json(out_dir, out_buffer)
+                            size_count = 0
+                            out_buffer.clear()
+
+                        del data
+
+                    else:
+                        del data
+                        continue
+
+                self.buffer_to_json(out_dir, out_buffer)
+                del out_buffer
+                # save retweets if needed
+        endt = time.clock()
+
+        print("ori:", ori_count, "extracted:", extracted)
+        print("Processing time: %s s" % (endt - start))
+        return (ori_count - 1, extracted)
+
+    def keywords_dirs(self, dir_path, out_dir):
+        '''process all json files in directroy'''
+        path_list = find_suffix('json', dir_path)
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        ori_count = 0
+        extracted = 0
+        start_time = time.clock()
+        for file_path in path_list:
+            (ori, ext) = self.keywords_flitering(file_path, out_dir)
+            ori_count += ori
+            extracted += ext
+        end_time = time.clock()
+
+        log = dir_path + " ori: " + \
+            str(ori_count) + " extracted: " + str(extracted) + '\n'
+        with open(os.path.join(out_dir, 'logs.txt'), 'a', encoding='utf-8') as f:
+            f.write(log)
+        print(log)
+        print('Processing time:', end_time-start_time)
 
     def filter_tweets(self, path, out_dir, ignore_geo=True, language='en', ret=True, keywords=False):
         '''select out all useful tweets from a single json file and save them to a file'''
@@ -258,11 +358,15 @@ class archive(object):
                 lang_count = 0
 
                 for f in file:
-                    data = json.loads(f)
+                    data = {}
+                    try:
+                        data = json.loads(f)
+                    except:
+                        continue
                     ori_count += 1
                     if 'lang' not in data or data['lang'] != language:
                         continue
-                    else: 
+                    else:
                         lang_count += 1
 
                     if 'text' in data and (ignore_geo or data['user']['geo_enabled']):
@@ -294,23 +398,25 @@ class archive(object):
                                     ret_buffer.clear()
                             # save retweets to a single file if needed
 
-                        else: # not retweet
+                        else:  # not retweet
                             text = self.regularize(text)
                             # regularize text
-                            if len(text.split()) < 3: 
+                            temp = text.split()
+                            if len(temp) < 3:
                                 continue
                             # exclude text that has less than three words
-
-                            if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
+                            # if keywords and not re.search(self.in_rule, text, flags=re.IGNORECASE):
+                            #     continue
+                            if keywords and not self.keywords_search(text):
                                 continue
-                                # if not in inclusion list or in exclusion list, skip it
+                            # if not in inclusion list or in phrases list, skip it
 
                             location = data['user']['location']
                             coordinates = data['coordinates']
                             place = data['place']
                             created_at = date
                             selected_data = dict(created_at=created_at, text=text,
-                                                location=location, coordinates=coordinates, place=place)
+                                                 location=location, coordinates=coordinates, place=place)
                             if date not in out_buffer:
                                 out_buffer[date] = []
                             out_buffer[date].append(selected_data)
@@ -339,7 +445,7 @@ class archive(object):
 
         print("ori:", ori_count, "ret:",
               retweet, "extracted:", extracted, "language:", lang_count)
-        print("Processing time: %s s"%(endt - start) )
+        print("Processing time: %s s" % (endt - start))
         return (ori_count - 1, extracted, retweet, lang_count)
 
     def filter_dirs(self, dir_path, out_dir, ignore_geo=True, language='en', ret=False, keywords=False):
@@ -368,6 +474,7 @@ class archive(object):
         print(log)
         print('Processing time:', end_time-start_time)
 
+
 class text_pro(object):
     """procoss textual data"""
 
@@ -383,7 +490,8 @@ class text_pro(object):
         r4 = '\s+'  # multiple empty chars
         r5 = 'http[s]?:.*? '
         r6 = '[^A-Za-z0-9_]'  # not alphabet number and _
-        sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5
+        r7 = '\*.+?\*'
+        sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5 + '|' + r7
         text = html.unescape(text)
         text = re.sub(sub_rule, "", text)
         text = emoji.demojize(text, delimiters=('emo_', ' '))
@@ -554,17 +662,18 @@ class text_pro(object):
         text = re.sub(r1, " ", text)
 
         tokens = word_tokenize(text)
-        filtered = [word for word in tokens if word not in STOP_WORDS and 'emo_' not in word]
+        filtered = [
+            word for word in tokens if word not in STOP_WORDS and 'emo_' not in word]
         text = " ".join(filtered)
 
         tokens = word_tokenize(text)
         if len(tokens) <= 2:
             return 1
-        filtered = [word for word in tokens if word not in STOP_WORDS and len(word) > 1]
+        filtered = [
+            word for word in tokens if word not in STOP_WORDS and len(word) > 1]
         text = " ".join(filtered)
 
         return text
-
 
 
 def text_only(in_file, out_file):
@@ -579,7 +688,8 @@ def text_only(in_file, out_file):
                 else:
                     text = data['text']
                     text = text_pro.exclude_stop_word(text)
-                    if text == 1: continue
+                    if text == 1:
+                        continue
                     out_text = (text + "\n")
                     #out_text = data['text']
                     out_f.write(out_text)
@@ -604,8 +714,6 @@ def text_only_tree(in_dir, out_dir):
             out_file = os.path.join(sub_out_dir, file_name[:2] + ".txt")
             text_only(in_file, out_file)
 
-   
-
 
 class CDC_preprocessor(object):
     """preprocess CDC data"""
@@ -625,12 +733,13 @@ class CDC_preprocessor(object):
             data = data[data['SEASON'] == season].reset_index(drop=True)
             data.to_csv(os.path.join(out_path, season + ".csv"), index=0)
 
+
 class Visualization(object):
     '''some toolkit for analysis and visualization'''
 
     def __init__(self):
         super(Visualization, self).__init__()
-    
+
     def rank_retweets(in_dir):
         '''return the top retweets'''
         record = {}
@@ -656,7 +765,6 @@ class Visualization(object):
         rank_result = sorted(record.items(), key=lambda x: x[1], reverse=True)
         return rank_result
 
-
 if __name__ == "__main__":
 
     # input_path = "/Volumes/Data/Twitter/2018/02"
@@ -675,7 +783,7 @@ if __name__ == "__main__":
     # cdc.get_information(cdc_in_path, cdc_out_path)
 
     '''unzip files recursively'''
-    tar_path = "/Volumes/Data/Twitter/2018/10"
+    tar_path = "/Volumes/Data/Twitter/2018/11"
     unzip_tree(tar_path, "bz2", tar_path)
 
     '''labeling'''
