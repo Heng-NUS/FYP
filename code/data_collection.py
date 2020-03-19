@@ -1,21 +1,33 @@
 import bz2
+import gc
+import html
 import json
+import logging
+import multiprocessing
 import os
 import re
-import zlib
 import tarfile
 import time
-import gc
-import numpy as np
-import pandas as pd
+import zlib
+
 import emoji
-import html
 import nltk
+import numpy as np
+import tqdm
+from gensim import corpora, matutils, models, similarities
+from gensim.utils import deaccent
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from smart_open import open
+from pprint import pprint
+from collections import defaultdict
+
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 global WORD_LIST
-
+global STOP_WORDS
+global MIN_FREQUENCY
 
 def load_word_list(word_list_path):
     try:
@@ -29,6 +41,7 @@ def load_word_list(word_list_path):
 word_list_path = './Filter_rule/word_list.json'
 WORD_LIST = load_word_list(word_list_path)
 STOP_WORDS = stopwords.words('english')
+MIN_FREQUENCY = 10
 
 
 def find_suffix(suffix, dir_path):
@@ -489,11 +502,12 @@ class text_pro(object):
         r3 = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # e-mail
         r4 = '\s+'  # multiple empty chars
         r5 = 'http[s]?:.*? '
-        r6 = '[^A-Za-z0-9_]'  # not alphabet number and _
+        r6 = "[^A-Za-z0-9_']"  # not alphabet number and _
         r7 = '\*.+?\*'
         sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5 + '|' + r7
         text = html.unescape(text)
-        text = re.sub(sub_rule, "", text)
+        text = deaccent(text)
+        text = re.sub(sub_rule, " ", text)
         text = emoji.demojize(text, delimiters=('emo_', ' '))
         text = re.sub(r6, ' ', text)
         text = re.sub(r4, ' ', text)
@@ -652,68 +666,110 @@ class text_pro(object):
                 text = data['text']
                 text_pro.regularize(text)
 
-    def tokenize(text):
-        '''tokenize a text'''
-        return word_tokenize(text)
-
     def exclude_stop_word(text):
         '''exclude the stop words from text'''
-        r1 = '[0-9]'
-        text = re.sub(r1, " ", text)
-
-        tokens = word_tokenize(text)
         filtered = [
-            word for word in tokens if word not in STOP_WORDS and 'emo_' not in word]
-        text = " ".join(filtered)
+            word for word in word_tokenize(text) if word not in STOP_WORDS and len(word) > 1]
+        temp = []
+        r1 = "[0-9]|__+|^_"
+        r2 = '[A-Za-z]'
+        for token in filtered:
+            if not re.search(r2, token) or re.search(r1, token):
+                continue
+            else:
+                temp.append(token)
+            
+        if len(temp) < 4:
+            return 0
+        return temp
 
-        tokens = word_tokenize(text)
-        if len(tokens) <= 2:
-            return 1
-        filtered = [
-            word for word in tokens if word not in STOP_WORDS and len(word) > 1]
-        text = " ".join(filtered)
-
-        return text
-
-
-def text_only(in_file, out_file):
-    '''save extracted text to out_file'''
-    with open(in_file, 'r', encoding='utf-8') as in_f, open(out_file, 'a', encoding='utf-8') as out_f:
-        for line in in_f:
+def word_frequency_json(file):
+    '''return the word frequency of a twitter file'''
+    frequency = defaultdict(int)
+    with open(file, 'r', encoding='utf-8') as f:
+        line_count = 0
+        for line in f:
+            line_count += 1
             if line != "\n":
                 try:
                     data = json.loads(line)
-                except IOError:
-                    print("Can't read ", in_file)
+                except:
+                    print("Error with:", in_file, "Line", line_count)
+                    continue
+                else:
+                    text = data['text']
+                    token = word_tokenize(text)
+                    for word in token:
+                        frequency[word] += 1
+    return frequency
+
+                    
+
+def text_only(in_file, out_file, frequency=None, min_frequency=3):
+    '''save extracted text from a single file to out_file'''
+    with open(in_file, 'r', encoding='utf-8') as in_f, open(out_file, 'a', encoding='utf-8') as out_f:
+        line_count = 0
+        print("processing: ", in_file)
+        start_t = time.clock()
+        for line in in_f:
+            line_count += 1
+            if line != "\n":
+                try:
+                    data = json.loads(line)
+                except:
+                    print("Error with:", in_file, "Line", line_count)
+                    continue
                 else:
                     text = data['text']
                     text = text_pro.exclude_stop_word(text)
-                    if text == 1:
+                    if text == 0:
                         continue
+                    if frequency:
+                        text = [token for token in text if frequency[token] >= min_frequency]
+                    text = " ".join(text)
                     out_text = (text + "\n")
                     #out_text = data['text']
                     out_f.write(out_text)
+        end_t = time.clock()
+        print("Finished:", end_t - start_t)
 
 
-def text_only_tree(in_dir, out_dir):
-    if not os.path.exists(in_dir):
+def text_only_dir(in_dir, out_dir, suffix="json", rm_low_frequency=True, min_frequency=3):
+    ''''''
+    start_t = time.clock()
+    path_list = []
+    if os.path.isfile(in_dir):
+        path_list = [in_dir]
+    elif os.path.exists(in_dir):
+        path_list = find_suffix(suffix, in_dir)
+    else:
         print("Can't find", in_dir)
         exit(0)
-    else:
-        path_list = find_suffix("json", in_dir)
-        if not os.path.exists(out_dir):
-            os.makedirs(out_dir)
+        
+    frequency = defaultdict(int)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    if rm_low_frequency:
         for in_file in path_list:
-            date = in_file.split('_')
-            file_name = date[-1]
-            sub_out_dir = os.path.join(out_dir, date[-2])
+            temp = word_frequency_json(in_file)
+            for word, count in temp.items():
+                frequency[word] += count
+        with open(os.path.join(out_dir, 'frequency.json'),'w', encoding='utf-8') as file:
+            json.dump(obj=frequency, fp=file)
+    #frequency list
 
-            if not os.path.exists(sub_out_dir):
-                os.makedirs(sub_out_dir)
+    for in_file in path_list:
+        file_name = os.path.basename(in_file)
+        file_name = file_name.split('.')[0]
 
-            out_file = os.path.join(sub_out_dir, file_name[:2] + ".txt")
+        out_file = os.path.join(out_dir, file_name + ".txt")
+        if rm_low_frequency:
+            text_only(in_file, out_file, frequency=frequency, min_frequency=min_frequency)
+        else:
             text_only(in_file, out_file)
-
+    end_t = time.clock()
+    print("Extracting Finished:", end_t-start_t)
 
 class CDC_preprocessor(object):
     """preprocess CDC data"""
@@ -765,6 +821,7 @@ class Visualization(object):
         rank_result = sorted(record.items(), key=lambda x: x[1], reverse=True)
         return rank_result
 
+
 if __name__ == "__main__":
 
     # input_path = "/Volumes/Data/Twitter/2018/02"
@@ -783,14 +840,14 @@ if __name__ == "__main__":
     # cdc.get_information(cdc_in_path, cdc_out_path)
 
     '''unzip files recursively'''
-    tar_path = "/Volumes/Data/Twitter/2018/11"
-    unzip_tree(tar_path, "bz2", tar_path)
+    # tar_path = "/Volumes/Data/Twitter/2018/11"
+    # unzip_tree(tar_path, "bz2", tar_path)
 
     '''labeling'''
     # data_path = './Data/dataset/2018/10/2018_10_05.json'
     # out_name = './Data/twitter.json'
     # text_pro.label_file(data_path, out_name)
 
-    # out_dir = 'testData'
-    # in_dir = './Data/topics/2018/01/'
-    # text_only_tree(in_dir, out_dir)
+    out_dir = '/Volumes/White/text'
+    in_dir = '/Volumes/White/Data/filtered/2018/01/2018_01_01.json'
+    text_only_dir(in_dir, out_dir, rm_low_frequency=True, min_frequency=MIN_FREQUENCY)

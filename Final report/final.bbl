@@ -223,6 +223,13 @@
 \newblock {\em Journal of Telecommunication, Electronic and Computer
   Engineering (JTEC) 10}, 1-8 (2018), 41--46.
 
+\bibitem{rehurek_lrec}
+{\sc {\v R}eh{\r u}{\v r}ek, R., and Sojka, P.}
+\newblock {Software Framework for Topic Modelling with Large Corpora}.
+\newblock In {\em {Proceedings of the LREC 2010 Workshop on New Challenges for
+  NLP Frameworks}\/} (Valletta, Malta, May 2010), ELRA, pp.~45--50.
+\newblock \url{http://is.muni.cz/publication/884893/en}.
+
 \bibitem{relatedwords.org}
 {\sc {relatedwords}}.
 \newblock Words that are associated with flu.
