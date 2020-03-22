@@ -211,6 +211,11 @@
 \newblock In {\em Fifth International AAAI Conference on Weblogs and Social
   Media\/} (2011).
 
+\bibitem{paul2012model}
+{\sc Paul, M.~J., and Dredze, M.}
+\newblock A model for mining public health topics from twitter.
+\newblock {\em Health 11}, 16-16 (2012), 1.
+
 \bibitem{paul2014discovering}
 {\sc Paul, M.~J., and Dredze, M.}
 \newblock Discovering health topics in social media using topic models.
@@ -337,6 +342,12 @@
 \newblock A biterm topic model for short texts.
 \newblock In {\em Proceedings of the 22nd international conference on World
   Wide Web\/} (2013), pp.~1445--1456.
+
+\bibitem{yan2015probabilistic}
+{\sc Yan, X., Guo, J., Lan, Y., Xu, J., and Cheng, X.}
+\newblock A probabilistic model for bursty topic discovery in microblogs.
+\newblock In {\em Twenty-Ninth AAAI Conference on Artificial Intelligence\/}
+  (2015).
 
 \bibitem{zhao2011comparing}
 {\sc Zhao, W.~X., Jiang, J., Weng, J., He, J., Lim, E.-P., Yan, H., and Li, X.}
