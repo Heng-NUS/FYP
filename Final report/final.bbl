@@ -193,11 +193,28 @@
 \newblock Nltk: The natural language toolkit.
 \newblock {\em CoRR cs.CL/0205028\/} (2002).
 
+\bibitem{mikolov2013efficient}
+{\sc Mikolov, T., Chen, K., Corrado, G., and Dean, J.}
+\newblock Efficient estimation of word representations in vector space.
+\newblock {\em arXiv preprint arXiv:1301.3781\/} (2013).
+
+\bibitem{mikolov2013distributed}
+{\sc Mikolov, T., Sutskever, I., Chen, K., Corrado, G.~S., and Dean, J.}
+\newblock Distributed representations of words and phrases and their
+  compositionality.
+\newblock In {\em Advances in neural information processing systems\/} (2013),
+  pp.~3111--3119.
+
 \bibitem{mill2016utilitarianism}
 {\sc Mill, J.~S.}
 \newblock Utilitarianism.
 \newblock In {\em Seven masterpieces of philosophy}. Routledge, 2016,
   pp.~337--383.
+
+\bibitem{moody2016mixing}
+{\sc Moody, C.~E.}
+\newblock Mixing dirichlet topic models and word embeddings to make lda2vec.
+\newblock {\em arXiv preprint arXiv:1605.02019\/} (2016).
 
 \bibitem{omary2010machine}
 {\sc Omary, Z., and Mtenzi, F.}
@@ -298,6 +315,13 @@
 {\sc Tankard, C.}
 \newblock Big data security.
 \newblock {\em Network security 2012}, 7 (2012), 5--8.
+
+\bibitem{teh2005sharing}
+{\sc Teh, Y.~W., Jordan, M.~I., Beal, M.~J., and Blei, D.~M.}
+\newblock Sharing clusters among related groups: Hierarchical dirichlet
+  processes.
+\newblock In {\em Advances in neural information processing systems\/} (2005),
+  pp.~1385--1392.
 
 \bibitem{tuarob2013discovering}
 {\sc Tuarob, S., Tucker, C.~S., Salathe, M., and Ram, N.}

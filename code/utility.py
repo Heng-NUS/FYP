@@ -245,14 +245,14 @@ class text_pro(object):
         r3 = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # e-mail
         r4 = '\s+'  # multiple empty chars
         r5 = 'http[s]?:.*? '
-        r6 = "[^A-Za-z0-9_']"  # not alphabet number and _
+        # r6 = "[^A-Za-z0-9_']"  # not alphabet number and _
         r7 = '\*.+?\*'
         sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5 + '|' + r7
         text = html.unescape(text)
         text = deaccent(text)
         text = re.sub(sub_rule, " ", text)
         text = emoji.demojize(text, delimiters=('emo_', ' '))
-        text = re.sub(r6, ' ', text)
+        # text = re.sub(r6, ' ', text)
         text = re.sub(r4, ' ', text)
         return text.lower()
 

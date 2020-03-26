@@ -1,5 +1,6 @@
-
 from utility import *
+import pandas as pd
+
 
 class Archive(object):
     """preprocess archive twitter data"""
@@ -13,6 +14,7 @@ class Archive(object):
         self.ex_rule = ""
         self.stop_rule = ""
         self.out_dir = os.path.join(os.getcwd(), '/Data/dataset/')
+        self.hashtag_re = re.compile("(?:^|\s)[＃#]{1}(\w+)", re.UNICODE)
 
         for x in word_list['include_words']:
             new_words = x + "|"
@@ -202,6 +204,7 @@ class Archive(object):
 
                     if 'text' in data and (ignore_geo or data['user']['geo_enabled']):
                         text = data['text']
+                        hashtags = self.hashtag_re.findall(text)
 
                         time_split = data['created_at'].split()
                         date = time_split[-1] + '/' + \
@@ -247,7 +250,7 @@ class Archive(object):
                             place = data['place']
                             created_at = date
                             selected_data = dict(created_at=created_at, text=text,
-                                                 location=location, coordinates=coordinates, place=place)
+                                                 location=location, coordinates=coordinates, place=place, hashtags=hashtags)
                             if date not in out_buffer:
                                 out_buffer[date] = []
                             out_buffer[date].append(selected_data)
@@ -305,6 +308,40 @@ class Archive(object):
         print(log)
         print('Processing time:', end_time-start_time)
 
+
+class Other_dataset(object):
+    '''extract covid-19 data'''
+
+    def extract_covid(self, in_file, out_file):
+        data = pd.read_csv(in_file)
+        for index, row in tweets.iterrows():
+            if row["Tweet Language"] != ["English"]:
+                continue
+                pass
+            
+    def extract_news_dir(self, in_dir, out_dir, suffix='txt'):
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        if os.path.isfile(in_dir):
+            file_name = os.path.basename(in_dir)
+            out_file = os.path.join(out_dir, file_name)
+            self.extract_news(file, out_file)
+        elif os.path.isdir(in_dir):
+            file_list = find_suffix(suffix, in_dir)
+            for file in file_list:
+                file_name = os.path.basename(file)
+                out_file = os.path.join(out_dir, file_name)
+                self.extract_news(file, out_file)
+
+    def extract_news(self, in_file, out_file):
+        '''extract text from healthcare tweets'''
+        print("Processing", in_file)
+        with open(in_file, 'r') as in_f, open(out_file, 'a', encoding="utf-8") as out_f:
+            for line in in_f:
+                if len(line) > 1:
+                    text = line.split("|")[-1]
+                    text = text_pro.regularize(text)
+                    out_f.write(text + '\n')
 
 class CDC_preprocessor(object):
     """preprocess CDC data"""

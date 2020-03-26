@@ -24,10 +24,10 @@ logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 if __name__ == "__main__":
-    input_path = "/Volumes/Data/Twitter/2019/01"
-    out_dir = '/Volumes/White/Data/tweets'
-    acv = Archive(WORD_LIST)
-    acv.filter_dirs(input_path, out_dir, ret=True, keywords=False)
+    # input_path = "/Volumes/Data/Twitter/2019/01"
+    # out_dir = '/Volumes/White/Data/tweets'
+    # acv = Archive(WORD_LIST)
+    # acv.filter_dirs(input_path, out_dir, ret=True, keywords=False)
 
     # data_count(input_path,func = 'line')
 
@@ -59,3 +59,9 @@ if __name__ == "__main__":
     # dicts = [os.path.join(dirc, x) for x in os.listdir(dirc)]
     # for path in dicts:
     #      line_count(path, "json")
+
+    '''other data'''
+    # input_dir = "/Volumes/White/Health-Tweets"
+    # out_dir = "/Volumes/White/training"
+    # otherset = Other_dataset()
+    # otherset.extract_news_dir(input_dir, out_dir)

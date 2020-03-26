@@ -1,0 +1,167 @@
+\label{sec:uncoverig}
+There are massive topics related to healthcare and diseases and them expand everyday, it's impractical to list them all. \cite{tuarob2013discovering} defined health-related messages as follows: (1) either a message indicates explicitly the sick (or health problems) of the author; (2) or the message contains the author's worries about health probelms (e.g. someone else falling ill, disease outbreak). To surveille diseases, we want to cluster messages(tweets) into different groups, find out what topics are concerned about. The aim of this section is to build a model (or a ensemble of different models) that can: (1) check wether a input document is related to health; (2) assign the checked document to one best match topic. If there is no topic match it, create a new one and assign the document to it (one similar example is hot event discovery). To achieve this, the model should be able to: (1) update the parameters over new input; (2) handle unseen input (such as new words, new topics, new meaning of a seen word, etc.). As far as we know, there is no such model.
+\\\\
+In the existing works, there are two types of models: supervised and unsupervised. \cite{serban2019real,aramaki2011twitter,lampos2010flu,chen2017disease} use supervised machine learning and deep learning techniques to detect flu. Their experimental results show that when used to detect the known disease, supervised models can get high accuracy. However, the performance of such model highly depends on the training set. For topics that are not in the training set, supervised models cannot recognize it. 
+Hence a single end-to-end supervised model (label the data in advance) is not be qualified under this scenario. \cite{paul2012model} introduces Ailment Topic Aspect Model (ATAM) that amis to classify aliments. ATAM is an unsupervised model, requires a set of aliments and the prior distribution of them. Its essence is an variant of LDA, and the hyper-parameter K (the number of diseases/topics) is defined before training. Since the aliments and symptoms are pre-defined, ATAM cannot be treated as a pure unsupervised model, and it can't recognize new health event. However, pure unsupervised models cluster data based on its structure, and therefore are not able to identify whether a document is health-related or not. In addition, the generated topics are hard to interpret. Hence, to achieve the requirements of our model, both supervised and unsupervised methods are required.
+\\\\
+To extract health-related tweets and topics, \cite{paul2014discovering, paul2011you} described a general framework with 2 main phases: data filtering and topic modeling. The first phase is vital for narrowing down search space. They adopt keyword searching and machine learning as data filtering method. 269 keywords and 20,000 keyphrases were collected and used to filter out irrelevant data roughly. Then 5128 tweets selected randomly from dataset were labeled for training a SVM classifier that identifies wether a input is or isn't health-related. In the second phase, probabilistic topic modeling such as LDA and ATAM are used to cluster tweets and get interpretable topics. \cite{serban2019real,sadilek2012modeling} followed the same framework to classify tweets in their system, with some variance on data labeling, keywords list and classifier. \cite{elkin2017network} used exclusion list rather a classifier in phase one. 
+\\\\
+Before adopting any existing framework, we used Online Biterm Term Modeling (OBTM, a unsupervised Topic modeling algorithm, details can be found in section \ref{sec:topic modeling}) on a sample of processed data, to see how many health-related topics can be found. The sample covers all processed tweets created at Jan 2018 (13,643,710 non-retweet english tweets). The algorithm took three days on calculation to cluster documents into 100 topics. Merely few topics contain words related to health while they are hard to interpret. Similar experimental results can be found in \cite{zhao2011comparing}, where the authors calculate the distribution of topic categories, and find that roughly 5\% tweets are about health. To narrow down the search space, decrease the running time and make the final results more interpretable, our project adopts a similar framework with \cite{paul2014discovering}: use the keywords search first, then cluster topics. The details and experimental results are in following sections.
+
+\section{Keywords search}
+\label{sec:Keywords search}
+Influenza is one of the most common diseases and is analyzed most by researchers. For scientific comparison, it was used to test the dataset. \cite{aramaki2011twitter} used a simple word look-up of ``influenza'', which may lose massive valuable data. In inspired by \cite{lamb2013separating,lampos2010flu}, we create a list with 26 words highly related to flu based on Flu Symptoms \cite{cdc.symp} Cambridge Dictionary \cite{cambridge} and relatedwords.org \cite{relatedwords.org}. The complete word list can be seen in table \ref{tab:words list}, note that not all the words from the sources are added to our list. Professional terms are excluded since they are hardly used in colloquialism. Words that are wildly used in other scenarios (such as chill, cold) and phrases that contain keywords in our list (such as asian influenza) are not added. Then tweets are filtered according to the list (ignore case). In this step, we initially adopted a relatively lose filtering strategy: accept tweets containing any string in our list. 
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{p{90pt}p{320pt}}
+        Source & Word list \\ \hline
+        \href{https://www.cdc.gov/flu/symptoms/symptoms.htm}{CDC} &  fever, feverish, sore throat, runny nose, stuffy nose, headache, nasal congestion, diarrhea, bluish lips, bluish face, dehydration\\ \hline
+        \href{https://dictionary.cambridge.org/us/topics/disease-and-illness/colds-and-flu/}{Dictionary} & flu, catarrh, cough, common cold, influenza, sniffle, snuffle\\ \hline
+        \href{https://relatedwords.org/relatedto/flu}{relatedwords.org} & h1n1, h5n1, coughing, cholera, ebola, epidemic, feverous, measles \\ \hline
+    \end{tabular}
+    \caption{Inclusion list}
+    \label{tab:words list}
+\end{table}
+\\
+Table \ref{tab:filtering} shows the number of left tweets after keywords filtering with this list. The test sample are tweets posted in the first 5 days of Oct 2018 (with retweets), and in Jan 2018 (without retweets). 
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{ccc}
+        Date & Original & Filtered \\ \hline
+        2018/10/01 & 4317376 & 5984 \\
+        2018/10/02 & 4349129 & 5740 \\
+        2018/10/03 & 4417333 & 5415 \\
+        2018/10/04 & 4337327 & 5676 \\
+        2018/10/05 & 4273031 & 5190 \\
+        2018/01 & 134704400 & 37519 \\
+    \end{tabular}
+    \caption{Tweet counts after flu-related keywords filtering}
+    \label{tab:filtering}
+\end{table}
+\\\\
+The result corresponds with experiment conducted by \cite{culotta2010towards}, where the majority of the filtered tweets are irrelevant to keywords. The possible reasons could be that people will use those words even when they are healthy (such as headache), and some words are substring of other words (such as chill-Achill, flu-influence). Another probelm found after this step is that the volume of filtered data is far less than expectation. When retweets are included, nearly 0.129\% data are left. Exclude retweets, the percentage drops to 0.0279\% (although the experiment doesn't operate on a same sample set). In the initial design, geo-tagged tweets (tweets with geographic information) created at certain regions are required. According to \cite{sloan}, geo-tagged tweets are scarce (less than 5\% in their experiment), meaning that the percentage of target data could be much lower (less than 0.001\%). Under such condition, massive data are required to get a reliable estimation. To get 10000 filtered data, at least 100000000 metadata are required. The results indicate that, our dataset may be insufficient for analyzing a single disease (such as flu) when the geographic information is required. Therefore, to get a reliable and convincing dataset, we treat all diseases as a whole, expand the inclusion list to more than 9,000 keywords and keyphrases. The sources are given in \cite{paul2011you}. Table \ref{tab:filtering2} shows the filtering results with new keywords list. More than 30 thousand tweets per day are left, which we believe is sufficient for analysis.
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{ccc}
+        Date & total & average(per day) \\ \hline
+        2018/01 & 3590773 & 115831 \\
+        2018/02 & 1087720 & 40285 \\
+        2018/03 & 1108867 & 35769 \\
+        2018/04 & 769700 & 33465 \\
+        2018/10 & 1035587 & 33406 \\
+    \end{tabular}
+    \caption{Tweet counts after health-related keywords filtering}
+    \label{tab:filtering2}
+\end{table}
+
+\section{Supervised classification}
+\label{sec:Supervised classification}
+To overcome the drawbacks of first round filtration, further filtration is required. \cite{elkin2017network} created another exclusion dictionary containing keywords and phrases indicating tweets should not be included in the filtered dataset, such as "sick and tired". But their experiment shows the accuracy of their method is roughly 70\%, which we think is relatively lower than our requirement. This result can result from their choice of exclusion words and their dataset.  Since we want to get a higer filtering accuracy, we decide to use a machine learning based classification method \cite{aramaki2011twitter}. We labeled our dataset, and trained a binary classifier. Following are our detailed methods:
+\begin{enumerate}
+    \item Data labeling (classification): as mentioned before, we want to our classifier can tell wether a tweet is relevant to flu, therefore, we adopt a simple binary labeling strategy. We write a piece code and manually labeled the regularized data 1 and 0 (1 means it indeed relates to flu). While labeling, we found that some tweets can't be told wether they are truly related to flu, such as ``Coughing!'', ``i'm chilling'. And since in our first filtering (section \ref{sec:Keywords search}), we adopt a relatively loose rule, which accepts tweet that containing any string (word) in our inclusion dictionary, no matter the word is indeed a sub-string of another word (eg. flu and influence), the majority of filtered tweets (roughly 83\%, 450 of 540) are toally irrelevant to flu. In addition, some tweets are flu-related, but don't show signs of catching a flu, such as ``Just had my flu jab!''. All the problems mentioned above increase the difficulty of labeling. While we have more than a billion raw data, we decide to change our initial design and set a strict standard in filtering. Followings are our specific labeling rules: 
+    \begin{itemize}
+        \item tweets that don't contain any exact word in our word list will be excluded (eg. tweet containg ``feverfew'' and no other keywords won't be accepted even it has string ``fever'')
+        \item tweets containing fewer words (no specific number) will be label 0, even they have keywords inside (eg. ``coughing!''), since they can hardly be classified
+        \item tweets containing keywords but are irrelevant to flu will be labeled 0 (eg. ``Monday Chill. Always Chill'')
+        \item tweets talking about flu outbreak happened in the history and past, about catching a flu before (months or years ago) and about flu statistics will be labeled 0 (eg. ``Over 80,000 Americans Died of Flu Last Winter, Highest Toll in Years'')
+        \item tweets talking about flu but don't have signs of catching flu or outbreak of flu will be labeled 0 (eg. ``Flu vaccine is very safe - risk of serious reaction is less than one in a million, much lower risk than catching the flu'', ``It's that time of year again. Here are some tips to help your child get through a cough or cold.'')
+        \item tweets containing symptoms of flu but can't tell the whether such symptoms are result of flu will be labeled 0 (eg. ``i’ve had a headache since yesterday and i wanna die'')
+        \item tweets meeting the requirements above but still cause confusion when classification will be labeled 0 (eg. ``All iwanna do is cuddleand not cough every minute'')
+        \item only tweets containing real information of getting flu and can easily be recognized will be labeled 1 (eg. ``Oh, is it colds and flu? Get well soon, and rest'')
+    \end{itemize} 
+    All the examples given above come from our dataset. Note that this standard is still not precise enough and can't guarantee all the data are correctly labeled, since the classification result highly depends on individuals who label the data. To minimize such difference brought by manual work, we built a exclusion list based on our deliberate review on the dataset during labeling, and labeled tweet containing word in the list 0.
+    \item Stop words elimination: stop-words are words that are not regarded as keywords in text mining. Examples are: is, am, did, a, an, the, ect. Exclude stop-words can reduce the length of the text and dimensionality of term space\cite{vijayarani2015preprocessing}. There are four stop-word removal methods: (1) manually define the removal list; (2) Zipf' law based methods, which removes the most frequent and least frequent words; (3) Mutual information method (MI), a supervised method that can evaluate the discrimination power of a term for classification; (4) Term Based Random Sampling (TBRS), which is based on a term's importance \cite{jivani2011comparative}. 
+\end{enumerate}
+
+To get meaningful words referring to an extracted topic, we exclude stop words listed by NLTK (The Natural Language Toolkit) \cite{journals/corr/cs-CL-0205028}.
+
+\section{Unsupervised document clustering and topic generation}
+\label{sec:unsupervised}
+Supervised model screen out documents that are health-related. To detect unseen diseases and healthcare events, we seek solutions on unsupervised algorithm. To our knowledge, there are two general schools of thought on unsupervised document clustering: probability based and neural network based. This section will introduce both and provides some experimental result of applying them on our dataset. Then we will explain how our model are build upon them. The test data used in this section are the tweets posted by CDChealth in our benchmark dataset, which contain 3741 unique tweets.
+
+\subsection{Probability based Topic Model}
+\label{sec:topic modeling}
+Topic modeling is a typical tool that frequently used for discovering abstract topics hidden in documents. It mainly uses techniques of Probability. Early progress includes algorithms such as latent semantic indexing (LSI), Unigram language model and Probabilistic latent semantic analysis (PLSA) \cite{hofmann1999probabilistic, baeza1999modern}. They abstract document (d), topic (z) and word (w) from corpus, assume that the generation of a document can be considered as picking a sequence of words from dictionary based on certain probabilistic distribution. Latent Dirichlet Allocation (LDA) \cite{blei2003latent} is a more advanced algorithm under bayesian probability framework. Most of current text modeling algorithms are variants of it. It assumes that: a word is the basic unit of a document, one document could have multiple topics; there are various latent topics that can be characterized by a multinomial distribution over words. The generation of a document can be seen in figure \ref{fig:lda}. It can be explained as following steps: 
+\begin{enumerate}
+    \item choose the number of words based on poisson distribution and a prior N
+    \item choose the topic distribution {$\theta_d$} of this document based on dirichlet distribution with prior {$\alpha$}
+    \item for each word {$w_w$} in document {$d$}:
+    \begin{enumerate}
+        \item choose its topic {$z_w$} based on multinomial distribution with prior {$\theta_d$}
+        \item choose a word {$w_w$} based on multinomial probability with prior {$z_w$} and {$\beta$}
+    \end{enumerate}
+\end{enumerate}
+\begin{figure}[!htp]
+    \centering
+    \begin{tikzpicture}
+      [
+        observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+        unobserved/.style={minimum size=15pt,circle,draw},
+        hyper/.style={minimum size=1pt,circle,fill=black},
+        post/.style={->,>=stealth',semithick},
+      ]
+  
+      \node (w-j) [observed] at (0,0) {$w_w$};
+      \node (z-j) [unobserved] at (-1.5,0) {$z_w$};
+      \node (z-prior) [unobserved] at (-3,0) {$\theta_d$};
+      \node (z-hyper) [label=above:$\alpha$] at (-4.5,0) {};
+      \filldraw [black] (-4.5,0) circle (3pt);
+      \node (w-hyper) [label=above:$\beta$] at (-1.5,1.5) {};
+      \filldraw [black] (-1.5,1.5) circle (3pt);
+      
+      \path
+      (z-j) edge [post] (w-j)
+      
+      (z-hyper) edge [post] (z-prior)
+      (z-prior) edge [post] (z-j)
+  
+      (w-hyper) edge [post] (w-j)
+      ;
+  
+      \node [draw,fit=(w-j) (z-prior), inner sep=14pt] (plate-context) {};
+      \node [above right] at (plate-context.south west) {$D$};
+      \node [draw,fit=(w-j) (z-j), inner sep=10pt] (plate-token) {};
+      \node [above right] at (plate-token.south west) {$N$};
+  
+    \end{tikzpicture}
+    \caption{Plate Diagram of LDA.\cite{blei2003latent}}
+    \label{fig:lda}
+  \end{figure}
+We applied LDA to our dataset. Table \ref{tab:LDA1} shows the experimental result. 
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{|p{45pt}|p{210pt}|p{80pt}|p{50pt}|}
+        \hline
+        Topic ID & Top\_words(10) & number of doc & Coherence \\ \hline
+        1 & study health child risk may say flu canada find heart  & & -3.90\\ \hline
+        2 & cancer medical case food measles kid marijuana school man death & & -12.28 \\ \hline
+        3 & ebola doctor outbreak say ebola\_outbreak health vaccine mental virus case  & & -5.88 \\ \hline
+        4 & health patient care hospital say help woman canada cancer get  & & -4.30 \\ \hline
+        5 & life doctor say quebec recalled concussion could teen rule safety  & & -11.81 \\ \hline
+        & & & -7.63 \\ \hline
+       
+    \end{tabular}
+    \caption{Experimental result of LDA}
+    \label{tab:LDA1}
+\end{table}
+This model works well on long document such as news, column reports. However, since it captures the word co-occurrence pattern at document-level, its performance may decrease when running on short document such as tweets due to word sparsity probelm \cite{yan2013biterm}. \\\\
+Biterm Topic Model (BTM) \cite{yan2013biterm, cheng2014btm} provides a feasible solution, it learns the co-occurrence pattern of unordered word pairs (a Biterm) at corpus-level and gets a better retrieval result than LDA and PLSA on short text. The idea behind BTM is that, one words could contain multiple meaning under different scenarios and topics, while a word-pair is more likely belongs to one topic. Despite when dataset containing more than 1,000,000 unique words, the set of biterms will be extremely large ($\frac{|B| = |D| * (|D|-1)}{2}$, where $|B|$ is the number of biterms, $|D|$ is the number of words), BTM provides an feasible solution to representation of multi-meaning words. Online version BTM (OBTM) \cite{cheng2014btm} divides corpus into small batches according to time slice, it therefore can continuously update model parameters. Bursty Biterm Topic Models \cite{yan2015probabilistic} assumes that a biterm has two states: it can either appear in normal document or in some new topics. It then uses the extra information to discover the bursty topics. Inspired by the series of BTM algorithm, we get the following hints:
+\begin{enumerate}
+    \item ambiguity can be alleviated by forming word pairs (similar to n-gram). For example, while Apple has multiple meaning, (Apple, Macbook) should be assigned to digital devices topics, and (Apple, Orange) should be assigned to fruit.
+    \item online model can be achieved by introducing memory mechanism, updating model with previous state (such as LSTM). Especially for surveillance, we mainly cares about new situations, meaning that previous topics can be gradually forgot.
+    \item prior distribution and background word distribution can be introduced to indicate the likelihood of a word is related to new events. Then the probability can be used to detect bursty topics
+\end{enumerate} 
+Topic models listed above are relatively static. The number of topics K is a hyper-parameter that should be given before training them. In reality, social media topics are changing everyday. The content and number of healthcare topics change dynamically. To cluster data into unknown number of groups, \cite{teh2005sharing} use the Dirichlet process (DP) mixture model in their model.
+
+\subsection{Document vector}
+\label{sec:Document vector}
+Document vector shows another direction for solving this probelm. The idea behind it is that map original text to a vector space, clustering documents based on certain algorithm (such as k-means). The key point is how to map documents and assign them with physical meaning. Traditional methods used to represent documents includes bag-of-words and TF-IDF model. They transform words to vectors based on the count of words in whole corpus and hence has no physical meaning in a vector space. Word embeddings techniques such as Word2vec \cite{mikolov2013distributed,mikolov2013efficient} introduce some techniques of how to transform words into distributed dense word vectors. Word2vec is a machine learning algorithm based on neural network that can learns relationships between words automatically. Each word is represented by a vector with remarkable linear relationships. One example is: vec(“king”) - vec(“man”) + vec(“woman”) =~ vec(“queen”). Such representation is close to human cognition. Inspired by it, documents, topics are possible to be presented in such way. If words, documents and topics share the same space, then their relationships can be calculated easily. For example, if a document vector is more ``close'' to a topic vector, it is more likely belongs to that topic. Lda2vec \cite{moody2016mixing} is an application of such idea. It combines LDA and Word2vec, takes the advantage of both. Use word embeddings to extract the relationships between words and use LDA to uncover the latent information at document level. 
+
+\subsection{Our model}
+\label{sec:modelinh}
+
+Gensim \cite{rehurek_lrec} is a wildly-used NLP library.

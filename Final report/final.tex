@@ -7,6 +7,13 @@
 \usepackage{url}
 \usepackage{sectsty} % Enables custom section titles
 \include{thesis.preamble}
+\usepackage{algorithmic}
+\usepackage{amstext}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,fit,positioning}
+
+\newcommand{\dir}{\text{Dirichlet}}
+\newcommand{\mult}{\text{Multinomial}}
 
 \usepackage{titlesec}
 \titleformat{\chapter}[display]   
@@ -42,10 +49,11 @@
 \chapter{Design}
 \input{chapters/design}
 
-\chapter{Signal extraction}
+\chapter{Data collection and processing}
 \input{chapters/data}
 
-\chapter{Modeling}
+\chapter{Signal extraction}
+\input{chapters/uncover.tex}
 
 \chapter{Evaluation}
 
