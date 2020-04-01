@@ -157,10 +157,15 @@
 \newblock \url{https://archive.org/about/terms.php}, 2019.
 \newblock Accessed December 30, 2019.
 
-\bibitem{jivani2011comparative}
-{\sc Jivani, A.~G., et~al.}
-\newblock A comparative study of stemming algorithms.
-\newblock {\em Int. J. Comp. Tech. Appl 2}, 6 (2011), 1930--1938.
+\bibitem{joulin2016bag}
+{\sc Joulin, A., Grave, E., Bojanowski, P., and Mikolov, T.}
+\newblock Bag of tricks for efficient text classification.
+\newblock {\em arXiv preprint arXiv:1607.01759\/} (2016).
+
+\bibitem{kim2014convolutional}
+{\sc Kim, Y.}
+\newblock Convolutional neural networks for sentence classification.
+\newblock {\em arXiv preprint arXiv:1408.5882\/} (2014).
 
 \bibitem{kim2016competitive}
 {\sc Kim, Y., Dwivedi, R., Zhang, J., and Jeong, S.~R.}
@@ -180,6 +185,12 @@
 \newblock Flu detector-tracking epidemics on twitter.
 \newblock In {\em Joint European conference on machine learning and knowledge
   discovery in databases\/} (2010), Springer, pp.~599--602.
+
+\bibitem{le2014distributed}
+{\sc Le, Q., and Mikolov, T.}
+\newblock Distributed representations of sentences and documents.
+\newblock In {\em International conference on machine learning\/} (2014),
+  pp.~1188--1196.
 
 \bibitem{lee2013real}
 {\sc Lee, K., Agrawal, A., and Choudhary, A.}
@@ -237,6 +248,12 @@
 {\sc Paul, M.~J., and Dredze, M.}
 \newblock Discovering health topics in social media using topic models.
 \newblock {\em PloS one 9}, 8 (2014).
+
+\bibitem{pennington2014glove}
+{\sc Pennington, J., Socher, R., and Manning, C.~D.}
+\newblock Glove: Global vectors for word representation.
+\newblock In {\em Proceedings of the 2014 conference on empirical methods in
+  natural language processing (EMNLP)\/} (2014), pp.~1532--1543.
 
 \bibitem{perdana2018combining}
 {\sc Perdana, R.~S., and Pinandito, A.}
@@ -355,12 +372,6 @@
 \newblock The impact of preprocessing on text classification.
 \newblock {\em Information Processing \& Management 50}, 1 (2014), 104--112.
 
-\bibitem{vijayarani2015preprocessing}
-{\sc Vijayarani, S., Ilamathi, M.~J., and Nithya, M.}
-\newblock Preprocessing techniques for text mining-an overview.
-\newblock {\em International Journal of Computer Science \& Communication
-  Networks 5}, 1 (2015), 7--16.
-
 \bibitem{yan2013biterm}
 {\sc Yan, X., Guo, J., Lan, Y., and Cheng, X.}
 \newblock A biterm topic model for short texts.
@@ -372,6 +383,14 @@
 \newblock A probabilistic model for bursty topic discovery in microblogs.
 \newblock In {\em Twenty-Ninth AAAI Conference on Artificial Intelligence\/}
   (2015).
+
+\bibitem{yang2019xlnet}
+{\sc Yang, Z., Dai, Z., Yang, Y., Carbonell, J., Salakhutdinov, R.~R., and Le,
+  Q.~V.}
+\newblock Xlnet: Generalized autoregressive pretraining for language
+  understanding.
+\newblock In {\em Advances in neural information processing systems\/} (2019),
+  pp.~5754--5764.
 
 \bibitem{zhao2011comparing}
 {\sc Zhao, W.~X., Jiang, J., Weng, J., He, J., Lim, E.-P., Yan, H., and Li, X.}

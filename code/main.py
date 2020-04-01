@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 
 from modeling import *
 from preprocess import *
-from utility import *
+from utils import *
 
 
 def load_word_list(word_list_path):
