@@ -1,8 +1,17 @@
+import json
 import logging
 import multiprocessing
+import os
+import pickle
 
+import bcolz
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 from nltk.corpus import stopwords
 
+from config import SUconfig, UNconfig
 from modeling import *
 from preprocess import *
 from utils import *
@@ -20,12 +29,64 @@ word_list_path = './Filter_rule/word_list.json'
 WORD_LIST = load_word_list(word_list_path)
 STOP_WORDS = stopwords.words('english')
 MIN_FREQUENCY = 10
-logging.basicConfig(
-    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+suconfig = SUconfig()
+unconfig = UNconfig()
+
+vectors_path = './27B.100d.dat/'
+words_path = './words.pkl'
+word2idx_path = './idx.pkl'
+# vectors = bcolz.open(vectors_path)[:]
+# words = pickle.load(open(words_path, 'rb'))
+# word2idx = pickle.load(open(word2idx_path, 'rb'))
+
+# glove = {w: vectors[word2idx[w]] for w in words}
+
+
+def collect_all(dir):
+    file_list = find_suffix('json', dir)
+    out_file = os.path.join(dir, "training.txt")
+    out_f = open(out_file, 'w', encoding='utf-8')
+    for file in file_list:
+        with open(file, 'r', encoding='utf-8') as f:
+            for line in f:
+                text = None
+                try:
+                    data = json.loads(line)
+                    text = data['text']
+                except:
+                    continue
+                tokens = text_pro.exclude_stop_word(text, STOP_WORDS)
+                if tokens:
+                    text = ' '.join(tokens)
+                    out_f.write(text + "\n")
+
+def negative(file, out_file):
+    with open(file, 'r', encoding='utf-8') as f, open(out_file, 'w', encoding='utf-8') as out_f:
+        for line in f:
+            tokens = line.split()
+            tokens = [x for x in tokens if len(x) > 2 and "\'" not in x]
+            Found = False
+            if len(tokens) < 4:
+                continue
+            for w in WORD_LIST['include_words']:
+                if w.lower() in tokens:
+                    Found = True
+                    break
+            if not Found:
+                for phrase in WORD_LIST['phrases']:
+                    if phrase.lower() in line:
+                        Found = True
+                        break
+            if Found:
+                continue
+            else:
+                out_f.write(" ".join(tokens) + '\n')
+
+
 
 if __name__ == "__main__":
-    # input_path = "/Volumes/Data/Twitter/2019/01"
-    # out_dir = '/Volumes/White/Data/tweets'
+    # input_path = "F:\Twitter\\2019\\01"
+    # out_dir = 'F:\\temp'
     # acv = Archive(WORD_LIST)
     # acv.filter_dirs(input_path, out_dir, ret=True, keywords=False)
 
@@ -60,8 +121,39 @@ if __name__ == "__main__":
     # for path in dicts:
     #      line_count(path, "json")
 
-    '''other data'''
-    # input_dir = "/Volumes/White/Health-Tweets"
-    # out_dir = "/Volumes/White/training"
-    # otherset = Other_dataset()
-    # otherset.extract_news_dir(input_dir, out_dir)
+    # lable_news("H:\\training")
+    # collect_all("H:\Data\\tweets\\2019\\2019\\01")
+
+    '''supervised model'''
+    suconfig = SUconfig()
+    dataset = Dataset(suconfig)
+    dataset.load_data("./glove.twitter.27B.100d.txt", "./train.txt",
+                      "./test.txt")
+    model = TextCNN(suconfig, len(dataset.vocab), dataset.word_embeddings)
+
+    if torch.cuda.is_available():
+        model.cuda()
+    model.train()
+    optimizer = optim.Adam(model.parameters(), lr=SUconfig().lr)
+    loss_function = nn.CrossEntropyLoss()
+    model.add_optimizer(optimizer)
+    model.add_loss_op(loss_function)
+    ##############################################################
+
+    train_losses = []
+    val_accuracies = []
+
+    for i in range(config.max_epochs):
+        print("Epoch: {}".format(i))
+        train_loss, val_accuracy = model.run_epoch(dataset.train_data,
+                                                dataset.val_data, i)
+        train_losses.append(train_loss)
+        val_accuracies.append(val_accuracy)
+
+    train_acc = evaluate_model(model, dataset.train_iterator)
+    val_acc = evaluate_model(model, dataset.val_iterator)
+    test_acc = evaluate_model(model, dataset.test_iterator)
+
+    print('Final Training Accuracy: {:.4f}'.format(train_acc))
+    print('Final Validation Accuracy: {:.4f}'.format(val_acc))
+    print('Final Test Accuracy: {:.4f}'.format(test_acc))

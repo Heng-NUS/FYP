@@ -1,3 +1,4 @@
+#untili
 import bz2
 import gc
 import html
@@ -21,7 +22,7 @@ from smart_open import open
 def find_suffix(suffix, dir_path):
     '''find all files ending with suffix in directory'''
     if not os.path.exists(dir_path):
-        print("Can't find", dir_path)
+        print("Find_suffix can't find", dir_path)
         exit(0)
     name_buffer = []
     for file in os.listdir(dir_path):
@@ -245,7 +246,7 @@ class text_pro(object):
         r3 = r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # e-mail
         r4 = '\s+'  # multiple empty chars
         r5 = 'http[s]?:.*? '
-        # r6 = "[^A-Za-z0-9_']"  # not alphabet number and _
+        # r6 = "[^A-Za-z0-9_]"  # not alphabet number and _
         r7 = '\*.+?\*'
         sub_rule = r1 + '|' + r2 + '|' + r3 + '|' + r5 + '|' + r7
         text = html.unescape(text)
@@ -412,12 +413,12 @@ class text_pro(object):
     def exclude_stop_word(text, stop_words):
         '''exclude the stop words from text'''
         filtered = [
-            word for word in word_tokenize(text) if word not in stop_words and len(word) > 1]
+            word for word in word_tokenize(text) if word not in stop_words and len(word) > 2]
         temp = []
         r1 = "[0-9]|__+|^_"
         r2 = '[A-Za-z]'
         for token in filtered:
-            if not re.search(r2, token) or re.search(r1, token):
+            if not re.search(r2, token) or re.search(r1, token) or len(token) < 3:
                 continue
             else:
                 temp.append(token)
@@ -549,14 +550,19 @@ class Visualization(object):
 
         rank_result = sorted(record.items(), key=lambda x: x[1], reverse=True)
         return rank_result
-# tweet_count = dict()
-# user_count = dict()
-# with open("./Data/test_result.json", 'r', encoding='utf-8') as file:
-# 	tweet_count = json.load(file)
-# with open("./Data/test_users.json", 'r', encoding='utf-8') as file:
-# 	user_count = json.load(file)
 
-# a = mapper(tweet_count, user_count)
-# a.map_level()
-# print(a.level)
-# b = Diffusion(tweet_count)
+
+def lable_news(dir):
+    file_list = find_suffix("txt", dir)
+    out_file = os.path.join(dir,'news.txt')
+    out_f = open(out_file, 'a', encoding='utf-8')
+    num = 0
+    for file in file_list:
+        with open(file, 'r', encoding='utf-8') as f:
+            for line in f:
+                num += 1
+                if line.endswith('\n'):
+                    out_f.write(line[:-2] + '\n')
+                else:
+                    out_f.write(line + '\n')
+    print("number:", num)
