@@ -25,8 +25,8 @@
 \BOOKMARK [1][-]{section.5.1}{Keywords search}{chapter.5}% 25
 \BOOKMARK [1][-]{section.5.2}{Supervised classification}{chapter.5}% 26
 \BOOKMARK [1][-]{section.5.3}{Unsupervised document clustering and topic generation}{chapter.5}% 27
-\BOOKMARK [2][-]{subsection.5.3.1}{Probability based Topic Model}{section.5.3}% 28
-\BOOKMARK [2][-]{subsection.5.3.2}{Document vector}{section.5.3}% 29
+\BOOKMARK [2][-]{subsection.5.3.1}{Probability based Topic Modeling}{section.5.3}% 28
+\BOOKMARK [2][-]{subsection.5.3.2}{Machine learning based clustering}{section.5.3}% 29
 \BOOKMARK [2][-]{subsection.5.3.3}{Our model}{section.5.3}% 30
 \BOOKMARK [0][-]{chapter.6}{Evaluation}{}% 31
 \BOOKMARK [0][-]{chapter.7}{Potential ethical issues}{}% 32
@@ -41,5 +41,5 @@
 \BOOKMARK [0][-]{chapter.8}{Progress}{}% 41
 \BOOKMARK [1][-]{section.8.1}{Project management}{chapter.8}% 42
 \BOOKMARK [1][-]{section.8.2}{Conclusion and Future work}{chapter.8}% 43
-\BOOKMARK [0][-]{Item.52}{Bibliography}{}% 44
+\BOOKMARK [0][-]{Item.50}{Bibliography}{}% 44
 \BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 45

@@ -125,6 +125,7 @@ if __name__ == "__main__":
     # collect_all("H:\Data\\tweets\\2019\\2019\\01")
 
     '''supervised model'''
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     suconfig = SUconfig()
     dataset = Dataset(suconfig)
     dataset.load_data("./glove.twitter.27B.100d.txt", "./train.txt",
@@ -142,18 +143,20 @@ if __name__ == "__main__":
 
     train_losses = []
     val_accuracies = []
+    val_f1s = []
 
     for i in range(config.max_epochs):
         print("Epoch: {}".format(i))
-        train_loss, val_accuracy = model.run_epoch(dataset.train_data,
+        train_loss, val_accuracy, val_f1 = model.run_epoch(dataset.train_data,
                                                 dataset.val_data, i)
         train_losses.append(train_loss)
         val_accuracies.append(val_accuracy)
+        val_f1s.append(val_f1)
 
-    train_acc = evaluate_model(model, dataset.train_iterator)
-    val_acc = evaluate_model(model, dataset.val_iterator)
-    test_acc = evaluate_model(model, dataset.test_iterator)
+    train_acc, trian_f1 = evaluate_model(model, dataset.train_iterator)
+    val_acc, val_f1 = evaluate_model(model, dataset.val_iterator)
+    test_acc, test_f1 = evaluate_model(model, dataset.test_iterator)
 
-    print('Final Training Accuracy: {:.4f}'.format(train_acc))
-    print('Final Validation Accuracy: {:.4f}'.format(val_acc))
-    print('Final Test Accuracy: {:.4f}'.format(test_acc))
+    print('Final Training Accuracy: {:.4f}, Training F1: {:.4f}'.format(train_acc, trian_f1))
+    print('Final Validation Accuracy: {:.4f}, Validation F1: {:.4f}'.format(val_acc, val_f1))
+    print('Final Test Accuracy: {:.4f}, Test F1: {:.4f}'.format(test_acc, test_f1))

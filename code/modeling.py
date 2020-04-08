@@ -1,5 +1,7 @@
 #modeling.py
 import json
+import os
+import random
 from collections import defaultdict
 
 import gensim
@@ -14,25 +16,16 @@ from gensim.corpora import Dictionary
 from gensim.utils import deaccent, simple_preprocess
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 from smart_open import open
 from torch.autograd import Variable
 from torchtext import data
 from torchtext.vocab import Vectors
-import random
 
 from utils import *
 
 dtype = torch.FloatTensor
-
-embedding_size = 100
-sequence_length = 15
-
-topics = 16
-filter_size = 2  # n-gram window
-stride = 1
-padding = 0
-dilation = 1
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 def read_corpus(fname, tokens_only=True):
@@ -52,66 +45,12 @@ def read_labeled(fname):
             if line == '\n':
                 continue
             tokens = gensim.utils.simple_preprocess(line[2:], deacc=True)
-            examples.append((tokens, int(line[0])))
+            try:
+                examples.append((tokens, int(line[0])))
+            except:
+                print(line[0])
     random.shuffle(examples)
     return [x[0] for x in examples], [x[1] for x in examples]
-
-
-
-class Dataset1(object):
-    '''load dataset'''
-    def __init__(self, fname, labeled, config):
-        super().__init__()
-        self.fname = fname
-        self.config = config
-        self.model = models.doc2vec.Doc2Vec(vector_size=40,
-                                            min_count=0,
-                                            epochs=100,
-                                            workers=4,
-                                            dm_concat=1,
-                                            dm_tag_count=1)
-        self.labels = None
-        self.corpus = None
-        if labeled:
-            self.corpus, self.labels = read_labeled(fname)
-        else:
-            self.corpus = read_corpus(fname)
-        self.vocab = Dictionary(self.corpus)
-        self.vocab_size = len(self.vocab)
-
-        #self.vocab.filter_extremes(no_below=2, no_above=5)
-        #can remove high frequency words
-
-    def get_doc_vectors(self, corpus, num_max_words=20):
-        '''return trained doc2vec'''
-        self.model.build_vocab(corpus)
-        self.model.train(corpus,
-                    total_examples=model.corpus_count,
-                    epochs=model.epochs)
-        self.docMatrixs = [[model.wv.get_vector(x) for x in doc[0]] for doc in corpus]
-        self.docVectors = [self.model.docvecs[doc[1][0]] for doc in corpus]
-
-        X = np.zeros((len(self.docMatrixs), sequence_length, embedding_size))
-        for i, doc in enumerate(self.docMatrixs):
-            if len(doc)>sequence_length:
-                X[i] = doc[:sequence_length]
-            else:
-                X[i] = np.pad(doc,
-                              pad_width=((0, sequence_length - len(doc)), (0,
-                                                                           0)))
-        self.X = X # X (num_doc, sequence_length, embedding_size)
-        self.Y = np.array(self.docVectors)
-
-    def get_weights_matrix(self, embedding_size, word_embeddings):
-        matrix = weight_matrix(embedding_size, self.vocab.values(),
-                               word_embeddings)
-        return matrix
-
-    def doc2id(self, fix_length, unknown_idx):
-        '''document is represented by a list of words. return the indexed document'''
-        doc = [self.dictinary.doc2idx(x,unknown_idx) for x in self.corpus]
-        X = np.zeros((len(doc), sequence_length, embedding_size))
-        return doc
 
 
 class Dataset(object):
@@ -137,7 +76,13 @@ class Dataset(object):
         full_df = pd.DataFrame({"text": data_text, "label": data_label})
         return full_df
 
-    def load_data(self, embed_file, train_file, test_file, val_file=None):
+    def load_data(self,
+                  train_file,
+                  test_file,
+                  embed_file=None,
+                  val_file=None,
+                  voc_file='vocab.txt',
+                  new_embed='word_embeddings.pkl'):
         '''
         Loads the data from files
         Sets up iterators for training, validation and test data
@@ -149,9 +94,6 @@ class Dataset(object):
             test_file (String): absolute path to test file
             val_file (String): absolute path to validation file
         '''
-        embeds = Vectors(embed_file,
-                         unk_init=lambda x: torch.Tensor(
-                             np.random.normal(scale=0.6, size=(x.size()))))
         #load embeddings
 
         train_X, train_Y = read_labeled(train_file)
@@ -168,15 +110,29 @@ class Dataset(object):
         test_X = [doc_padding(x, self.config.max_sen_len) for x in test_X]
         val_X = [doc_padding(x, self.config.max_sen_len) for x in val_X]
 
-        self.vocab = Dictionary(train_X)
-        special_tokens = {'<pad>': 0, '<unk>': 1}
-        self.vocab.patch_with_special_tokens(special_tokens)
+        if os.path.isfile(voc_file):
+            self.vocab = Dictionary.load_from_text(voc_file)
+        else:
+            self.vocab = Dictionary(train_X)
+            special_tokens = {'<pad>': 0, '<unk>': 1}
+            self.vocab.patch_with_special_tokens(special_tokens)
+            self.vocab.save_as_text('vocab.txt')
         #build vocab
         train_X = [self.vocab.doc2idx(x, 1) for x in train_X]
         test_X = [self.vocab.doc2idx(x, 1) for x in test_X]
         val_X = [self.vocab.doc2idx(x, 1) for x in val_X]
         #transform words to index
-        self.word_embeddings = weight_matrix(self.config.embed_size, self.vocab, embeds)
+        if os.path.isfile(new_embed):
+            self.word_embeddings = torch.load(new_embed)
+        else:
+            if not embeds:
+                print("need a word embedings")
+                exit(0)
+            embeds = Vectors(embed_file,
+                             unk_init=lambda x: torch.Tensor(
+                                 np.random.normal(scale=0.6, size=(x.size()))))
+            self.word_embeddings = weight_matrix(self.config.embed_size, self.vocab, embeds)
+            torch.save(self.word_embeddings, "word_embeddings.pkl")
         self.train_data = (train_X, train_Y)
         self.test_data = (test_X, test_Y)
         self.val_data = (val_X, val_Y)
@@ -281,16 +237,14 @@ class TextCNN(nn.Module):
             self.config.output_size)
 
         # Softmax non-linearity
-        self.softmax = nn.Softmax(dim=1)
+        # self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         # x.shape = (max_sen_len, batch_size)
         embedded_sent = self.embeddings(x)
         embedded_sent = torch.transpose(embedded_sent,1,2)
-        # embedded_sent.shape = (batch_size=64,embed_size=100,max_sen_len=15)
 
         conv_out1 = self.conv1(embedded_sent).squeeze(2)
-        #shape=(64, num_channels, 1) (squeeze 1)
         conv_out2 = self.conv2(embedded_sent).squeeze(2)
         conv_out3 = self.conv3(embedded_sent).squeeze(2)
 
@@ -312,9 +266,8 @@ class TextCNN(nn.Module):
             g['lr'] = g['lr'] / 2
 
     def run_epoch(self, train_data, val_data, epoch):
-        train_losses = []
-        val_accuracies = []
         losses = []
+        self.train()
 
         # # Reduce learning rate as number of epochs increase
         # if (epoch == int(self.config.max_epochs / 3)) or (epoch == int(
@@ -325,49 +278,41 @@ class TextCNN(nn.Module):
 
         for i, batch in enumerate(train_iterator):
             self.optimizer.zero_grad()
-            if torch.cuda.is_available():
-                x = batch[0].cuda()
-                y = (batch[1]).type(torch.cuda.LongTensor)
-            else:
-                x = batch[0]
-                y = (batch[1]).type(torch.LongTensor)
+            x = batch[0].to(device)
+            y = batch[1].to(device)
             y_pred = self.__call__(x)
             loss = self.loss_op(y_pred, y)
             loss.backward()
             losses.append(loss.data.cpu().numpy())
             self.optimizer.step()
 
-            # if i % 100 == 0:
         val_iterator = batch_iter(*val_data, self.config.batch_size,
                                     False)
         print("Iter: {}".format(i + 1))
         avg_train_loss = np.mean(losses)
-        train_losses.append(avg_train_loss)
         print("\tAverage training loss: {:.5f}".format(avg_train_loss))
-        losses = []
 
         # Evalute Accuracy on validation set
-        val_accuracy = evaluate_model(self, val_iterator)
-        print("\tVal Accuracy: {:.4f}".format(val_accuracy))
-        self.train()
+        val_accuracy, val_f1 = evaluate_model(self, val_iterator)
+        print("\tVal Accuracy: {:.4f}, Val F1: {:.4f}".format(val_accuracy, val_f1))
 
-        return train_losses, val_accuracies
+        return avg_train_loss, val_accuracy, val_f1
 
 
 def evaluate_model(model, iterator):
     '''batch[0]: data, batch[1]: label'''
+    model.eval()
     all_preds = []
     all_y = []
     for idx, batch in enumerate(iterator):
-        x = batch[0]
-        if torch.cuda.is_available():
-            x = batch[0].cuda()
+        x = batch[0].to(device)
         y_pred = model(x)
         predicted = torch.max(y_pred.cpu().data, 1)[1]
         all_preds.extend(predicted.numpy())
         all_y.extend(batch[1].numpy())
-    score = accuracy_score(all_y, np.array(all_preds).flatten())
-    return score
+    accuracy = accuracy_score(all_y, np.array(all_preds).flatten())
+    f1 = f1_score(all_y, np.array(all_preds).flatten())
+    return accuracy,f1
 
 
 def create_emb_layer(weights_matrix, non_trainable=False):
@@ -395,3 +340,13 @@ def weight_matrix(embedding_size, target_vocab, word_embeddings):
             matrix[i] = torch.Tensor(np.random.normal(scale=0.6,
                                                  size=(embedding_size, )))
     return matrix
+
+def predict(vocab, tokens, label, max_sen_len, model):
+    '''predict the class of a single text'''
+    model = model.to(device)
+    model.eval()
+    padded = doc_padding(tokens, max_sen_len)
+    x = torch.LongTensor([vocab.doc2idx(padded, 1)]).to(device)
+    y_pred = model(x)
+    predicted = torch.max(y_pred.cpu().data, 1)[1]
+    print(' '.join(tokens) + ' predict class:', predicted, "True class:", label)

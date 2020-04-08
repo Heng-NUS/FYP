@@ -10,6 +10,13 @@
 {\sc Alexander, L., and Moore, M.}
 \newblock Deontological ethics (2007).
 
+\bibitem{allahyari2017brief}
+{\sc Allahyari, M., Pouriyeh, S., Assefi, M., Safaei, S., Trippe, E.~D.,
+  Gutierrez, J.~B., and Kochut, K.}
+\newblock A brief survey of text mining: Classification, clustering and
+  extraction techniques.
+\newblock {\em arXiv preprint arXiv:1707.02919\/} (2017).
+
 \bibitem{andreu2015big}
 {\sc Andreu-Perez, J., Poon, C.~C., Merrifield, R.~D., Wong, S.~T., and Yang,
   G.-Z.}
@@ -80,12 +87,6 @@
 \newblock Reality mining: A prediction algorithm for disease dynamics based on
   mobile big data.
 \newblock {\em Information Sciences 379\/} (2017), 82--93.
-
-\bibitem{cheng2014btm}
-{\sc Cheng, X., Yan, X., Lan, Y., and Guo, J.}
-\newblock Btm: Topic modeling over short texts.
-\newblock {\em IEEE Transactions on Knowledge and Data Engineering 26}, 12
-  (2014), 2928--2941.
 
 \bibitem{Chollet:2017:DLP:3203489}
 {\sc Chollet, F.}
@@ -333,13 +334,6 @@
 \newblock Big data security.
 \newblock {\em Network security 2012}, 7 (2012), 5--8.
 
-\bibitem{teh2005sharing}
-{\sc Teh, Y.~W., Jordan, M.~I., Beal, M.~J., and Blei, D.~M.}
-\newblock Sharing clusters among related groups: Hierarchical dirichlet
-  processes.
-\newblock In {\em Advances in neural information processing systems\/} (2005),
-  pp.~1385--1392.
-
 \bibitem{tuarob2013discovering}
 {\sc Tuarob, S., Tucker, C.~S., Salathe, M., and Ram, N.}
 \newblock Discovering health-related knowledge in social media using ensembles
@@ -377,12 +371,6 @@
 \newblock A biterm topic model for short texts.
 \newblock In {\em Proceedings of the 22nd international conference on World
   Wide Web\/} (2013), pp.~1445--1456.
-
-\bibitem{yan2015probabilistic}
-{\sc Yan, X., Guo, J., Lan, Y., Xu, J., and Cheng, X.}
-\newblock A probabilistic model for bursty topic discovery in microblogs.
-\newblock In {\em Twenty-Ninth AAAI Conference on Artificial Intelligence\/}
-  (2015).
 
 \bibitem{yang2019xlnet}
 {\sc Yang, Z., Dai, Z., Yang, Y., Carbonell, J., Salakhutdinov, R.~R., and Le,
