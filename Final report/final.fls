@@ -163,6 +163,20 @@ INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/libraries/pgflibraryplo
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/tools/xspace.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/tools/xspace.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/relsize/relsize.sty
+INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/relsize/relsize.sty
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
 INPUT /usr/local/texlive/2019/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
@@ -238,6 +252,9 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/ulasy.fd
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/ulasy.fd
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
@@ -286,9 +303,6 @@ INPUT /Users/NonBee/Desktop/FYP/Final report/images/week43.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/archive1.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/archive1.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/archive1.png
-INPUT /Users/NonBee/Desktop/FYP/Final report/images/fluView1.png
-INPUT /Users/NonBee/Desktop/FYP/Final report/images/fluView1.png
-INPUT /Users/NonBee/Desktop/FYP/Final report/images/fluView1.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/pipeline.jpg
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/pipeline.jpg
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/pipeline.jpg
@@ -304,6 +318,10 @@ INPUT /Users/NonBee/Desktop/FYP/Final report/images/emoji_lib.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/images/emoji_lib.png
 INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/uncover.tex
 INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/uncover.tex
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/ethics.tex
 INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/ethics.tex
 INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/progress.tex
@@ -311,17 +329,20 @@ INPUT /Users/NonBee/Desktop/FYP/Final report/chapters/progress.tex
 INPUT /Users/NonBee/Desktop/FYP/Final report/final.bbl
 INPUT /Users/NonBee/Desktop/FYP/Final report/final.bbl
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
-INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT /Users/NonBee/Desktop/FYP/Final report/final.aux
 INPUT /Users/NonBee/Desktop/FYP/Final report/final.out
 INPUT /Users/NonBee/Desktop/FYP/Final report/final.out
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb
 INPUT /usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb

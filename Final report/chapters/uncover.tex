@@ -94,7 +94,7 @@ Table \ref{tab:sup1} shows 11 prediction examples of this model. As mentioned be
 
 \section{Unsupervised document clustering and topic generation}
 \label{sec:unsupervised}
-Supervised model screen out documents that are health-related. To detect unseen diseases and healthcare events, we seek solutions on unsupervised algorithm. According to \cite{allahyari2017brief}, Probability Based Topic Modeling and Machine Learning Based Clustering are two common methods used to group documents. This section will introduce both and provides some experimental result of applying them on our dataset. Then we will explain how our model are build upon them. 
+Supervised model screen out documents that are health-related. To detect unseen diseases and healthcare events, we seek solutions on unsupervised algorithm. According to \cite{allahyari2017brief}, Probability Based Topic Modeling and Machine Learning Based Clustering are two common methods used to group documents. This section will introduce both and provide some experimental results of applying them on our dataset. Then we will explain how our model are build upon them. The evaluation criterion used in this section is topic coherence. Since the generated topics are hard to interpret, scoring each topic with a exact number by human judgments could be difficult and objective, and it requires massive labour.Topic coherence helps to evaluate the quality of generated topics. Experimental results have proven that it has positive correlation with human judgments. In our experiment, we adopt the framework proposed by \cite{roder2015exploring} to calculate the coherence, higer value meaning more coherent. Some libraries such as Gensim provide APIs for using it. For convenience, we uses the service provided \href{https://palmetto.demos.dice-research.org/}{Palmetto}, the Python interface calling the service can be found in our source code. Each generated topic is evaluated by $C_v$, $C_a$, $C_p$ and their sum together. The test dataset is SearchSnippets, it contains 12,295 documents with 8 clusters and 5,547 unique words. For comparison, the number of cluster in our experiment is the same with that in the test set. 
 
 \subsection{Probability based Topic Modeling}
 \label{sec:topic modeling}
@@ -144,40 +144,209 @@ Topic modeling is a typical tool that is frequently used for discovering abstrac
     \caption{Plate Diagram of LDA.\cite{blei2003latent}}
     \label{fig:lda}
   \end{figure}
-By training, the word distribution among topics $P(w|z)$ and the topic distribution among documents $P(z|d)$ can be calculated. Then, each document could be assigned to a topic based on its topic distribution. Each topic can be represented by the first few words that are more likely belong to it. We applied LDA to our dataset. Table \ref{tab:LDA1} shows the experimental result. 
+By training, the word distribution among topics $P(w|z)$ and the topic distribution among documents $P(z|d)$ can be calculated. Then, each document could be assigned to a topic based on its topic distribution. Each topic can be represented by the first few words that are more likely belong to it. 
 \begin{table}[!htbp]
     \centering
     \hspace{0.5cm}
-    \begin{tabular}{|p{45pt}|p{210pt}|p{80pt}|p{50pt}|}
+    \begin{tabular}{|p{45pt}|p{210pt}|p{30pt}|p{30pt}|p{30pt}|p{30pt}|p{30pt}|}
         \hline
-        Topic ID & Top\_words(10) & number of doc & Coherence \\ \hline
-        1 & study health child risk may say flu canada find heart  & & -3.90\\ \hline
-        2 & cancer medical case food measles kid marijuana school man death & & -12.28 \\ \hline
-        3 & ebola doctor outbreak say ebola\_outbreak health vaccine mental virus case  & & -5.88 \\ \hline
-        4 & health patient care hospital say help woman canada cancer get  & & -4.30 \\ \hline
-        5 & life doctor say quebec recalled concussion could teen rule safety  & & -11.81 \\ \hline
-        & & & -7.63 \\ \hline
+        Topic ID & Top\_words(10) & $C_v$ & $C_p$ & $C_a$ & $sum_{vpa}$ & $sum_{pa}$\\ \hline
+        1 & science edu university research school computer journal culture art program & 0.392 & 0.408 & 0.254 & 1.054 & 0.662\\\hline
+        2 & sport game wikipedia com tennis tournament encyclopedia wiki wikipedia\_wiki wikipedia\_encyclopedia & 0.340 & 0.119 & 0.148 & 0.607 & .267 \\\hline
+        3 & theory information page ticket gov home home\_page edu library physic & 0.465 & -0.210 & 0.138 & 0.392 & -0.072\\\hline
+        4 & health play music information job article com kid news healthy & 0.341 & 0.122 & 0.169 & 0.633 & 0.291\\\hline
+        5 & research business software theoretical service data internet network military product & 0.383 & 0.312 & 0.194 & 0.888 & 0.506\\\hline
+        6 & match movie yahoo amazon com book directory amazon\_com engine film & 0.345 & 0.054 & 0.171 & 0.570 & 0.225\\\hline
+        7 & player news com union market online google poker home car & 0.342 & 0.129 & 0.165 & 0.635 & 0.294 \\\hline
+        8 & football news soccer political team rugby party world democracy league & 0.447 & 0.140 & 0.254 & 0.841 & 0.394 \\\hline
+        & & 3.054 & 1.075 & 1.493 & 5.622 &2.568\\\hline
        
     \end{tabular}
-    \caption{Experimental result of LDA}
+    \caption{Experimental results of LDA}
     \label{tab:LDA1}
 \end{table}
-This model works well on long document such as news, column reports. However, since it captures the word co-occurrence pattern at document-level, its performance may decrease when running on short document such as tweets due to word sparsity probelm \cite{yan2013biterm}. \\\\
-% Biterm Topic Model (BTM) \cite{yan2013biterm, cheng2014btm} provides a feasible solution, it learns the co-occurrence pattern of unordered word pairs (a Biterm) at corpus-level and gets a better retrieval result than LDA and PLSA on short text. The idea behind BTM is that, one words could contain multiple meaning under different scenarios and topics, while a word-pair is more likely belongs to one topic. Despite when dataset containing more than 1,000,000 unique words, the set of biterms will be extremely large ($\frac{|B| = |D| * (|D|-1)}{2}$, where $|B|$ is the number of biterms, $|D|$ is the number of words), BTM provides an feasible solution to representation of multi-meaning words. Online version BTM (OBTM) \cite{cheng2014btm} divides corpus into small batches according to time slice, it therefore can continuously update model parameters. Bursty Biterm Topic Models \cite{yan2015probabilistic} assumes that a biterm has two states: it can either appear in normal document or in some new topics. It then uses the extra information to discover the bursty topics. Inspired by the series of BTM algorithm, we get the following hints:
-% \begin{enumerate}
-%     \item ambiguity can be alleviated by forming word pairs (similar to n-gram). For example, while Apple has multiple meaning, (Apple, Macbook) should be assigned to digital devices topics, and (Apple, Orange) should be assigned to fruit.
-%     \item online model can be achieved by introducing memory mechanism, updating model with previous state (such as LSTM). Especially for surveillance, we mainly cares about new situations, meaning that previous topics can be gradually forgot.
-%     \item prior distribution and background word distribution can be introduced to indicate the likelihood of a word is related to new events. Then the probability can be used to detect bursty topics
-% \end{enumerate} 
-% Topic models listed above are relatively static. The number of topics K is a hyper-parameter that should be given before training them. In reality, social media topics are changing everyday. The content and number of healthcare topics change dynamically. To cluster data into unknown number of groups, \cite{teh2005sharing} use the Dirichlet process (DP) mixture model in their model.
+\\\\Table \ref{tab:LDA1} shows the experimental result of it. Parameters of this model is set to default. As can be seen in the table, while evaluating the same topic, $C_v$, $C_p$ and $C_a$ are not always positively correlated with each other, especially for $C_v$ and $C_p$. This is proved by the correlation matrix of them \ref{tab:cormat1}, $C_v$ and $C_p$ are indeed negatively correlated, while $C_a$ has positive correlation with both $C_v$ and $C_p$. Therefore, the sum of them is added and treated as the main criterion for the evaluation. Words in topic 1 contain obvious implication related to education and research that can be easily understood by human, therefore, topic 1 gets the highest sum score. Topic 3 gets the highest $C_v$ score and the lowest $C_p$ and $C_a$ scores. In terms of human judgments, topic 3 is hard to interpret. This means that $C_v$ could be misleading. Hence in the later experiments, $C_v$ is excluded from the evaluation criteria, the final coherence of a model is the sum of $C_p$ and $C_a$. The coherence of the LDA model evaluation on the SearchSnippets dataset is 2.568.
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        & $C_v$ & $C_p$ & $C_a$ \\\hline
+        $C_v$ & 1 & -0.330 & 0.304 \\\hline
+        $C_p$ & -0.330 & 1 & 0.685 \\\hline
+        $C_a$ & 0.304 & 0.685 & 1 \\\hline
+    \end{tabular}
+    \caption{Correlation Matrix of coherence}
+    \label{tab:cormat1}
+\end{table}
+
+In addition to LDA, we experiment with another more advanced topic model, Biterm Topic Model (BTM) \cite{yan2013biterm, cheng2014btm}, which is designed to modeling short text such as tweets. LDA works well on long document such as news, column reports. However, since it captures the word co-occurrence pattern at document-level, its performance may decrease when running on short document such as tweets due to word sparsity probelm \cite{yan2013biterm}. BTM provides a feasible solution on short text modeling, it learns the co-occurrence pattern of unordered word pairs (a Biterm) at corpus-level and gets a better retrieval result than LDA and PLSA on short text in the experiment conducted by \cite{{yan2013biterm}}. The idea behind BTM is that, one words could contain multiple meaning under different scenarios and topics, while a word-pair is more likely belongs to one topic. 
+Table \ref{tab:BTM1} shows the experimental results of BTM applied on SearchSnippets dataset.
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{|p{45pt}|p{210pt}|p{30pt}|p{30pt}|p{30pt}|p{30pt}|}
+        \hline
+        Topic ID & Top\_words(10) & $C_p$ & $C_a$ & sum\\ \hline
+        1 & research edu science information school journal university program gov home & 0.323 & 0.221 & 0.543\\\hline
+        2 & movie music com art film video news review photo online & 0.373 & 0.277 & 0.650\\\hline
+        3 & wikipedia encyclopedia political system wiki wikipedia\_wiki culture party theory wikipedia\_encyclopedia & 0.064 & 0.167 & 0.231\\\hline
+        4 & computer software system web programming memory internet intel com data & 0.249 & 0.223 & 0.472\\\hline
+        5 & sport news game football com soccer world match league team & 0.445 & 0.322 & 0.767\\\hline
+        6 & business market news stock service trade job finance com information & 0.312 & 0.196 & 0.508\\\hline
+        7 & health information cancer disease gov medical drug news calorie healthy & 0.479 & 0.190 & 0.669\\\hline
+        8 & amazon com book car amazon\_com engine wheel motor war electrical & -0.034 & 0.190 & 0.156\\\hline
+        & & 2.211 & 1.786 & 3.997\\\hline
+    \end{tabular}
+    \caption{Experimental results of BTM}
+    \label{tab:BTM1}
+\end{table}
+\\Compared with LDA, BTM gets better coherence on both $C_p$ and $C_a$, its sum score is about 56\% higer than that of LDA. With human judgments, we believe this result is convincing, topic coherence is indeed can be used to evaluate the quality of topics and the later comparison will be made based on it.
 
 \subsection{Machine learning based clustering}
 \label{sec:Document vector}
 Another method for text grouping uses the unsupervised clustering algorithms of machine learning. The idea behind it is mapping original text to a vector space, grouping documents based on clustering algorithm (such as K-means). The key point is how to map documents and assign them with physical meaning. Traditional methods used to represent documents includes bag-of-words and TF-IDF model. They transform words to vectors based on the count of words in the whole corpus and hence has no physical and semantic meaning in a vector space, meaning that directly calculating the distance among to those vectors cannot help to extract the hidden relationships among documents. Word embeddings techniques such as Word2vec \cite{mikolov2013distributed,mikolov2013efficient} introduce some techniques of projecting words into distributed dense word vectors. Word2vec is an unsupervised machine learning algorithm using neural network, and it can learns relationships between words automatically. Each word is represented by a vector with remarkable linear relationships. One example is: vector(“king”) - vector(“man”) + vector(“woman”) =~ vector(“queen”) \cite{journals/corr/cs-CL-0205028}. Such representation is close to human cognition. Inspired by it, documents, topics are possible to be presented in such way. If words, documents and topics share the same space, then their relationships can be calculated easily. For example, if a document vector is more ``close'' to a topic vector, it is more likely belongs to that topic. Doc2vec \cite{le2014distributed} is a variance of Word2vec, it adds one more document vector as the input for each document. Word vectors are shared in corpus while the document is unique for each document. Once the document vectors are trained, clustering algorithms can be applied on them. We experiment this method with a simple K-means cluster. 
-Once the documents are all grouped, $P(w|z)$ of each words in each topic can be calculated. Then topic $z_i$ can be represented by few words that are more likely belong to it with higher $P(w|z_i)$.
-
+After the documents are all grouped, the next step is extracting representive keywords for each topic. Topic model can directly use the calculated probability $P(w|z)$ of each words in each topic, topic $z_i$ can be represented by first few words that are more likely belong to it with higher $P(w|z_i)$. In terms of clustering algorithms, $P(w|z)$ can be represented by the normalised count of a word $\frac{n_w}{\sum_jn_{w_{jz}}}$ in topic z, however, the probelm is that words with higer $P(w|z)$ could be common in all topics, and therefore there could be no significant difference among topics. There are massive algorithms for solving this probelm, including supervised and unsupervised, for the comparison with topic model, we use Term Frequency–Inverse Document Frequency $TFIDF_{i,k}$ in our experiment to rank the importance of words. TF means term frequency while IDF is the abbreviation of Inverse Document Frequency. The formula are listed below, where $n_i,d$ is the number of word i in topic k, $|D_k|$ is the number of instances in topic K, $|{\{j: w_i \in D_k\}}|$ is the number of documents of K that contain word i. In case of there is no instance found in any of the documents, base value 1 is added.
+\begin{displaymath}
+    \begin{array}{c}
+        TF_{i,k} = \frac{n_{i,k}}{\sum_kn_{i,k}}\\
+        IDF_{i} = \log\frac{|D_k|}{1 + |\{j: w_i \in D_k\}}| \\
+        TFIDF_{i,k} = TF_{i,k} \cdot IDF_{i}\\
+    \end{array}
+\end{displaymath}
+Table \ref{tab:kmeans1} shows the experimental results of K-means based topic modeling. Consider the distinguishability of document vectors and the curse of dimensionality probelm in K-means, the dimension of document vectors is set to 40.
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{|p{45pt}|p{210pt}|p{50pt}|}
+        \hline
+        Topic ID & Top\_words(10) & $C_v$ score \\ \hline
+        1 & computer software product game research web system com business service & 0.39\\ \hline
+        2 & research information health science business edu school resource news gov & 0.36 \\ \hline
+        3 & gov information research system news business trade political government democracy & 0.35 \\ \hline
+        4 & com amazon movie news game research computer system book information & 0.35 \\ \hline
+        5 & system computer party culture theory wikipedia football category article game & 0.35 \\ \hline
+        6 & news movie com music sport game yahoo world amazon video & 0.37\\\hline
+        7 & theory research edu science journal computer physic book system political & 0.38 \\\hline
+        8 & theory research edu science news com information game movie sport health online home wikipedia & 0.34 \\\hline
+        & & 0.361 \\ \hline
+       
+    \end{tabular}
+    \caption{Experimental results of K-means based clustering}
+    \label{tab:kmeans1}
+\end{table}
 \subsection{Our model}
 \label{sec:modeling}
-Topic model can find representive words of each topic while grouping documents, it's an ideal solution for our purpose. However, it makes assumptions that are far from reality, leading the bad performance in practice. The disadvantage of traditional clustering methods is that, the structure of latent topic of each cluster is unknown. For large scale dataset, word(document) embeddings requires high dimensional representation (more than 200 dimension). Distance based clustering algorithms will suffer from curse of dimensionality. Inspired by word embeddings and Lda2vec \cite{moody2016mixing}, we assume that each topic can be represented by a vector or matrix. In deep neural network, convolutional layers are wildly used to extract data feature. A filter (or kernel) represents one certain feature, and it's a by-product of learning process. The key idea of our method is treating each kernel as an independent topic, we focus on by-product rather than the output of a neural network. Once the topics(kernels) are trained, they can be used to group documents.
-
-Gensim \cite{rehurek_lrec} is a wildly-used NLP library.
+Experimental results show that traditional clustering methods can't help to generate interpretable topics.
+Topic model can find representive words of each topic while grouping documents, it's an ideal solution for our purpose. However, it uses the simple bag of words, meaning that its performance could be improved by taking the advantages of word embeddings. Lda2vec \cite{moody2016mixing} combines LDA and word embeddings in a novel way. In traditional CBOW model (one model of Word2vec), the context vector of a word is represented by the sum of its surrounding words' vectors, while in Lda2vec, the context vector of the word is the sum of the word's vector and the document's vector. Each document vector is a mixture of topic vectors, the weight of each topic $z_i$ can be treated as the probability $P(d|z_i)$. In the loss function, an additional LDA loss term is added. Theoretically, Lda2vec can learn topic, word, document vectors simultaneously while calculating the latent topic distribution, however, in practice we find this model requires massive training time, and the generated topics of it are not better than that of LDA in terms of topic coherence. We believe that this model uses too much variables and indeed doesn't use the good properties of word embeddings. \cite{dieng2019topic} assumes that the probability $P(w|z)$ can be got from the inner production of word embedding and vector embedding instead of from a distribution. With pre-trained word embeddings, their model outperform the traditional LDA. Our model takes the advantages of word embeddings and BTM. $\alpha$ is the topic matrix with size L $\times$ K (L: lengdith of embedding, K: number of topics), $\alpha_k$ denotes the vector of $k_{th}$ topic. $\rho$ denotes the word embeddings matrix with size L $\times$ V (V: the number of words). The generation of a corpus can be seen as follows:
+\begin{enumerate}
+    \item Draw topic proportion $\theta \sim logistc\_normal(\mu, \sigma)$ for the whole corpus. Equation \ref{eq:lognormal} shows the formula of logistc normal.
+    \begin{equation}
+        \theta=softmax(\psi); \psi \sim Gussian(0,1)
+        \label{eq:lognormal}
+    \end{equation}
+    \item For each biterm b in biterm set B:
+    \begin{enumerate}
+        \item  draw a topic assignment $z$ $\sim$ $Multinomial(\theta)$
+        \item draw two words $w_i$, $w_j$ $\sim$ $softmax(\rho^T\alpha_z)$ 
+    \end{enumerate}
+\end{enumerate} 
+Choosing logistc normal instead of Dirichlet function as the topic distribution benefits the further parameters inference (parameters of distribution model can be directly optimized by back propagation). Step 2(a) is the same with BTM while in 2(b), each word of a biterm is drawn from the production of word matrix and topic embeddings. $softmax(\rho^T\alpha_z)$ is a probability vector denotes the probability $P(w|z)$ of each word in the whole corpus. The marginal probability of each biterm under topic matrix $\alpha$ and the likelihood of the whole corpus are defined as follows:
+\begin{equation}
+    P(b|\alpha) = \sum_zP(z)P(w_{b_1}|z,\alpha)P(w_{b_s2}|z,\alpha)
+    \label{eq:biterm}
+\end{equation}
+\begin{equation}
+    P(B|\alpha) = \prod_bP(b|\alpha)
+    \label{eq:corpus}
+\end{equation}
+In the model, word embeddings $\rho$ is pre-defined parameters while topic embeddings $\alpha$ is unknown and needed to be trained.
+To maximize the likelihood is to maximize equation \ref{eq:marginal}:
+\begin{equation}
+    \begin{aligned}
+        \log P(B|a) = \sum_{b}\sum_zP(z)P(w_{b_1}|z,\alpha)P(w_{b_2}|z,\alpha)
+    \end{aligned} 
+    \label{eq:marginal}
+\end{equation}
+The conditional probability of a word i in biterm b under topic distribution z and topic matrix $\alpha$ can be calculated by equation \ref{eq:wbi}:
+\begin{equation}
+    P(w_{bi}|z,\alpha) = \sum_{k}\theta_{b_k}\beta_{k,w_{b_i}}
+\label{eq:wbi}
+\end{equation}
+$\theta_{bk}$ is the topic distribution of biterm b, which is generated by the logistc normal $softmax(Gussian(\mu,\sigma))$  in step 1. $\beta_k,w_{bi}$ is calculated by $softmax(\rho^T\alpha_k)$ in step 2(b). Once the parameters are trained, the topic distribution of documents can be inferd by the assumption proposed by \cite{yan2013biterm}:
+\begin{equation}
+    P(z|d) = \sum_bP(z|b)P(b|d)
+\label{eq:doc1}
+\end{equation}
+\begin{equation}
+    P(z|b) = \frac{P(z)P(w_{b_1}|z)P(w_{b_2}|z)}{\sum_zP(z)P(w_{b_1}|z)P(w_{b_2}|z)}
+\label{eq:doc2}
+\end{equation}
+\begin{equation}
+    P(b|d) = \frac{n_d(b)}{\sum_bn_d(b)}
+\label{eq:doc3}
+\end{equation}
+In equation \ref{eq:doc1} assumes $P(z|b)$ can be represented by the expectation of the topic proportions of biterms. In equation \ref{eq:doc3}, $n_d(b)$ represents the number of biterm b in document d.
+\\\\
+The next question is how to infer the parameters. Equation \ref{eq:marginal} can't be directly optimized since the integral of marginal probability $P(b|\alpha)$ is intractable (EM algorithm cannot be used). In LDA and BTM, Gibbs sampling is used to infer parameters. However, such method requires Dirichlet distribution. Since our model draw words based on the production of $\rho^T\alpha$, same method can't be applied. To infer the parameters, we use Variational inference\cite{wainwright2008graphical} instead. Variational inference helps to create a simpler distribution that could best approach the original intractable distribution. By adopting variational inference, the original statistical inference probelm becomes an optimization problem. Our goal now is to find a distribution $Q(z; \phi)$ that has the least difference with original marginal distribution of biterm in equation \ref{eq:biterm}. Here z is the variational distribution and $\phi$ is the variational parameters of q.
+In step 1, we assume that the original topic distribution of a biterm is drawn from a Gussian distribution, therefore, q is defined as a Gussian, whose mean and variance is calculated by its parameters. The next step is learning the variational parameters. \cite{kingma2013auto} proposes a method that could automatically learn the variational parameter based on given input (in our model is the biterm set B), the process can be seen as below:
+\begin{equation}
+    Q(z;\phi;b) \leftarrow Gussian(\mu_b,\sigma_b)
+\label{eq:var1}
+\end{equation}
+\begin{equation}
+    \mu_b = f(\phi_{\mu}, b)
+\label{eq:var2}
+\end{equation}
+\begin{equation}
+    \sigma_b = g(\phi_{\sigma}, b)
+\label{eq:var3}
+\end{equation}
+Recall that a biterm is a unordered words pair, and in our model, each word is represented by its embedding. Therefore, in our model, each biterm is defined as the sum of its corresponding words' embeddings (equation \ref{eq:biterm2}). As stated before, the pre-trained word embeddings has semantic and physic meaning (e.g. vec(``phone'') + vec(``apple'') = vec(``iphone'')), such representation uses this good property. Each biterm is assigned with semantic meaning, and this information will be used in parameter inference.
+\begin{equation}
+    b = w_{b_1} + w_{b_2}
+\label{eq:biterm2}
+\end{equation}
+Function $f(\phi_{\mu}, b)$ and $g(\phi_{\sigma}, b)$ are two neural networks with no bias (there is no special requirements of the networks, they could be simple NNs with one linear layer or with more complex structure). They are called ``encoder'' by \cite{kingma2013auto} since they receive a data (or a batch of data) and output the parameters of its corresponding distribution model (in term of Gussian, the outputs are mean and variance). $\phi_{\mu}$ and $\phi_{\sigma}$ are the parameters of this two neural networks respectively, and they will be updated by back propagation.\\\\
+The final step is defining the loss function. Recall that $P(z)$ is the real topic distribution and $Q(z;b;\phi)$ is the approximation distribution, $\phi$ is the parameter set of q, we want to find $\phi$ that can minimize their ``difference'' (it's obviously that a simple distribution of P(z) will benefit the inference of $\phi$, which is one reason why we use logistc normal in step 1). The ``difference'' between $P(z)$ and $Q(z;b;\phi)$ is commonly evaluated by the  the Kullback-Leibler (KL) divergence \cite{yang2017understanding}. The KL divergence for variational inference is defined as follows: 
+\begin{equation}
+    \begin{aligned}
+        KL(Q(z;b,\phi)||P(z)) & = \sum_zQ(z;b,\phi)\log\frac{Q(z;b,\phi)}{P(z)}\\
+    \end{aligned} 
+    \label{eq:KL}
+\end{equation}
+KL divergence can be treated as information loss, it is always $\geq$ 0. When KL divergence equals 0, $q(z;b,\phi)$ and $P(z)$ is the same distribution. In our model, we want the KL divergence is as small as possible. In addition, we want to maximize the likelihood of $P(B,\theta|\alpha)$, and this can be done by maximize equation \ref{eq:loss2}:
+\begin{equation}
+    \sum_b\log P(b_{w_1}|z_b,\alpha)+\log P(b_{w_2}|z_b,\alpha)
+    \label{eq:loss2}
+\end{equation}
+Therefore, the final loss function is defined as equation \ref{eq:loss}:
+\begin{equation}
+    \begin{aligned}
+        loss(model, B, \rho) & = \sum_b\left[KL(Q(z;b,\phi)||P(z))-\log P(b_{w_1}|z_b,\alpha)\right] 
+    \end{aligned}    
+    \label{eq:loss}
+\end{equation}
+By using the automatic derivation technique, parameters of our model can be updated by back propagation. One probelm is that random operation cannot be derived(backpropagated) since it doesn't have gradient. For example, given a variable x,y with arbitrary values, and a variable $z = Gussian(x,y)$, $loss(x,y) = (x-y)^2$, back propagation cannot be applied to the loss function. To solve this probelm, make the loss function derivable, we use the reparameterization trick \cite{kingma2013auto}. In terms of the same example, z now equals to $x + Gussian(0,1) * y$. The distribution of z is the same, while the latter one can be backpropagated. To use the trick, we adopt the logistc normal rather than Dirichlet in step 1.
+\begin{algorithm}
+    \caption{Topic distribution}
+    \LinesNumbered 
+    \KwIn{$D$: documents set $D=\{d_1,d_2\dots d_n\}$\newline
+    $\rho$: pre-trained word embeddings
+    }
+    \KwOut{$\alpha$: learned topic embeddings\newline
+    $\phi$: learned parameter set of Q}
+    Pre-process D, build vocabulary and encode documents in D to indexes \\
+    Initialise a biterm set $B = \{\}$ \\
+    \For{$d_i \in D$}{
+        biterms $\leftarrow$ $extract_biterm(d_i)$\\
+        $B \leftarrow B \union biterms$
+    }
+    \For{$i = 1 to max\_iteration$}
+    {
+        \For{topic k in K}
+        {
+            Compute $\beta_k$ = $softmax(\rho)$
+        } 
+    }
+\end{algorithm}

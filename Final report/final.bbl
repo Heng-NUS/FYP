@@ -88,6 +88,12 @@
   mobile big data.
 \newblock {\em Information Sciences 379\/} (2017), 82--93.
 
+\bibitem{cheng2014btm}
+{\sc Cheng, X., Yan, X., Lan, Y., and Guo, J.}
+\newblock Btm: Topic modeling over short texts.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering 26}, 12
+  (2014), 2928--2941.
+
 \bibitem{Chollet:2017:DLP:3203489}
 {\sc Chollet, F.}
 \newblock {\em Deep Learning with Python}, 1st~ed.
@@ -104,6 +110,11 @@
 \newblock How valuable is medical social media data? content analysis of the
   medical web.
 \newblock {\em Information Sciences 179}, 12 (2009), 1870--1880.
+
+\bibitem{dieng2019topic}
+{\sc Dieng, A.~B., Ruiz, F. J.~R., and Blei, D.~M.}
+\newblock Topic modeling in embedding spaces.
+\newblock {\em arXiv preprint arXiv:1907.04907\/} (2019).
 
 \bibitem{elkin2017network}
 {\sc Elkin, L.~S., Topal, K., and Bebek, G.}
@@ -173,6 +184,11 @@
 \newblock Competitive intelligence in social media twitter: iphone 6 vs. galaxy
   s5.
 \newblock {\em Online Information Review 40}, 1 (2016), 42--61.
+
+\bibitem{kingma2013auto}
+{\sc Kingma, D.~P., and Welling, M.}
+\newblock Auto-encoding variational bayes.
+\newblock {\em arXiv preprint arXiv:1312.6114\/} (2013).
 
 \bibitem{lamb2013separating}
 {\sc Lamb, A., Paul, M.~J., and Dredze, M.}
@@ -263,18 +279,23 @@
 \newblock {\em Journal of Telecommunication, Electronic and Computer
   Engineering (JTEC) 10}, 1-8 (2018), 41--46.
 
-\bibitem{rehurek_lrec}
-{\sc {\v R}eh{\r u}{\v r}ek, R., and Sojka, P.}
-\newblock {Software Framework for Topic Modelling with Large Corpora}.
-\newblock In {\em {Proceedings of the LREC 2010 Workshop on New Challenges for
-  NLP Frameworks}\/} (Valletta, Malta, May 2010), ELRA, pp.~45--50.
-\newblock \url{http://is.muni.cz/publication/884893/en}.
+\bibitem{qiang2018STTP}
+{\sc Qiang, J., Zhenyu, Q., Li, Y., Yuan, Y., and Wu, X.}
+\newblock Short text topic modeling techniques, applications, and performance:
+  A survey.
+\newblock {\em arXiv preprint arXiv:1904.07695\/} (2019).
 
 \bibitem{relatedwords.org}
 {\sc {relatedwords}}.
 \newblock Words that are associated with flu.
 \newblock \url{https://relatedwords.org/relatedto/flu}, 2019.
 \newblock Accessed December 18, 2019.
+
+\bibitem{roder2015exploring}
+{\sc R{\"o}der, M., Both, A., and Hinneburg, A.}
+\newblock Exploring the space of topic coherence measures.
+\newblock In {\em Proceedings of the eighth ACM international conference on Web
+  search and data mining\/} (2015), pp.~399--408.
 
 \bibitem{sadilek2012modeling}
 {\sc Sadilek, A., Kautz, H., and Silenzio, V.}
@@ -366,11 +387,21 @@
 \newblock The impact of preprocessing on text classification.
 \newblock {\em Information Processing \& Management 50}, 1 (2014), 104--112.
 
+\bibitem{wainwright2008graphical}
+{\sc Wainwright, M.~J., Jordan, M.~I., et~al.}
+\newblock Graphical models, exponential families, and variational inference.
+\newblock {\em Foundations and Trends{\textregistered} in Machine Learning 1},
+  1--2 (2008), 1--305.
+
 \bibitem{yan2013biterm}
 {\sc Yan, X., Guo, J., Lan, Y., and Cheng, X.}
 \newblock A biterm topic model for short texts.
 \newblock In {\em Proceedings of the 22nd international conference on World
   Wide Web\/} (2013), pp.~1445--1456.
+
+\bibitem{yang2017understanding}
+{\sc Yang, X.}
+\newblock Understanding the variational lower bound, 2017.
 
 \bibitem{yang2019xlnet}
 {\sc Yang, Z., Dai, Z., Yang, Y., Carbonell, J., Salakhutdinov, R.~R., and Le,

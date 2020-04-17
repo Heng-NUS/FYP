@@ -16,6 +16,7 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand \oddpage@label [2]{}
 \citation{blei2003latent}
 \citation{schmidt2012trending}
 \citation{elkin2017network}
@@ -32,6 +33,7 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {1.1}Background and related works}{1}{section.1.1}\protected@file@percent }
 \citation{sadilek2012predicting}
 \citation{salathe2011assessing}
@@ -42,10 +44,12 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {2}Aims and Objectives}{3}{chapter.2}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
 \citation{feldman2007text}
 \@writefile{toc}{\contentsline {chapter}{\numberline {3}Design}{4}{chapter.3}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Basic assumptions}{4}{section.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Overall design}{4}{section.3.2}\protected@file@percent }
 \newlabel{sec:Overall design}{{3.2}{4}{Overall design}{section.3.2}{}}
@@ -83,6 +87,7 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Data collection and processing}{13}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Social media dataset}{13}{section.4.1}\protected@file@percent }
 \newlabel{sec:Social media dataset}{{4.1}{13}{Social media dataset}{section.4.1}{}}
 \citation{serban2019real}
@@ -100,35 +105,34 @@
 \newlabel{sec:Data collection}{{4.3}{15}{Data collection}{section.4.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Twitter dataset collection}{15}{subsection.4.3.1}\protected@file@percent }
 \newlabel{sec:Twitter dataset}{{4.3.1}{15}{Twitter dataset collection}{subsection.4.3.1}{}}
+\citation{qiang2018STTP}
 \citation{cdc:fluView}
+\citation{uysal2014impact}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Screenshot of Archive's Twitter data}}{16}{figure.4.2}\protected@file@percent }
 \newlabel{fig:archive1}{{4.2}{16}{Screenshot of Archive's Twitter data}{figure.4.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Benchmark dataset collection}{16}{subsection.4.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Screenshot of Fluview's report}}{16}{figure.4.3}\protected@file@percent }
-\newlabel{fig:fluView1}{{4.3}{16}{Screenshot of Fluview's report}{figure.4.3}{}}
-\citation{uysal2014impact}
 \citation{twitter_dev}
 \citation{twitter_dev}
 \@writefile{toc}{\contentsline {section}{\numberline {4.4}Data Preprocessing}{17}{section.4.4}\protected@file@percent }
 \newlabel{sec:Preprocessing}{{4.4}{17}{Data Preprocessing}{section.4.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Common pipeline of text preprocessing}}{17}{figure.4.4}\protected@file@percent }
-\newlabel{fig:pipeline}{{4.4}{17}{Common pipeline of text preprocessing}{figure.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Common pipeline of text preprocessing}}{17}{figure.4.3}\protected@file@percent }
+\newlabel{fig:pipeline}{{4.3}{17}{Common pipeline of text preprocessing}{figure.4.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Unify data structure}{17}{subsection.4.4.1}\protected@file@percent }
 \newlabel{sec:Unify data structure}{{4.4.1}{17}{Unify data structure}{subsection.4.4.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of unified structure of social media dataset}}{18}{figure.4.5}\protected@file@percent }
-\newlabel{fig:social_data_sture}{{4.5}{18}{Screenshot of unified structure of social media dataset}{figure.4.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Screenshot of unified structure of social media dataset}}{18}{figure.4.4}\protected@file@percent }
+\newlabel{fig:social_data_sture}{{4.4}{18}{Screenshot of unified structure of social media dataset}{figure.4.4}{}}
 \citation{serban2019real}
 \citation{emo_list}
 \citation{pytho_emo}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{19}{figure.4.6}\protected@file@percent }
-\newlabel{fig:twitter_place}{{4.6}{19}{Screenshot of Twitter's place object from our dataset}{figure.4.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{19}{figure.4.5}\protected@file@percent }
+\newlabel{fig:twitter_place}{{4.5}{19}{Screenshot of Twitter's place object from our dataset}{figure.4.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Text regularization}{19}{subsection.4.4.2}\protected@file@percent }
 \citation{twitter_dev}
 \citation{perdana2018combining}
 \citation{kim2016competitive}
 \citation{twitter_dev}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Example of using emoji library}}{20}{figure.4.7}\protected@file@percent }
-\newlabel{fig:emo_lib}{{4.7}{20}{Example of using emoji library}{figure.4.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Example of using emoji library}}{20}{figure.4.6}\protected@file@percent }
+\newlabel{fig:emo_lib}{{4.6}{20}{Example of using emoji library}{figure.4.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Manually screening}{20}{subsection.4.4.3}\protected@file@percent }
 \newlabel{sec:Manually screening}{{4.4.3}{20}{Manually screening}{subsection.4.4.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Result of Manually filtering on a sample data}}{21}{table.4.1}\protected@file@percent }
@@ -144,6 +148,7 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Signal extraction}{22}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
 \newlabel{sec:uncoverig}{{5}{22}{Signal extraction}{chapter.5}{}}
 \citation{aramaki2011twitter}
 \citation{lamb2013separating,lampos2010flu}
@@ -176,39 +181,68 @@
 \citation{yang2019xlnet}
 \citation{kim2014convolutional}
 \citation{allahyari2017brief}
+\citation{roder2015exploring}
 \@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Sample prediction results of Supervised model}}{29}{table.5.4}\protected@file@percent }
 \newlabel{tab:sup1}{{5.4}{29}{Sample prediction results of Supervised model}{table.5.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.3}Unsupervised document clustering and topic generation}{29}{section.5.3}\protected@file@percent }
 \newlabel{sec:unsupervised}{{5.3}{29}{Unsupervised document clustering and topic generation}{section.5.3}{}}
 \citation{hofmann1999probabilistic,baeza1999modern}
 \citation{blei2003latent}
-\citation{blei2003latent}
-\citation{yan2013biterm}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Probability based Topic Modeling}{30}{subsection.5.3.1}\protected@file@percent }
 \newlabel{sec:topic modeling}{{5.3.1}{30}{Probability based Topic Modeling}{subsection.5.3.1}{}}
+\citation{blei2003latent}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Plate Diagram of LDA.\cite  {blei2003latent}}}{31}{figure.5.1}\protected@file@percent }
 \newlabel{fig:lda}{{5.1}{31}{Plate Diagram of LDA.\cite {blei2003latent}}{figure.5.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Experimental result of LDA}}{31}{table.5.5}\protected@file@percent }
-\newlabel{tab:LDA1}{{5.5}{31}{Experimental result of LDA}{table.5.5}{}}
+\citation{yan2013biterm,cheng2014btm}
+\citation{yan2013biterm}
+\citation{yan2013biterm}
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Experimental results of LDA}}{32}{table.5.5}\protected@file@percent }
+\newlabel{tab:LDA1}{{5.5}{32}{Experimental results of LDA}{table.5.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Correlation Matrix of coherence}}{32}{table.5.6}\protected@file@percent }
+\newlabel{tab:cormat1}{{5.6}{32}{Correlation Matrix of coherence}{table.5.6}{}}
 \citation{mikolov2013distributed,mikolov2013efficient}
 \citation{journals/corr/cs-CL-0205028}
 \citation{le2014distributed}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Machine learning based clustering}{32}{subsection.5.3.2}\protected@file@percent }
-\newlabel{sec:Document vector}{{5.3.2}{32}{Machine learning based clustering}{subsection.5.3.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces Experimental results of BTM}}{33}{table.5.7}\protected@file@percent }
+\newlabel{tab:BTM1}{{5.7}{33}{Experimental results of BTM}{table.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Machine learning based clustering}{33}{subsection.5.3.2}\protected@file@percent }
+\newlabel{sec:Document vector}{{5.3.2}{33}{Machine learning based clustering}{subsection.5.3.2}{}}
 \citation{moody2016mixing}
-\citation{rehurek_lrec}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Our model}{33}{subsection.5.3.3}\protected@file@percent }
-\newlabel{sec:modeling}{{5.3.3}{33}{Our model}{subsection.5.3.3}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Evaluation}{34}{chapter.6}\protected@file@percent }
-\@writefile{lof}{\addvspace {10\p@ }}
-\@writefile{lot}{\addvspace {10\p@ }}
+\citation{dieng2019topic}
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces Experimental results of K-means based clustering}}{35}{table.5.8}\protected@file@percent }
+\newlabel{tab:kmeans1}{{5.8}{35}{Experimental results of K-means based clustering}{table.5.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Our model}{35}{subsection.5.3.3}\protected@file@percent }
+\newlabel{sec:modeling}{{5.3.3}{35}{Our model}{subsection.5.3.3}{}}
+\newlabel{eq:lognormal}{{5.1}{36}{Our model}{equation.5.3.1}{}}
+\citation{yan2013biterm}
+\newlabel{eq:biterm}{{5.2}{37}{Our model}{equation.5.3.2}{}}
+\newlabel{eq:corpus}{{5.3}{37}{Our model}{equation.5.3.3}{}}
+\newlabel{eq:marginal}{{5.4}{37}{Our model}{equation.5.3.4}{}}
+\newlabel{eq:wbi}{{5.5}{37}{Our model}{equation.5.3.5}{}}
+\newlabel{eq:doc1}{{5.6}{37}{Our model}{equation.5.3.6}{}}
+\citation{wainwright2008graphical}
+\citation{kingma2013auto}
+\newlabel{eq:doc2}{{5.7}{38}{Our model}{equation.5.3.7}{}}
+\newlabel{eq:doc3}{{5.8}{38}{Our model}{equation.5.3.8}{}}
+\newlabel{eq:var1}{{5.9}{38}{Our model}{equation.5.3.9}{}}
+\newlabel{eq:var2}{{5.10}{38}{Our model}{equation.5.3.10}{}}
+\newlabel{eq:var3}{{5.11}{38}{Our model}{equation.5.3.11}{}}
+\citation{kingma2013auto}
+\citation{yang2017understanding}
+\newlabel{eq:biterm2}{{5.12}{39}{Our model}{equation.5.3.12}{}}
+\newlabel{eq:KL}{{5.13}{39}{Our model}{equation.5.3.13}{}}
+\citation{kingma2013auto}
+\newlabel{eq:loss2}{{5.14}{40}{Our model}{equation.5.3.14}{}}
+\newlabel{eq:loss}{{5.15}{40}{Our model}{equation.5.3.15}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Topic distribution}}{40}{algocf.1}\protected@file@percent }
 \citation{burkell2014facebook}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Potential ethical issues}{35}{chapter.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Potential ethical issues}{41}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Ethical Issues}{35}{section.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Privacy Issues}{35}{subsection.7.1.1}\protected@file@percent }
-\newlabel{privacy}{{7.1.1}{35}{Privacy Issues}{subsection.7.1.1}{}}
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Ethical Issues}{41}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Privacy Issues}{41}{subsection.6.1.1}\protected@file@percent }
+\newlabel{privacy}{{6.1.1}{41}{Privacy Issues}{subsection.6.1.1}{}}
 \citation{andreu2015big,denecke2009valuable,lamb2013separating}
 \citation{felt2008privacy}
 \citation{twitter_pri}
@@ -218,27 +252,28 @@
 \citation{mill2016utilitarianism}
 \citation{alexander2007deontological}
 \citation{archive_pri}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Trust, Safety and Reliability Issues}{36}{subsection.7.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.3}Vulnerable Groups Issues}{36}{subsection.7.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Evaluation and Analysis}{37}{section.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Privacy Analysis}{37}{subsection.7.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}Trust, Safety and Reliability Issues}{42}{subsection.6.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}Vulnerable Groups Issues}{42}{subsection.6.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Evaluation and Analysis}{43}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Privacy Analysis}{43}{subsection.6.2.1}\protected@file@percent }
 \citation{elkin2017network}
 \citation{schmidt2012trending}
 \citation{andreu2015big}
 \citation{birsch2004moral}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Reliability Analysis}{39}{subsection.7.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Reliability Analysis}{45}{subsection.6.2.2}\protected@file@percent }
 \citation{ACM_C}
 \citation{solove2007ven}
 \citation{cdc:fluView}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.3}Vulnerable Groups Analysis}{40}{subsection.7.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Progress}{42}{chapter.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}Vulnerable Groups Analysis}{46}{subsection.6.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Progress}{48}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}Project management}{42}{section.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8.2}Conclusion and Future work}{43}{section.8.2}\protected@file@percent }
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Project management}{48}{section.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Conclusion and Future work}{49}{section.7.2}\protected@file@percent }
 \bibstyle{acm}
 \bibdata{bibliography/bibliography}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{44}{Item.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{50}{Item.54}\protected@file@percent }
 \bibcite{ACM_C}{1}
 \bibcite{alexander2007deontological}{2}
 \bibcite{allahyari2017brief}{3}
@@ -254,55 +289,61 @@
 \bibcite{cdc:fluView}{13}
 \bibcite{chen2017disease}{14}
 \bibcite{chen2017reality}{15}
-\bibcite{Chollet:2017:DLP:3203489}{16}
-\bibcite{culotta2010towards}{17}
-\bibcite{denecke2009valuable}{18}
-\bibcite{elkin2017network}{19}
-\bibcite{feldman2007text}{20}
-\bibcite{felt2008privacy}{21}
-\bibcite{ginsberg2009detecting}{22}
-\bibcite{greenwood2016social}{23}
-\bibcite{grinstein2002information}{24}
-\bibcite{hofmann1999probabilistic}{25}
-\bibcite{archive}{26}
-\bibcite{archive_pri}{27}
-\bibcite{joulin2016bag}{28}
-\bibcite{kim2014convolutional}{29}
-\bibcite{kim2016competitive}{30}
-\bibcite{lamb2013separating}{31}
-\bibcite{lampos2010flu}{32}
-\bibcite{le2014distributed}{33}
-\bibcite{lee2013real}{34}
-\bibcite{journals/corr/cs-CL-0205028}{35}
-\bibcite{mikolov2013efficient}{36}
-\bibcite{mikolov2013distributed}{37}
-\bibcite{mill2016utilitarianism}{38}
-\bibcite{moody2016mixing}{39}
-\bibcite{omary2010machine}{40}
-\bibcite{paul2011you}{41}
-\bibcite{paul2012model}{42}
-\bibcite{paul2014discovering}{43}
-\bibcite{pennington2014glove}{44}
-\bibcite{perdana2018combining}{45}
-\bibcite{rehurek_lrec}{46}
-\bibcite{relatedwords.org}{47}
-\bibcite{sadilek2012modeling}{48}
-\bibcite{sadilek2012predicting}{49}
-\bibcite{salathe2011assessing}{50}
-\bibcite{schmidt2012trending}{51}
-\bibcite{signorini2011use}{52}
-\bibcite{sloan}{53}
-\bibcite{smith2012big}{54}
-\bibcite{solove2007ven}{55}
-\bibcite{pytho_emo}{56}
-\bibcite{tankard2012big}{57}
-\bibcite{tuarob2013discovering}{58}
-\bibcite{twitter_dev}{59}
-\bibcite{twitter_pri}{60}
-\bibcite{emo_list}{61}
-\bibcite{uysal2014impact}{62}
-\bibcite{yan2013biterm}{63}
-\bibcite{yang2019xlnet}{64}
-\bibcite{zhao2011comparing}{65}
-\bibcite{serban2019real}{66}
-\@writefile{toc}{\contentsline {chapter}{Appendix}{52}{chapter*.5}\protected@file@percent }
+\bibcite{cheng2014btm}{16}
+\bibcite{Chollet:2017:DLP:3203489}{17}
+\bibcite{culotta2010towards}{18}
+\bibcite{denecke2009valuable}{19}
+\bibcite{dieng2019topic}{20}
+\bibcite{elkin2017network}{21}
+\bibcite{feldman2007text}{22}
+\bibcite{felt2008privacy}{23}
+\bibcite{ginsberg2009detecting}{24}
+\bibcite{greenwood2016social}{25}
+\bibcite{grinstein2002information}{26}
+\bibcite{hofmann1999probabilistic}{27}
+\bibcite{archive}{28}
+\bibcite{archive_pri}{29}
+\bibcite{joulin2016bag}{30}
+\bibcite{kim2014convolutional}{31}
+\bibcite{kim2016competitive}{32}
+\bibcite{kingma2013auto}{33}
+\bibcite{lamb2013separating}{34}
+\bibcite{lampos2010flu}{35}
+\bibcite{le2014distributed}{36}
+\bibcite{lee2013real}{37}
+\bibcite{journals/corr/cs-CL-0205028}{38}
+\bibcite{mikolov2013efficient}{39}
+\bibcite{mikolov2013distributed}{40}
+\bibcite{mill2016utilitarianism}{41}
+\bibcite{moody2016mixing}{42}
+\bibcite{omary2010machine}{43}
+\bibcite{paul2011you}{44}
+\bibcite{paul2012model}{45}
+\bibcite{paul2014discovering}{46}
+\bibcite{pennington2014glove}{47}
+\bibcite{perdana2018combining}{48}
+\bibcite{qiang2018STTP}{49}
+\bibcite{relatedwords.org}{50}
+\bibcite{roder2015exploring}{51}
+\bibcite{sadilek2012modeling}{52}
+\bibcite{sadilek2012predicting}{53}
+\bibcite{salathe2011assessing}{54}
+\bibcite{schmidt2012trending}{55}
+\bibcite{signorini2011use}{56}
+\bibcite{sloan}{57}
+\bibcite{smith2012big}{58}
+\bibcite{solove2007ven}{59}
+\bibcite{pytho_emo}{60}
+\bibcite{tankard2012big}{61}
+\bibcite{tuarob2013discovering}{62}
+\bibcite{twitter_dev}{63}
+\bibcite{twitter_pri}{64}
+\bibcite{emo_list}{65}
+\bibcite{uysal2014impact}{66}
+\bibcite{wainwright2008graphical}{67}
+\bibcite{yan2013biterm}{68}
+\bibcite{yang2017understanding}{69}
+\bibcite{yang2019xlnet}{70}
+\bibcite{zhao2011comparing}{71}
+\bibcite{serban2019real}{72}
+\@writefile{toc}{\contentsline {chapter}{Appendix}{58}{chapter*.5}\protected@file@percent }
