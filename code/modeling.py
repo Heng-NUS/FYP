@@ -3,6 +3,7 @@ import json
 import os
 import pickle
 import random
+import time
 from collections import defaultdict
 
 import gensim
@@ -28,18 +29,19 @@ from torchtext import data
 from torchtext.vocab import Vectors
 from tqdm import tqdm
 
-from utils import *
-
 dtype = torch.FloatTensor
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+STOP_WORDS = stopwords.words('english')
+
 
 def setup_seed(seed):
     np.random.seed(seed)
     random.seed(seed)
-    torch.manual_seed(seed) #cpu
+    torch.manual_seed(seed)  #cpu
     torch.cuda.manual_seed_all(seed)  #并行gpu
     torch.backends.cudnn.deterministic = True  #cpu/gpu结果一致
     torch.backends.cudnn.benchmark = True
+
 
 def read_corpus(fname, tokens_only=True, labeled=True):
     with open(fname, encoding="utf-8") as f:
@@ -53,6 +55,7 @@ def read_corpus(fname, tokens_only=True, labeled=True):
                 # For training data, add tags
                 yield gensim.models.doc2vec.TaggedDocument(tokens, [i])
 
+
 def read_labeled(fname):
     examples = []
     with open(fname, encoding="utf-8") as f:
@@ -64,8 +67,11 @@ def read_labeled(fname):
     random.shuffle(examples)
     return [x[0] for x in examples], [x[1] for x in examples]
 
-def batch_iter(x, y, batch_size=64, shuffle=True):
-    """return batches"""
+
+def batch_iter(x, y, batch_size=256, shuffle=True):
+    """
+    return batches for supervised model
+    """
     data_len = len(x)
     num_batch = int((data_len - 1) / batch_size) + 1
 
@@ -86,10 +92,16 @@ def batch_iter(x, y, batch_size=64, shuffle=True):
         yield torch.LongTensor(x_shuffle[start_id:end_id]), torch.LongTensor(
             y_shuffle[start_id:end_id])
 
-def batch_iter2(biterms, embeddings, vocab_size, batch_size=4096, shuffle=True):
+
+def batch_iter2(biterms,
+                embeddings,
+                vocab_size,
+                batch_size=4096,
+                shuffle=True):
     '''
-        biterms: list of tuple [(w1,w2)], w1 and w2 are indexes.
-        embeddings: matrix of word embeddings, dtype=torch.Tensor
+    return batches for unsupervised model
+    biterms: list of tuple [(w1,w2)], w1 and w2 are indexes.
+    embeddings: matrix of word embeddings, dtype=torch.Tensor
     '''
     size = embeddings.size()
     data_len = len(biterms)
@@ -112,15 +124,20 @@ def batch_iter2(biterms, embeddings, vocab_size, batch_size=4096, shuffle=True):
             idx_matrix[j][w2] = 1.
         yield torch.Tensor(idx_matrix).type(torch.bool), emb_batch
 
+
 def doc_padding(tokens, sen_length, padding_with='<pad>'):
-    '''pad a list to a fixed length with certain word'''
+    '''
+    pad a list to a fixed length with certain word
+    '''
     if len(tokens) >= sen_length:
         return tokens[:sen_length]
     else:
         return tokens + [padding_with for i in range(sen_length - len(tokens))]
 
+
 def evaluate_su_model(model, iterator):
-    ''' Evaluate supervised model
+    ''' 
+    Evaluate supervised model
     batch[0]: data, batch[1]: label
     '''
     model.eval()
@@ -136,6 +153,7 @@ def evaluate_su_model(model, iterator):
     f1 = f1_score(all_y, np.array(all_preds).flatten())
     return accuracy, f1
 
+
 def create_emb_layer(weights_matrix, non_trainable=False):
     num_embeddings, embedding_dim = weights_matrix.size()
     emb_layer = nn.Embedding(num_embeddings, embedding_dim)
@@ -144,6 +162,7 @@ def create_emb_layer(weights_matrix, non_trainable=False):
         emb_layer.weight.requires_grad = False
 
     return emb_layer  #, num_embeddings, embedding_dim
+
 
 def weight_matrix(embedding_size, target_vocab, word_embeddings):
     '''creat a look-up table for word embeddings'''
@@ -161,8 +180,11 @@ def weight_matrix(embedding_size, target_vocab, word_embeddings):
                 np.random.normal(scale=0.6, size=(embedding_size, )))
     return matrix
 
+
 def predict(vocab, tokens, label, max_sen_len, model):
-    '''predict the class of a single text'''
+    '''
+    predict the class of a single text(supervised)
+    '''
     model = model.to(device)
     model.eval()
     padded = doc_padding(tokens, max_sen_len)
@@ -172,9 +194,13 @@ def predict(vocab, tokens, label, max_sen_len, model):
     print(' '.join(tokens))
     print('predict class:', predicted, "True class:", label)
 
-def extract_and_save_biterm(fname, embed_size=100, min_count=10, max_percent=0.4):
+
+def extract_and_save_biterm(fname,
+                            embed_size=200,
+                            min_count=5,
+                            max_percent=0.5):
     '''
-    simple precocess of biterm
+    simple preprocessing of biterm
 
     A biterm is an unordered words pair
     Biterm is drawn from documents not from the whole corpus
@@ -183,11 +209,20 @@ def extract_and_save_biterm(fname, embed_size=100, min_count=10, max_percent=0.4
     docs = read_corpus(fname, labeled=False, tokens_only=True)
     docs = [[token for token in doc if not token.isnumeric()] for doc in docs]
 
-    # Remove words that are only one character.
-    docs = [[token for token in doc if len(token) > 1] for doc in docs]
+    # Remove words that are only one character, and remove stop words
+    docs = [[
+        token for token in doc if len(token) > 1 and token not in STOP_WORDS
+    ] for doc in docs]
 
     lemmatizer = WordNetLemmatizer()
     docs = [[lemmatizer.lemmatize(token) for token in doc] for doc in docs]
+
+    bigram = Phrases(docs, min_count=20)
+    for idx in range(len(docs)):
+        for token in bigram[docs[idx]]:
+            if '_' in token:
+                # Token is a bigram, add to document.
+                docs[idx].append(token)
 
     dictionary = Dictionary(docs)
     dictionary.filter_extremes(no_below=min_count, no_above=max_percent)
@@ -249,78 +284,65 @@ def extract_and_save_biterm(fname, embed_size=100, min_count=10, max_percent=0.4
         pickle.dump(doc_bitems, f)
     with open(os.path.join(dirc, fname + '_emb.pkl'), 'wb') as f:
         pickle.dump(embeddings, f)
+    with open(os.path.join(dirc, fname + '_doc.pkl'), 'wb') as f:
+        pickle.dump(docs, f)
 
-class Dataset2(object):
-    '''load dataset'''
+
+class UnDataset(object):
+    '''
+    Create dataset for unsupervised model
+    '''
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.model = None
         self.docs = None
+        self.biterm_dic = None
+        self.biterms = None
         self.vocab = None
-        self.word_embeddings = {}
-        self.doc_embeddings = None
+        self.embeddings = None
 
     def __getitem__(self, item):
-        return self.corpus[item]
+
+        return [self.vocab.id2token[x] for x in self.docs[item]]
 
     def set_config(self, config):
         self.config = config
 
-    def load_data(self, fname, padding):
-        docs = read_corpus(fname, labeled=False)
-        docs = [[token for token in doc if not token.isnumeric()]
-                for doc in docs]
+    def load_data(self, filename):
+        '''
+        Load text data, each line in \parameter fname is a document
+        '''
+        fname = os.path.basename(filename)
+        fname = fname.split('.')[0]
+        dirc = os.path.join(os.getcwd(), 'Data', 'unsupervised')
+        dic_path = os.path.join(dirc, fname + '_dic.pkl')
+        biterm_path = os.path.join(dirc, fname + '_bit.pkl')
+        embed_path = os.path.join(dirc, fname + '_emb.pkl')
+        doc_path = os.path.join(dirc, fname + '_doc.pkl')
+        if not os.path.exists(dirc) or not os.path.isfile(
+                dic_path) or not os.path.isfile(
+                    biterm_path) or not os.path.isfile(
+                        embed_path) or not os.path.isfile(doc_path):
+            extract_and_save_biterm(filename,
+                                    embed_size=self.config.embed_size,
+                                    min_count=self.config.min_count,
+                                    max_percent=self.config.max_percent)
+        self.vocab = Dictionary.load(dic_path)
+        self.biterm_dic = pickle.load(open(biterm_path, 'rb'))
+        embeddings = pickle.load(open(embed_path, 'rb'))
+        self.docs = pickle.load(open(doc_path, 'rb'))
+        self.biterms = [self.biterm_dic[i] for i in range(len(self.biterm_dic))]
+        embeddings = [embeddings[i] for i in range(len(embeddings))]
+        self.embeddings = torch.Tensor(embeddings)
+        print("Loaded {} documents".format(len(self.docs)))
+        print("Loaded {} biterms".format(len(self.biterms)))
+        print("Loaded {} unique vocabs".format(len(self.vocab)))
 
-        # Remove words that are only one character.
-        docs = [[token for token in doc if len(token) > 1] for doc in docs]
-
-        lemmatizer = WordNetLemmatizer()
-        docs = [[lemmatizer.lemmatize(token) for token in doc] for doc in docs]
-
-        bigram = Phrases(docs, min_count=20)
-        for idx in range(len(docs)):
-            for token in bigram[docs[idx]]:
-                if '_' in token:
-                    # Token is a bigram, add to document.
-                    docs[idx].append(token)
-
-        # tagged = [
-        #     gensim.models.doc2vec.TaggedDocument(tokens, [i])
-        #     for i, tokens in enumerate(docs)
-        # ]
-
-        # model = models.doc2vec.Doc2Vec(tagged,
-        #                                vector_size=self.config.embed_size,
-        #                                min_count=0,
-        #                                epochs=30,
-        #                                workers=4,
-        #                                dm_concat=1,
-        #                                dm_tag_count=1)
-        self.vocab = Dictionary(docs)
-        if padding:
-            docs = [doc_padding(x, self.config.max_sen_len) for x in docs]
-            special_tokens = {'<pad>': 0, '<unk>': 1}
-            self.vocab.patch_with_special_tokens(special_tokens)
-
-        self.idxdoc = [self.vocab.doc2idx(x, 1) for x in docs]
-        self.biterm = [self.vocab.doc2bow(doc) for doc in docs]
-        # self.doc_embeddings = [model.docvecs[i] for i in range(len(docs))]
-
-        # self.word_embeddings = torch.zeros(
-        #     (len(self.vocab), self.config.embed_size))
-        # for i in range(2, len(self.vocab)):
-        #     word = self.vocab[i]
-        #     try:
-        #         self.word_embeddings[i] = torch.Tensor(
-        #             model.wv.get_vector(word))
-        #     except KeyError:
-        #         self.word_embeddings[i] = torch.Tensor(
-        #             np.random.normal(scale=0.6,
-        #                              size=(self.config.embed_size, )))
 
 class Dataset(object):
-    '''load data'''
+    '''
+    Create dataset for training supervised model
+    '''
     def __init__(self, config):
         self.config = config
         self.train_data = None
@@ -413,6 +435,7 @@ class Dataset(object):
 
     def val_iterator(self):
         return batch_iter(*self.val_data, self.config.batch_size, False)
+
 
 class TextCNN(nn.Module):
     def __init__(self, config, vocab_size, word_embeddings):
@@ -509,6 +532,7 @@ class TextCNN(nn.Module):
 
         return avg_train_loss, val_accuracy, val_f1
 
+
 class NBTM(nn.Module):
     def __init__(self,
                  num_topics,
@@ -516,7 +540,6 @@ class NBTM(nn.Module):
                  t_hidden_size,
                  embeddings,
                  theta_act="tanh",
-                 train_embeddings=False,
                  enc_drop=0.5):
         super(NBTM, self).__init__()
 
@@ -624,7 +647,7 @@ class NBTM(nn.Module):
         return preds
 
     def forward(self, bi_idx, biterms, theta=None, aggregate=True):
-        ## get \theta
+        ## get \\theta
         if theta is None:
             theta, kld_theta = self.get_theta(biterms)
         else:
@@ -635,31 +658,52 @@ class NBTM(nn.Module):
 
         ## get prediction loss
         preds = self.decode(theta, beta)
-        recon_loss = - torch.masked_select(preds, bi_idx)
-        # recon_loss = -(bi_idx * preds).sum(1)
+        recon_loss = torch.masked_select(preds, bi_idx)
         if aggregate:
             recon_loss = recon_loss.mean()
         return recon_loss, kld_theta
 
     def run_epoch(self, biterms, epoch):
-        losses = []
         self.train()
-        train_iterator = batch_iter2(biterms, self.rho, vocab_size=self.vocab_size, batch_size=20480)
+        losses = []
+        kls = []
+        recons = []
+        self.train()
+        if epoch % 3 == 0:
+            torch.save(self.state_dict(), 'nbtm_parameters.pkl')
+        s_time = time.clock()
+        train_iterator = batch_iter2(biterms,
+                                     self.rho,
+                                     vocab_size=self.vocab_size,
+                                     batch_size=20480)
+        print("Iter: {}".format(epoch + 1))
         for i, batch in enumerate(train_iterator):
             self.optimizer.zero_grad()
             self.zero_grad()
             idx = batch[0].to(device)
             biterms = batch[1].to(device)
             recon_loss, kld_theta = self.forward(idx, biterms)
-            total_loss = recon_loss + kld_theta
+            total_loss = kld_theta - recon_loss
             total_loss.backward()
             self.optimizer.step()
-            print(total_loss)
+            losses.append(total_loss.cpu().item())
+            kls.append(kld_theta.cpu().item())
+            recons.append(recon_loss)
+        avg_loss = sum(losses) / len(losses)
+        avg_kl = sum(kls) / len(kls)
+        avg_rec = sum(recons) / len(recons)
+        e_time = time.clock()
+        compute_time = e_time - s_time
+        print("\tProcessed {} mini-batches with average total loss: {}, kl loss: {}, recon loss: {}".format(
+            len(losses), avg_loss, avg_kl, avg_rec))
+        print("\tComputation time {:.2f}s".format(compute_time))
+        return avg_loss, compute_time
 
     def add_optimizer(self, optimizer):
         self.optimizer = optimizer
 
     def infer(self, doc, biterm_dic):
+        self.eval()
         '''infer topic distribution of a document
         doc: a set of biterm (idx, count)
         '''
@@ -667,7 +711,7 @@ class NBTM(nn.Module):
         with torch.no_grad():
             sum_biterms = sum(doc.values())
             p_b_ds = list(doc.values())
-            p_b_ds = [x / sum_biterms for x in p_b_ds]
+            p_b_ds = [[x / sum_biterms for x in p_b_ds]]
             p_b_ds = torch.Tensor(p_b_ds).to(device)
             #decode p_b_d = p(b|d)
 
@@ -689,24 +733,22 @@ class NBTM(nn.Module):
                 p_z_bs[i] /= sum_zb[i]
             #p_z_b = p(z|b)
 
-            p_z_ds = torch.zeros(self.num_topics).to(device)
-            for i in range(self.num_topics):
-                for j in range(len(biterms)):
-                    p_z_ds[i] += p_z_bs[i][j] * p_b_ds[j]
+            p_z_ds = torch.softmax(torch.mm(p_z_bs, p_b_ds.T), dim=0)
             #p_z_d = p(z|d)
-            return p_z_ds.cpu().numpy()
+
+            return p_z_ds.cpu().numpy().reshape(-1)
 
     def show_topics(self, vocab, max_words):
         '''
         Display generated topics with \param max_words words
         '''
+        self.eval()
         with torch.no_grad():
             betas = self.get_beta()
             topics = []
             for k in range(self.num_topics):
                 beta = betas[k]
-                top_words = list(beta.cpu().numpy().argsort()[-max_words +
-                                                            1:][::-1])
+                top_words = list(beta.cpu().numpy().argsort()[-max_words:][::-1])
                 topic_words = [vocab[a] for a in top_words]
                 topics.append(' '.join(topic_words))
                 print('Topic {}: {}'.format(k, topic_words))

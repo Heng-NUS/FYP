@@ -16,17 +16,20 @@ class Palmetto(object):
         "umass"
     ]
 
-    def __init__(self,
-                 palmetto_uri="https://palmetto.demos.dice-research.org/service/"):
+    def __init__(
+        self,
+        palmetto_uri="https://palmetto.demos.dice-research.org/service/"):
         self.palmetto_uri = palmetto_uri
 
     def _request_by_service(self, words, service_type, content_type="text"):
-        request_uri = self.palmetto_uri + service_type
-
-        payload = {}
-        payload["words"] = " ".join(words)
+        request_uri = self.palmetto_uri + service_type + "?words="
+        for word in words[:-1]:
+            request_uri += word + "%20"
+        request_uri += words[-1]
+        # payload = {}
+        # payload["words"] = " ".join(words)
         try:
-            r = requests.post(request_uri, data=payload, timeout=30)
+            r = requests.post(request_uri, timeout=50)
         except BaseException:
             raise EndpointDown(request_uri)
 
