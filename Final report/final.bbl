@@ -111,6 +111,11 @@
   medical web.
 \newblock {\em Information Sciences 179}, 12 (2009), 1870--1880.
 
+\bibitem{dieng2019topic}
+{\sc Dieng, A.~B., Ruiz, F. J.~R., and Blei, D.~M.}
+\newblock Topic modeling in embedding spaces.
+\newblock {\em arXiv preprint arXiv:1907.04907\/} (2019).
+
 \bibitem{elkin2017network}
 {\sc Elkin, L.~S., Topal, K., and Bebek, G.}
 \newblock Network based model of social media big data predicts contagious

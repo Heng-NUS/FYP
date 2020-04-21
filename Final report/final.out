@@ -8,38 +8,39 @@
 \BOOKMARK [1][-]{section.3.3}{Basic components}{chapter.3}% 8
 \BOOKMARK [2][-]{subsection.3.3.1}{Data collector design}{section.3.3}% 9
 \BOOKMARK [2][-]{subsection.3.3.2}{Data preprocessor design}{section.3.3}% 10
-\BOOKMARK [2][-]{subsection.3.3.3}{Model design}{section.3.3}% 11
-\BOOKMARK [2][-]{subsection.3.3.4}{Evaluation layer design}{section.3.3}% 12
-\BOOKMARK [2][-]{subsection.3.3.5}{Visualization design}{section.3.3}% 13
-\BOOKMARK [0][-]{chapter.4}{Data collection and processing}{}% 14
-\BOOKMARK [1][-]{section.4.1}{Social media dataset}{chapter.4}% 15
-\BOOKMARK [1][-]{section.4.2}{Benchmark}{chapter.4}% 16
-\BOOKMARK [1][-]{section.4.3}{Data collection}{chapter.4}% 17
-\BOOKMARK [2][-]{subsection.4.3.1}{Twitter dataset collection}{section.4.3}% 18
-\BOOKMARK [2][-]{subsection.4.3.2}{Benchmark dataset collection}{section.4.3}% 19
-\BOOKMARK [1][-]{section.4.4}{Data Preprocessing}{chapter.4}% 20
-\BOOKMARK [2][-]{subsection.4.4.1}{Unify data structure}{section.4.4}% 21
-\BOOKMARK [2][-]{subsection.4.4.2}{Text regularization}{section.4.4}% 22
-\BOOKMARK [2][-]{subsection.4.4.3}{Manually screening}{section.4.4}% 23
-\BOOKMARK [0][-]{chapter.5}{Signal extraction}{}% 24
-\BOOKMARK [1][-]{section.5.1}{Keywords search}{chapter.5}% 25
-\BOOKMARK [1][-]{section.5.2}{Supervised classification}{chapter.5}% 26
-\BOOKMARK [1][-]{section.5.3}{Unsupervised document clustering and topic generation}{chapter.5}% 27
-\BOOKMARK [2][-]{subsection.5.3.1}{Embeddings based clustering}{section.5.3}% 28
-\BOOKMARK [2][-]{subsection.5.3.2}{Probability based Topic Modeling}{section.5.3}% 29
-\BOOKMARK [2][-]{subsection.5.3.3}{Our model}{section.5.3}% 30
-\BOOKMARK [1][-]{section.5.4}{System integration and evaluation}{chapter.5}% 31
-\BOOKMARK [0][-]{chapter.6}{Potential ethical issues}{}% 32
-\BOOKMARK [1][-]{section.6.1}{Ethical Issues}{chapter.6}% 33
-\BOOKMARK [2][-]{subsection.6.1.1}{Privacy Issues}{section.6.1}% 34
-\BOOKMARK [2][-]{subsection.6.1.2}{Trust, Safety and Reliability Issues}{section.6.1}% 35
-\BOOKMARK [2][-]{subsection.6.1.3}{Vulnerable Groups Issues}{section.6.1}% 36
-\BOOKMARK [1][-]{section.6.2}{Evaluation and Analysis}{chapter.6}% 37
-\BOOKMARK [2][-]{subsection.6.2.1}{Privacy Analysis}{section.6.2}% 38
-\BOOKMARK [2][-]{subsection.6.2.2}{Reliability Analysis}{section.6.2}% 39
-\BOOKMARK [2][-]{subsection.6.2.3}{Vulnerable Groups Analysis}{section.6.2}% 40
-\BOOKMARK [0][-]{chapter.7}{Progress}{}% 41
-\BOOKMARK [1][-]{section.7.1}{Project management}{chapter.7}% 42
-\BOOKMARK [1][-]{section.7.2}{Conclusion and Future work}{chapter.7}% 43
-\BOOKMARK [0][-]{Item.63}{Bibliography}{}% 44
-\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 45
+\BOOKMARK [2][-]{subsection.3.3.3}{Classification Model design}{section.3.3}% 11
+\BOOKMARK [2][-]{subsection.3.3.4}{Clustering model design}{section.3.3}% 12
+\BOOKMARK [2][-]{subsection.3.3.5}{Evaluation layer design}{section.3.3}% 13
+\BOOKMARK [2][-]{subsection.3.3.6}{Visualization design}{section.3.3}% 14
+\BOOKMARK [0][-]{chapter.4}{Data collection and processing}{}% 15
+\BOOKMARK [1][-]{section.4.1}{Social media dataset}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.2}{Benchmark}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.3}{Data collection}{chapter.4}% 18
+\BOOKMARK [2][-]{subsection.4.3.1}{Twitter dataset collection}{section.4.3}% 19
+\BOOKMARK [2][-]{subsection.4.3.2}{Benchmark dataset collection}{section.4.3}% 20
+\BOOKMARK [1][-]{section.4.4}{Data Preprocessing}{chapter.4}% 21
+\BOOKMARK [2][-]{subsection.4.4.1}{Unify data structure}{section.4.4}% 22
+\BOOKMARK [2][-]{subsection.4.4.2}{Text regularization}{section.4.4}% 23
+\BOOKMARK [2][-]{subsection.4.4.3}{Manually screening}{section.4.4}% 24
+\BOOKMARK [0][-]{chapter.5}{Signal extraction}{}% 25
+\BOOKMARK [1][-]{section.5.1}{Keywords search}{chapter.5}% 26
+\BOOKMARK [1][-]{section.5.2}{Supervised classification}{chapter.5}% 27
+\BOOKMARK [1][-]{section.5.3}{Unsupervised document clustering and topic generation}{chapter.5}% 28
+\BOOKMARK [2][-]{subsection.5.3.1}{Embeddings based clustering}{section.5.3}% 29
+\BOOKMARK [2][-]{subsection.5.3.2}{Probability based Topic Modeling}{section.5.3}% 30
+\BOOKMARK [2][-]{subsection.5.3.3}{Our model}{section.5.3}% 31
+\BOOKMARK [1][-]{section.5.4}{System integration and visualization}{chapter.5}% 32
+\BOOKMARK [0][-]{chapter.6}{Potential ethical issues}{}% 33
+\BOOKMARK [1][-]{section.6.1}{Ethical Issues}{chapter.6}% 34
+\BOOKMARK [2][-]{subsection.6.1.1}{Privacy Issues}{section.6.1}% 35
+\BOOKMARK [2][-]{subsection.6.1.2}{Trust, Safety and Reliability Issues}{section.6.1}% 36
+\BOOKMARK [2][-]{subsection.6.1.3}{Vulnerable Groups Issues}{section.6.1}% 37
+\BOOKMARK [1][-]{section.6.2}{Evaluation and Analysis}{chapter.6}% 38
+\BOOKMARK [2][-]{subsection.6.2.1}{Privacy Analysis}{section.6.2}% 39
+\BOOKMARK [2][-]{subsection.6.2.2}{Reliability Analysis}{section.6.2}% 40
+\BOOKMARK [2][-]{subsection.6.2.3}{Vulnerable Groups Analysis}{section.6.2}% 41
+\BOOKMARK [0][-]{chapter.7}{Reflection and summary}{}% 42
+\BOOKMARK [1][-]{section.7.1}{Project management}{chapter.7}% 43
+\BOOKMARK [1][-]{section.7.2}{Conclusion and Future work}{chapter.7}% 44
+\BOOKMARK [0][-]{section.7.2}{Bibliography}{}% 45
+\BOOKMARK [0][-]{chapter*.5}{Appendix}{}% 46
