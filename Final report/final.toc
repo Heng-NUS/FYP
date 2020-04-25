@@ -1,46 +1,46 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}% 
-\contentsline {section}{\numberline {1.1}Background and related works}{1}{section.1.1}% 
-\contentsline {section}{\numberline {1.2}Motivation}{2}{section.1.2}% 
-\contentsline {chapter}{\numberline {2}Aims and Objectives}{3}{chapter.2}% 
-\contentsline {chapter}{\numberline {3}Design}{4}{chapter.3}% 
-\contentsline {section}{\numberline {3.1}Basic assumptions}{4}{section.3.1}% 
-\contentsline {section}{\numberline {3.2}Overall design}{4}{section.3.2}% 
-\contentsline {section}{\numberline {3.3}Basic components}{6}{section.3.3}% 
-\contentsline {subsection}{\numberline {3.3.1}Data collector design}{6}{subsection.3.3.1}% 
-\contentsline {subsection}{\numberline {3.3.2}Data preprocessor design}{6}{subsection.3.3.2}% 
-\contentsline {subsection}{\numberline {3.3.3}Classification Model design}{9}{subsection.3.3.3}% 
-\contentsline {subsection}{\numberline {3.3.4}Clustering model design}{10}{subsection.3.3.4}% 
-\contentsline {subsection}{\numberline {3.3.5}Evaluation layer design}{10}{subsection.3.3.5}% 
-\contentsline {subsection}{\numberline {3.3.6}Visualization design}{12}{subsection.3.3.6}% 
-\contentsline {chapter}{\numberline {4}Data collection and processing}{13}{chapter.4}% 
-\contentsline {section}{\numberline {4.1}Social media dataset}{13}{section.4.1}% 
-\contentsline {section}{\numberline {4.2}Benchmark}{14}{section.4.2}% 
-\contentsline {section}{\numberline {4.3}Data collection}{15}{section.4.3}% 
-\contentsline {subsection}{\numberline {4.3.1}Twitter dataset collection}{15}{subsection.4.3.1}% 
-\contentsline {subsection}{\numberline {4.3.2}Benchmark dataset collection}{16}{subsection.4.3.2}% 
-\contentsline {section}{\numberline {4.4}Data Preprocessing}{17}{section.4.4}% 
-\contentsline {subsection}{\numberline {4.4.1}Unify data structure}{17}{subsection.4.4.1}% 
-\contentsline {subsection}{\numberline {4.4.2}Text regularization}{19}{subsection.4.4.2}% 
-\contentsline {subsection}{\numberline {4.4.3}Manually screening}{20}{subsection.4.4.3}% 
-\contentsline {chapter}{\numberline {5}Signal extraction}{22}{chapter.5}% 
-\contentsline {section}{\numberline {5.1}Keywords search}{24}{section.5.1}% 
-\contentsline {section}{\numberline {5.2}Supervised classification}{26}{section.5.2}% 
-\contentsline {section}{\numberline {5.3}Unsupervised document clustering and topic generation}{29}{section.5.3}% 
-\contentsline {subsection}{\numberline {5.3.1}Embeddings based clustering}{30}{subsection.5.3.1}% 
-\contentsline {subsection}{\numberline {5.3.2}Probability based Topic Modeling}{33}{subsection.5.3.2}% 
-\contentsline {subsection}{\numberline {5.3.3}Our model}{36}{subsection.5.3.3}% 
-\contentsline {section}{\numberline {5.4}System integration and visualization}{44}{section.5.4}% 
-\contentsline {chapter}{\numberline {6}Potential ethical issues}{45}{chapter.6}% 
-\contentsline {section}{\numberline {6.1}Ethical Issues}{45}{section.6.1}% 
-\contentsline {subsection}{\numberline {6.1.1}Privacy Issues}{45}{subsection.6.1.1}% 
-\contentsline {subsection}{\numberline {6.1.2}Trust, Safety and Reliability Issues}{46}{subsection.6.1.2}% 
-\contentsline {subsection}{\numberline {6.1.3}Vulnerable Groups Issues}{46}{subsection.6.1.3}% 
-\contentsline {section}{\numberline {6.2}Evaluation and Analysis}{47}{section.6.2}% 
-\contentsline {subsection}{\numberline {6.2.1}Privacy Analysis}{47}{subsection.6.2.1}% 
-\contentsline {subsection}{\numberline {6.2.2}Reliability Analysis}{49}{subsection.6.2.2}% 
-\contentsline {subsection}{\numberline {6.2.3}Vulnerable Groups Analysis}{50}{subsection.6.2.3}% 
-\contentsline {chapter}{\numberline {7}Reflection and summary}{52}{chapter.7}% 
-\contentsline {section}{\numberline {7.1}Project management}{52}{section.7.1}% 
-\contentsline {section}{\numberline {7.2}Conclusion and Future work}{53}{section.7.2}% 
-\contentsline {chapter}{Bibliography}{53}{section.7.2}% 
-\contentsline {chapter}{Appendix}{61}{chapter*.5}% 
+\contentsline {section}{\numberline {1.1}Background and motivation}{1}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Related works}{2}{section.1.2}% 
+\contentsline {chapter}{\numberline {2}Aims and Objectives}{4}{chapter.2}% 
+\contentsline {chapter}{\numberline {3}Design}{5}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}Basic assumptions}{5}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}Overall design}{5}{section.3.2}% 
+\contentsline {section}{\numberline {3.3}Basic components}{7}{section.3.3}% 
+\contentsline {subsection}{\numberline {3.3.1}Data collector design}{7}{subsection.3.3.1}% 
+\contentsline {subsection}{\numberline {3.3.2}Data preprocessor design}{7}{subsection.3.3.2}% 
+\contentsline {subsection}{\numberline {3.3.3}Classification Model design}{10}{subsection.3.3.3}% 
+\contentsline {subsection}{\numberline {3.3.4}Clustering model design}{11}{subsection.3.3.4}% 
+\contentsline {subsection}{\numberline {3.3.5}Evaluation layer design}{11}{subsection.3.3.5}% 
+\contentsline {subsection}{\numberline {3.3.6}Visualization design}{13}{subsection.3.3.6}% 
+\contentsline {chapter}{\numberline {4}Data collection and processing}{14}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Social media dataset}{14}{section.4.1}% 
+\contentsline {section}{\numberline {4.2}Benchmark}{15}{section.4.2}% 
+\contentsline {section}{\numberline {4.3}Data collection}{16}{section.4.3}% 
+\contentsline {subsection}{\numberline {4.3.1}Twitter dataset collection}{16}{subsection.4.3.1}% 
+\contentsline {subsection}{\numberline {4.3.2}Benchmark dataset collection}{17}{subsection.4.3.2}% 
+\contentsline {section}{\numberline {4.4}Data Preprocessing}{18}{section.4.4}% 
+\contentsline {subsection}{\numberline {4.4.1}Unify data structure}{18}{subsection.4.4.1}% 
+\contentsline {subsection}{\numberline {4.4.2}Text regularization}{20}{subsection.4.4.2}% 
+\contentsline {subsection}{\numberline {4.4.3}Manually screening}{21}{subsection.4.4.3}% 
+\contentsline {chapter}{\numberline {5}Signal extraction}{23}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Keywords search}{25}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Supervised classification}{27}{section.5.2}% 
+\contentsline {section}{\numberline {5.3}Unsupervised document clustering and topic generation}{30}{section.5.3}% 
+\contentsline {subsection}{\numberline {5.3.1}Embeddings based clustering}{31}{subsection.5.3.1}% 
+\contentsline {subsection}{\numberline {5.3.2}Probability based Topic Modeling}{34}{subsection.5.3.2}% 
+\contentsline {subsection}{\numberline {5.3.3}Our model}{37}{subsection.5.3.3}% 
+\contentsline {section}{\numberline {5.4}Integration, evaluation and visualization}{45}{section.5.4}% 
+\contentsline {chapter}{\numberline {6}Potential ethical issues}{46}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Ethical Issues}{46}{section.6.1}% 
+\contentsline {subsection}{\numberline {6.1.1}Privacy Issues}{46}{subsection.6.1.1}% 
+\contentsline {subsection}{\numberline {6.1.2}Trust, Safety and Reliability Issues}{47}{subsection.6.1.2}% 
+\contentsline {subsection}{\numberline {6.1.3}Vulnerable Groups Issues}{47}{subsection.6.1.3}% 
+\contentsline {section}{\numberline {6.2}Evaluation and Analysis}{48}{section.6.2}% 
+\contentsline {subsection}{\numberline {6.2.1}Privacy Analysis}{48}{subsection.6.2.1}% 
+\contentsline {subsection}{\numberline {6.2.2}Reliability Analysis}{50}{subsection.6.2.2}% 
+\contentsline {subsection}{\numberline {6.2.3}Vulnerable Groups Analysis}{51}{subsection.6.2.3}% 
+\contentsline {chapter}{\numberline {7}Reflection and summary}{53}{chapter.7}% 
+\contentsline {section}{\numberline {7.1}Project management}{53}{section.7.1}% 
+\contentsline {section}{\numberline {7.2}Conclusion and Future work}{54}{section.7.2}% 
+\contentsline {chapter}{Bibliography}{54}{section.7.2}% 
+\contentsline {chapter}{Appendix}{62}{chapter*.5}% 

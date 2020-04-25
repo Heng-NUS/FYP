@@ -82,12 +82,6 @@
   communities.
 \newblock {\em Ieee Access 5\/} (2017), 8869--8879.
 
-\bibitem{chen2017reality}
-{\sc Chen, Y., Crespi, N., Ortiz, A.~M., and Shu, L.}
-\newblock Reality mining: A prediction algorithm for disease dynamics based on
-  mobile big data.
-\newblock {\em Information Sciences 379\/} (2017), 82--93.
-
 \bibitem{cheng2014btm}
 {\sc Cheng, X., Yan, X., Lan, Y., and Guo, J.}
 \newblock Btm: Topic modeling over short texts.
@@ -302,18 +296,6 @@
 \newblock Modeling spread of disease from social interactions.
 \newblock In {\em Sixth International AAAI Conference on Weblogs and Social
   Media\/} (2012).
-
-\bibitem{sadilek2012predicting}
-{\sc Sadilek, A., Kautz, H., and Silenzio, V.}
-\newblock Predicting disease transmission from geo-tagged micro-blog data.
-\newblock In {\em Twenty-Sixth AAAI Conference on Artificial Intelligence\/}
-  (2012).
-
-\bibitem{salathe2011assessing}
-{\sc Salath{\'e}, M., and Khandelwal, S.}
-\newblock Assessing vaccination sentiments with online social media:
-  implications for infectious disease dynamics and control.
-\newblock {\em PLoS computational biology 7}, 10 (2011), e1002199.
 
 \bibitem{schmidt2012trending}
 {\sc Schmidt, C.~W.}

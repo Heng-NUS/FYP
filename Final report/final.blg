@@ -5,45 +5,45 @@ The style file: acm.bst
 Database file #1: bibliography/bibliography.bib
 Warning--empty journal in alexander2007deontological
 Warning--empty booktitle in felt2008privacy
-You've used 72 entries,
+You've used 69 entries,
             2253 wiz_defined-function locations,
-            902 strings with 15993 characters,
-and the built_in function-call counts, 23847 in all, are:
-= -- 2300
-> -- 1074
+            889 strings with 15468 characters,
+and the built_in function-call counts, 22858 in all, are:
+= -- 2209
+> -- 1023
 < -- 0
-+ -- 450
-- -- 372
-* -- 1701
-:= -- 3779
-add.period$ -- 224
-call.type$ -- 72
-change.case$ -- 395
++ -- 429
+- -- 354
+* -- 1618
+:= -- 3616
+add.period$ -- 215
+call.type$ -- 69
+change.case$ -- 377
 chr.to.int$ -- 0
-cite$ -- 74
-duplicate$ -- 924
-empty$ -- 1998
-format.name$ -- 372
-if$ -- 5056
+cite$ -- 71
+duplicate$ -- 890
+empty$ -- 1916
+format.name$ -- 354
+if$ -- 4855
 int.to.chr$ -- 0
-int.to.str$ -- 72
-missing$ -- 62
-newline$ -- 370
-num.names$ -- 144
-pop$ -- 498
+int.to.str$ -- 69
+missing$ -- 59
+newline$ -- 355
+num.names$ -- 138
+pop$ -- 479
 preamble$ -- 1
-purify$ -- 328
+purify$ -- 313
 quote$ -- 0
-skip$ -- 634
+skip$ -- 618
 stack$ -- 0
-substring$ -- 1356
-swap$ -- 280
+substring$ -- 1298
+swap$ -- 274
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 280
+type$ -- 268
 warning$ -- 2
-while$ -- 227
-width$ -- 74
-write$ -- 728
+while$ -- 218
+width$ -- 71
+write$ -- 699
 (There were 2 warnings)
