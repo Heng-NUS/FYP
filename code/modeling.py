@@ -1,4 +1,4 @@
-#modeling.py
+# modeling.py
 import json
 import os
 import pickle
@@ -25,11 +25,12 @@ from nltk.tokenize import word_tokenize
 from sklearn.metrics import accuracy_score, f1_score
 from smart_open import open
 from torch.autograd import Variable
+from torch.utils import cpp_extension
 from torchtext import data
 from torchtext.vocab import Vectors
 from tqdm import tqdm
+from setuptools import setup, Extension
 
-dtype = torch.FloatTensor
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 STOP_WORDS = stopwords.words('english')
 
@@ -37,9 +38,9 @@ STOP_WORDS = stopwords.words('english')
 def setup_seed(seed):
     np.random.seed(seed)
     random.seed(seed)
-    torch.manual_seed(seed)  #cpu
-    torch.cuda.manual_seed_all(seed)  #并行gpu
-    torch.backends.cudnn.deterministic = True  #cpu/gpu结果一致
+    torch.manual_seed(seed)  # cpu
+    torch.cuda.manual_seed_all(seed)  # 并行gpu
+    torch.backends.cudnn.deterministic = True  # cpu/gpu结果一致
     torch.backends.cudnn.benchmark = True
 
 
@@ -93,36 +94,41 @@ def batch_iter(x, y, batch_size=256, shuffle=True):
             y_shuffle[start_id:end_id])
 
 
-def batch_iter2(biterms,
+def batch_iter2(bi_idx,
                 embeddings,
                 vocab_size,
                 batch_size=4096,
                 shuffle=True):
     '''
     return batches for unsupervised model
-    biterms: list of tuple [(w1,w2)], w1 and w2 are indexes.
+    bi_idx: list of tuple [(w1,w2)], w1 and w2 are indexes.
     embeddings: matrix of word embeddings, dtype=torch.Tensor
     '''
     size = embeddings.size()
-    data_len = len(biterms)
+    data_len = len(bi_idx)
     num_batch = int((data_len - 1) / batch_size) + 1
-    copy = biterms.copy()
+    copy = bi_idx.copy()
     if shuffle:
         random.shuffle(copy)
+    emb_batch = torch.zeros(1, size[1]).to(device)
+    for i in range(len(bi_idx)):
+        w1, w2 = bi_idx[i]
+        emb_batch += embeddings[w1] + embeddings[w2]
 
     for i in range(num_batch):
         start_id = i * batch_size
         end_id = min((i + 1) * batch_size, data_len)
         batch_length = end_id - start_id
         idx_batch = copy[start_id:end_id]
-        emb_batch = torch.zeros(batch_length, size[1])
+        # emb_batch = torch.zeros(batch_length, size[1]).to(device)
         idx_matrix = np.zeros((batch_length, vocab_size))
         for j in range(len(idx_batch)):
             w1, w2 = idx_batch[j]
-            emb_batch[j] = embeddings[w1] + embeddings[w2]
+            # emb_batch[j] = embeddings[w1] + embeddings[w2]
             idx_matrix[j][w1] = 1.
             idx_matrix[j][w2] = 1.
-        yield torch.Tensor(idx_matrix).type(torch.bool), emb_batch
+        # yield torch.Tensor(idx_matrix).type(torch.bool), emb_batch
+        yield torch.LongTensor(idx_batch), emb_batch
 
 
 def doc_padding(tokens, sen_length, padding_with='<pad>'):
@@ -161,7 +167,7 @@ def create_emb_layer(weights_matrix, non_trainable=False):
     if non_trainable:
         emb_layer.weight.requires_grad = False
 
-    return emb_layer  #, num_embeddings, embedding_dim
+    return emb_layer  # , num_embeddings, embedding_dim
 
 
 def weight_matrix(embedding_size, target_vocab, word_embeddings):
@@ -170,7 +176,7 @@ def weight_matrix(embedding_size, target_vocab, word_embeddings):
 
     matrix = torch.zeros((matrix_len, embedding_size))
     #matrix[0] = torch.Tensor(np.random.normal(scale=0.6, size=(embedding_size, )))
-    #vector of padding word
+    # vector of padding word
 
     for i in range(2, len(target_vocab)):
         try:
@@ -198,7 +204,8 @@ def predict(vocab, tokens, label, max_sen_len, model):
 def extract_and_save_biterm(fname,
                             embed_size=200,
                             min_count=5,
-                            max_percent=0.5):
+                            max_percent=0.5,
+                            iteration=100):
     '''
     simple preprocessing of biterm
 
@@ -292,6 +299,7 @@ class UnDataset(object):
     '''
     Create dataset for unsupervised model
     '''
+
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -331,9 +339,10 @@ class UnDataset(object):
         self.biterm_dic = pickle.load(open(biterm_path, 'rb'))
         embeddings = pickle.load(open(embed_path, 'rb'))
         self.docs = pickle.load(open(doc_path, 'rb'))
-        self.biterms = [self.biterm_dic[i] for i in range(len(self.biterm_dic))]
+        self.biterms = [self.biterm_dic[i]
+                        for i in range(len(self.biterm_dic))]
         embeddings = [embeddings[i] for i in range(len(embeddings))]
-        self.embeddings = torch.Tensor(embeddings)
+        self.embeddings = embeddings
         print("Loaded {} documents".format(len(self.docs)))
         print("Loaded {} biterms".format(len(self.biterms)))
         print("Loaded {} unique vocabs".format(len(self.vocab)))
@@ -343,6 +352,7 @@ class Dataset(object):
     '''
     Create dataset for training supervised model
     '''
+
     def __init__(self, config):
         self.config = config
         self.train_data = None
@@ -375,14 +385,14 @@ class Dataset(object):
         Loads the data from files
         Sets up iterators for training, validation and test data
         Also create vocabulary and word embeddings based on the data
-        
+
         Inputs:
             embed_file (String): absolute path to file containing word embeddings (GloVe/Word2Vec)
             train_file (String): absolute path to training file
             test_file (String): absolute path to test file
             val_file (String): absolute path to validation file
         '''
-        #load embeddings
+        # load embeddings
 
         train_X, train_Y = read_labeled(train_file)
         test_X, test_Y = read_labeled(test_file)
@@ -405,11 +415,11 @@ class Dataset(object):
             special_tokens = {'<pad>': 0, '<unk>': 1}
             self.vocab.patch_with_special_tokens(special_tokens)
             self.vocab.save_as_text('vocab.txt')
-        #build vocab
+        # build vocab
         train_X = [self.vocab.doc2idx(x, 1) for x in train_X]
         test_X = [self.vocab.doc2idx(x, 1) for x in test_X]
         val_X = [self.vocab.doc2idx(x, 1) for x in val_X]
-        #transform words to index
+        # transform words to index
         if os.path.isfile(new_embed):
             self.word_embeddings = torch.load(new_embed)
         else:
@@ -533,38 +543,45 @@ class TextCNN(nn.Module):
         return avg_train_loss, val_accuracy, val_f1
 
 
-class NBTM(nn.Module):
+class EBTM(nn.Module):
     def __init__(self,
                  num_topics,
                  vocab_size,
                  t_hidden_size,
                  embeddings,
                  theta_act="tanh",
-                 enc_drop=0.5):
-        super(NBTM, self).__init__()
+                 enc_drop=0.5, 
+                 batch_size=2048,
+                 train_embeddings=False):
+        super(EBTM, self).__init__()
 
-        ## define hyperparameters
+        # define hyperparameters
         self.num_topics = num_topics
         self.vocab_size = vocab_size
         self.t_hidden_size = t_hidden_size
         self.enc_drop = enc_drop
         self.t_drop = nn.Dropout(enc_drop)
+        self.batch_size = batch_size
+        self.to(device)
 
         self.theta_act = self.get_activation(theta_act)
 
-        ## define the word embedding matrix \rho
+        # define the word embedding matrix \rho
         num_embeddings, emb_size = embeddings.size()
         self.emb_size = emb_size
-        with torch.no_grad():
+        if train_embeddings:
+            self.rho = nn.Linear(num_embeddings, emb_size, bias=False)
+            self.rho.weight = nn.Parameter(embeddings, requires_grad=True)
+        else:
             self.rho = embeddings.clone().float().to(device)
-        ## creat word embeddings
+        # creat word embeddings
 
-        ## define the matrix containing the topic embeddings
+        # define the matrix containing the topic embeddings
         self.alphas = nn.Linear(
             emb_size, num_topics,
-            bias=False)  #nn.Parameter(torch.randn(emb_size, num_topics))
+            bias=False)  # nn.Parameter(torch.randn(emb_size, num_topics))
 
-        ## define variational distribution for \theta_{1:D} via amortizartion
+        # define variational distribution for \theta_{1:D} via amortizartion
         self.q_theta = nn.Sequential(
             nn.Linear(emb_size, t_hidden_size),
             self.theta_act,
@@ -609,17 +626,17 @@ class NBTM(nn.Module):
         """Returns paramters of the variational distribution for \\theta.
 
         input: biterms vectors with size batch_size * emb_size
-        output: mu_theta, log_sigma_theta
+        output: mu_theta, log_sigma_theta, kld_theta
         """
         q_theta = self.q_theta(biterms)
         if self.enc_drop > 0:
             q_theta = self.t_drop(q_theta)
         mu_theta = self.mu_q_theta(q_theta)
         logsigma_theta = self.logsigma_q_theta(q_theta)
-        kl_theta = -0.5 * torch.sum(
+        kld_theta = -0.5 * torch.sum(
             1 + logsigma_theta - mu_theta.pow(2) - logsigma_theta.exp(),
             dim=-1).mean()
-        return mu_theta, logsigma_theta, kl_theta
+        return mu_theta, logsigma_theta, kld_theta
 
     def get_beta(self):
         '''return the probability of P(w|z)'''
@@ -630,52 +647,49 @@ class NBTM(nn.Module):
             logit = self.alphas(self.rho)
         beta = F.softmax(logit,
                          dim=0).transpose(1,
-                                          0)  ## softmax over vocab dimension
+                                          0)  # softmax over vocab dimension
         return beta
 
     def get_theta(self, biterms):
-        '''return topic distribution \\theat'''
+        '''return topic distribution \\theat P(z|b)'''
         mu_theta, logsigma_theta, kld_theta = self.encode(biterms)
-        ## mu, sigma of Gaussian, kld_theaa
+        # mu, sigma of Gaussian, kld_theaa
         z = self.gaussian(mu_theta, logsigma_theta)
         theta = F.softmax(z, dim=-1)
         return theta, kld_theta
 
-    def decode(self, theta, beta):
-        res = torch.mm(theta, beta)
+    def decode(self, bi_idx, theat, tranposed_beta):
+        res = tranposed_beta[bi_idx].prod(1)
+        res = (theat.pow(3) * res).sum(1)
         preds = torch.log(res + 1e-6)
         return preds
 
     def forward(self, bi_idx, biterms, theta=None, aggregate=True):
-        ## get \\theta
+        # get \\theta
         if theta is None:
             theta, kld_theta = self.get_theta(biterms)
         else:
             kld_theta = None
 
-        ## get \\beta
+        # get \\beta
         beta = self.get_beta()
 
-        ## get prediction loss
-        preds = self.decode(theta, beta)
-        recon_loss = torch.masked_select(preds, bi_idx)
-        if aggregate:
-            recon_loss = recon_loss.mean()
+        preds = self.decode(bi_idx, theta, torch.transpose(beta, 1, 0))
+        recon_loss = preds.sum()
         return recon_loss, kld_theta
 
-    def run_epoch(self, biterms, epoch):
+    def run_epoch(self, bi_idx, epoch):
         self.train()
         losses = []
         kls = []
         recons = []
-        self.train()
         if epoch % 3 == 0:
             torch.save(self.state_dict(), 'nbtm_parameters.pkl')
         s_time = time.clock()
-        train_iterator = batch_iter2(biterms,
+        train_iterator = batch_iter2(bi_idx,
                                      self.rho,
                                      vocab_size=self.vocab_size,
-                                     batch_size=20480)
+                                     batch_size=self.batch_size)
         print("Iter: {}".format(epoch + 1))
         for i, batch in enumerate(train_iterator):
             self.optimizer.zero_grad()
@@ -688,16 +702,16 @@ class NBTM(nn.Module):
             self.optimizer.step()
             losses.append(total_loss.cpu().item())
             kls.append(kld_theta.cpu().item())
-            recons.append(recon_loss)
+            recons.append(recon_loss.cpu().item())
         avg_loss = sum(losses) / len(losses)
         avg_kl = sum(kls) / len(kls)
         avg_rec = sum(recons) / len(recons)
         e_time = time.clock()
         compute_time = e_time - s_time
         print("\tProcessed {} mini-batches with average total loss: {}, kl loss: {}, recon loss: {}".format(
-            len(losses), avg_loss, avg_kl, avg_rec))
+            len(losses), avg_loss, avg_kl, -avg_rec))
         print("\tComputation time {:.2f}s".format(compute_time))
-        return avg_loss, compute_time
+        return avg_kl, avg_rec, avg_loss, compute_time
 
     def add_optimizer(self, optimizer):
         self.optimizer = optimizer
@@ -713,7 +727,7 @@ class NBTM(nn.Module):
             p_b_ds = list(doc.values())
             p_b_ds = [[x / sum_biterms for x in p_b_ds]]
             p_b_ds = torch.Tensor(p_b_ds).to(device)
-            #decode p_b_d = p(b|d)
+            # decode p_b_d = p(b|d)
 
             emb_batch = torch.zeros(len(biterms), self.emb_size).to(device)
             for i in range(len(biterms)):
@@ -748,7 +762,8 @@ class NBTM(nn.Module):
             topics = []
             for k in range(self.num_topics):
                 beta = betas[k]
-                top_words = list(beta.cpu().numpy().argsort()[-max_words:][::-1])
+                top_words = list(beta.cpu().numpy().argsort()
+                                 [-max_words:][::-1])
                 topic_words = [vocab[a] for a in top_words]
                 topics.append(' '.join(topic_words))
                 print('Topic {}: {}'.format(k, topic_words))
