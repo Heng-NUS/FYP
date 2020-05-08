@@ -15,7 +15,7 @@ void Model::run(string doc_pt, string res_dir) {
 
   model_init();
 
-  cout << "Begin clustering" << endl;
+  cout << "Runing BTM" << endl;
   string out_dir = res_dir;
   for (int it = 1; it < n_iter + 1; ++it) {
 	cout << "\riter " << it << '/' << n_iter;

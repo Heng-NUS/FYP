@@ -3,47 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: final.aux
 The style file: acm.bst
 Database file #1: bibliography/bibliography.bib
-Warning--empty journal in alexander2007deontological
-Warning--empty booktitle in felt2008privacy
-You've used 69 entries,
+You've used 58 entries,
             2253 wiz_defined-function locations,
-            889 strings with 15468 characters,
-and the built_in function-call counts, 22858 in all, are:
-= -- 2209
-> -- 1023
+            833 strings with 14072 characters,
+and the built_in function-call counts, 19685 in all, are:
+= -- 1892
+> -- 906
 < -- 0
-+ -- 429
-- -- 354
-* -- 1618
-:= -- 3616
-add.period$ -- 215
-call.type$ -- 69
-change.case$ -- 377
++ -- 380
+- -- 316
+* -- 1413
+:= -- 3104
+add.period$ -- 179
+call.type$ -- 58
+change.case$ -- 325
 chr.to.int$ -- 0
-cite$ -- 71
-duplicate$ -- 890
-empty$ -- 1916
-format.name$ -- 354
-if$ -- 4855
+cite$ -- 58
+duplicate$ -- 764
+empty$ -- 1633
+format.name$ -- 316
+if$ -- 4179
 int.to.chr$ -- 0
-int.to.str$ -- 69
-missing$ -- 59
-newline$ -- 355
-num.names$ -- 138
-pop$ -- 479
+int.to.str$ -- 58
+missing$ -- 51
+newline$ -- 298
+num.names$ -- 116
+pop$ -- 412
 preamble$ -- 1
-purify$ -- 313
+purify$ -- 272
 quote$ -- 0
-skip$ -- 618
+skip$ -- 538
 stack$ -- 0
-substring$ -- 1298
-swap$ -- 274
+substring$ -- 1123
+swap$ -- 242
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 268
-warning$ -- 2
-while$ -- 218
-width$ -- 71
-write$ -- 699
-(There were 2 warnings)
+type$ -- 224
+warning$ -- 0
+while$ -- 183
+width$ -- 60
+write$ -- 584

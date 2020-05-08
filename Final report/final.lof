@@ -5,15 +5,16 @@
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Overall design}}{6}{figure.3.2}% 
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Tweet with URL and picture (screenshot from \href {https://twitter.com/search?q=flu&src=typed_query}{Twitter})}}{8}{figure.3.3}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Influenza Season Week 43 ending Oct 26, 2019, Source: \href {https://www.cdc.gov/flu/weekly/index.htm\#ILIActivityMap}{Fluview}}}{16}{figure.4.1}% 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Screenshot of Archive's Twitter data}}{17}{figure.4.2}% 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Common pipeline of text preprocessing}}{18}{figure.4.3}% 
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Screenshot of unified structure of social media dataset}}{19}{figure.4.4}% 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{20}{figure.4.5}% 
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Example of using emoji library}}{21}{figure.4.6}% 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Influenza Season Week 43 ending Oct 26, 2019, Source: \href {https://www.cdc.gov/flu/weekly/index.htm\#ILIActivityMap}{Fluview}}}{17}{figure.4.1}% 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Screenshot of Archive's Twitter data}}{18}{figure.4.2}% 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Common pipeline of text preprocessing}}{19}{figure.4.3}% 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Screenshot of unified structure of social media dataset}}{20}{figure.4.4}% 
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Screenshot of Twitter's place object from our dataset}}{21}{figure.4.5}% 
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Example of using emoji library}}{22}{figure.4.6}% 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Plate Diagram of LDA.\cite {blei2003latent}}}{35}{figure.5.1}% 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Plate Diagram of BTM.\cite {yan2013biterm}}}{36}{figure.5.2}% 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Plate Diagram of Our Model.}}{38}{figure.5.3}% 
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Plate Diagram of LDA.\cite {blei2003latent}}}{36}{figure.5.1}% 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Plate Diagram of BTM.\cite {yan2013biterm}}}{37}{figure.5.2}% 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Plate Diagram of Our Model.}}{39}{figure.5.3}% 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Example of Word Clouds}}{48}{figure.5.4}% 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Example of Bar chart}}{49}{figure.5.5}% 
 \addvspace {10\p@ }

@@ -62,6 +62,7 @@ Some topics could be relatively new or have few samples, it's hard to label the 
 \begin{enumerate}
     \item Must take the filtered data from the classification model, and group them into clusters
     \item Must assign a interpretable topic to each cluster
+    \item Must be evaluated by a criterion that correlates with human judgement
 \end{enumerate}
 
 \subsection{Evaluation layer design}
@@ -91,4 +92,5 @@ The final result may not clear and meanful for users. Visualization can help use
 Functional requirements of this component includes:
 \begin{enumerate}
     \item It should integrate the whole process and choose an approach to display the result.
+    \item It should ignore uninterpretable or ambiguous topics. 
 \end{enumerate}

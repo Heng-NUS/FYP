@@ -62,7 +62,7 @@ The result corresponds with experiment conducted by \cite{culotta2010towards}, w
 Keywords search helps to screen out the majority of unrelated data. However, as proved in the experiment, it can't guarantee the purity of the rest. To alleviate the content-irrelevance problem found after first round screening, further filtration is required. \cite{elkin2017network} created another exclusion dictionary containing keywords and phrases indicating tweets should not be included in the filtered dataset, such as "sick and tired". Their experimental result shows such method provides roughly 70\% accuracy on their dataset. This method is easy to implement while its accuracy is highly affected by the choice of exclusion words. In section \ref{sec:unsupervised}, we will use unsupervised method to cluster document. Therefore, the outcome of this step decides the final performance of our model. To get a higer accuracy, we decide to use machine learning based classification methods \cite{aramaki2011twitter}. The model we trained in this step is a binary classifier, aiming to detect health-related tweets. Following are our detailed steps:
 \begin{enumerate}
     \item Data classification: Labeling strategies are various for different uses. \cite{lampos2010flu} labeled their data with three categories, positive, negative and unknown. We adopt a simple binary labeling strategy, since the ambiguity will decrease the performance of unsupervised clustering used in the next section. Document will be labeled 1 if it indeed related to health and can easily be recognized, 0 otherwise. One exception is our news dataset, since all the documents were posted by official healthy news channels (such as BBChealth, CDChealth), we treat them all as positive samples (63279 tweets in total with 59902 unique words). Apart from that, we randomly labeled 50000 negative samples based on the keywords list. 20\% data are held out as test set while 20\% of training set are used as validation set at each training epoch.
-    \item Word embeddings: This step aims to transform documents into vectors and create a look-up table. There are generally two transforming methods: (1) randomly initialise word vector for each word and then continuously update them by learning; (2) pre-train word embeddings on training set. The former one is easy to implement but will need more time on training and it depends more on training set. In our project, we choose to load word embeddings that was pre-trained on large dataset to save training time and increase accuracy. If a word is in the pre-defined dictionary, we will use its vector directly. Otherwise we will initialise its word vector and train it during training. Word2vec\cite{mikolov2013efficient}, Fasttext\cite{joulin2016bag} and Glove \cite{pennington2014glove} are three most common algorithms used to train word embeddings. Although the theories behind them are different, researchers have proven that there is no significant difference among them in practice. While Fasttext and Word2vec train the word vectors through neural networks that are hard to interpret, Glove adopt a more comprehensive method: getting the word representation based on word co-occurrence. For convenience, we use the pre-trained Glove vectors trained on 2 billion tweets with 27 billion tokens and 1.2 million vocabularies. Each word is represented by a 100-dimension vector \cite{pennington2014glove}. An unique index is assigned to each word and its corresponding vector to form up a look-up table. Each document is then transformed to a 2-D matrix based on the table. Note that the number of vocabularies varies among documents. Text can't be reshaped as images, the common solution is pre-define the maximum length of documents and pad missing value with a certain number. In our dataset, most tweets are 5-15 words long, therefore, we define the maximum length of a document is 15. For tweets having less than three words, they are not included in training set. In our implementation, we handle special terms in following rules: For words that either frequently appear in corpus or merely contained by few documents, they are excluded from the document; (2) string `$<pad>'$ is used to pad missing value to extend sentence, and its vector is initialised with zeros; (3) out of vocabulary (OOV) words in new data are represented by string `$<unk>$'. To get meaningful words referring to an extracted topic, we exclude stop words listed by NLTK (The Natural Language Toolkit) \cite{journals/corr/cs-CL-0205028}.
+    \item Word embeddings: This step aims to transform documents into vectors and create a look-up table. There are generally two transforming methods: (1) randomly initialise word vector for each word and then continuously update them by learning; (2) pre-train word embeddings on training set. The former one is easy to implement but will need more time on training and it depends more on training set. In our project, we choose to load word embeddings that was pre-trained on large dataset to save training time and increase accuracy. If a word is in the pre-defined dictionary, we will use its vector directly. Otherwise we will initialise its word vector and train it during training. Word2vec\cite{mikolov2013efficient}, Fasttext\cite{joulin2016bag} and Glove \cite{pennington2014glove} are three most common algorithms used to train word embeddings. Although the theories behind them are different, researchers have proven that there is no significant difference among them in practice. While Fasttext and Word2vec train the word vectors through neural networks that are hard to interpret, Glove adopt a more comprehensive method: getting the word representation based on word co-occurrence. For convenience, we use the pre-trained Glove vectors trained on 2 billion tweets with 27 billion tokens and 1.2 million vocabularies. Each word is represented by a 100-dimension vector \cite{pennington2014glove}. A unique index is assigned to each word and its corresponding vector to form up a look-up table. Each document is then transformed to a 2-D matrix based on the table. Note that the number of vocabularies varies among documents. Text can't be reshaped as images, the common solution is pre-define the maximum length of documents and pad missing value with a certain number. In our dataset, most tweets are 5-15 words long, therefore, we define the maximum length of a document is 15. For tweets having less than three words, they are not included in training set. In our implementation, we handle special terms in following rules: For words that either frequently appear in corpus or merely contained by few documents, they are excluded from the document; (2) string `$<pad>'$ is used to pad missing value to extend sentence, and its vector is initialised with zeros; (3) out of vocabulary (OOV) words in new data are represented by string `$<unk>$'. To get meaningful words referring to an extracted topic, we exclude stop words listed by NLTK (The Natural Language Toolkit) \cite{journals/corr/cs-CL-0205028}.
     \item Evaluation: We choose binary cross entropy loss as the loss function while training the model. The formula is: $$\text{loss}(x, class) = -\log\left(\frac{\exp(x[class])}{\sum_j \exp(x[j])}\right)
     \\                     = -x[class] + \log\left(\sum_j \exp(x[j])\right)$$
     Accuracy and F1 score are used to evaluate the performance of the model, their formulas can be found in section \ref{sec:evaluation}.
@@ -94,7 +94,7 @@ Table \ref{tab:sup1} shows 11 prediction examples of this model. As mentioned be
 
 \section{Unsupervised document clustering and topic generation}
 \label{sec:unsupervised}
-Supervised models help to screen out documents that are health-related. To detect unseen diseases and healthcare events, we seek solutions on unsupervised algorithm. According to \cite{allahyari2017brief}, Embeddings Based Clustering and Probability Based Topic Modeling are two common methods used to group documents. This section will introduce both and provide some experimental results of applying them on our dataset. Then we will explain how our model are build upon them. The evaluation criterion used in this section is topic coherence. Since the generated topics are hard to interpret, scoring each topic with a exact value by human judgments could be difficult and objective, and it requires massive labour. Topic coherence helps to evaluate the quality of generated topics. Experimental results have proven that it has positive correlation with human judgments. In our experiment, we adopt the framework proposed by \cite{roder2015exploring} to calculate the coherence, higer value means more coherent. Some libraries such as Gensim provide APIs for using it. For convenience, we uses the online service provided by \href{https://palmetto.demos.dice-research.org/}{Palmetto}. The Python interface calling the service can be found in our source code. Each generated topic is evaluated by $C_a$, $C_p$ and their sum together. The test dataset is SearchSnippets, it contains 12,295 documents with 8 clusters and 5,547 unique words. For comparison, the number of cluster in our experiment is the same with that in the test set. 
+Supervised models help to screen out documents that are health-related. To detect unseen diseases and healthcare events, we seek solutions on unsupervised algorithm. According to \cite{allahyari2017brief}, Embeddings Based Clustering and Probability Based Topic Modeling are two common methods used to group documents. This section will introduce both and provide some experimental results of applying them on our dataset. Then we will explain how our model are build upon them. The evaluation criterion used in this section is topic coherence. Since the generated topics are hard to interpret, scoring each topic with a exact value by human judgments could be difficult and objective, and it requires massive labour. Topic coherence helps to evaluate the quality of generated topics. Experimental results have proven that it has positive correlation with human judgments. In our experiment, we adopt the framework proposed by \cite{roder2015exploring} to calculate the coherence, higer value means more coherent. Some libraries such as Gensim provide APIs for using it. For convenience, we uses the online service provided by \href{https://palmetto.demos.dice-research.org/}{Palmetto}. The Python interface calling the service can be found in our source code. Each generated topic is evaluated by $C_a$, $C_p$ and their sum together. The test dataset is SearchSnippets, it contains 12,295 documents and 5,547 unique words with 8 different topics (other datasets contain more than 20 topics and therefore are not suitable for comprehensibly comparing the generated topics by human judgments). For comparison, the number of cluster in our experiment is the same with that in the test set. 
 
 \subsection{Embeddings based clustering}
 \label{sec:Document vector}
@@ -233,7 +233,7 @@ initialised, each time the output could be different. We made 5 more experiments
       \node (w-1) [observed] at (0,0.8) {$w_1$};
       \node (w-2) [observed] at (0,-0.2) {$w_2$};
       \node (z-j) [unobserved] at (-1.5,0) {$z_b$};
-      \node (z-prior) [unobserved] at (-3,0) {$\theta_b$};
+      \node (z-prior) [unobserved] at (-3,0) {$\theta$};
       \node (z-hyper) [label=left:$\alpha$] at (-4.5,0) {};
       \filldraw [black] (-4.5,0) circle (3pt);
       \node (w-hyper) [label=right:$\beta$] at (2,0) {};
@@ -250,9 +250,8 @@ initialised, each time the output could be different. We made 5 more experiments
       (w-hyper) edge [post] (w-2)
       ;
   
-      \node [draw,fit=(w-1) (z-prior), inner sep=14pt] (plate-context) {};
+      \node [draw,fit=(w-1) (z-j), inner sep=14pt] (plate-context) {};
       \node [above right] at (plate-context.south west) {$B$};
-      \node [draw,fit=(w-1) (z-j), inner sep=10pt] (plate-token) {};
   
     \end{tikzpicture}
     \caption{Plate Diagram of BTM.\cite{yan2013biterm}}
@@ -284,21 +283,24 @@ Table \ref{tab:BTM1} shows the experimental results of BTM applied on SearchSnip
 \subsection{Our model}
 \label{sec:modeling}
 Experimental results show that traditional clustering methods can't help to generate interpretable topics.
-Topic model can find representive words of each topic while grouping documents, it's an ideal solution for our purpose. However, it uses the simple bag of words representation, when handle documents with low frequency words, its interpretability will be affected. To mitigate such problem, an intuitive method is to combine topic model with word embeddings. Lda2vec \cite{moody2016mixing} combines LDA and Word2vec by introducing topic vectors and document vectors. Theoretically, Lda2vec can learn topic, word, document vectors simultaneously while calculating the latent topic distribution, however, in practice we find this model requires massive training time, and the generated topics is hard to understand. Embeded Topic Model (ETM) \cite{dieng2019topic} proposes a novel idea that the word distribution of a topic can be drawn from the Categorical Distribution of the inner production of word embeddings and topic vectors, and it shows how to train the model with back propagation. For our purpose, we need model on short text, hence we take the advantages from both ETM and BTM. The generation of a corpus in our model can be seen as follows, $\alpha$ is the topic matrix with size L $\times$ $|K|$ (L: lengdith of embedding, $|K|$: number of topics), $\alpha_k$ denotes the vector of $k_{th}$ topic. $\rho$ denotes the word embeddings matrix with size L $\times$ $|V|$ ($|V|$: the number of words):
+Topic model can find representive words of each topic while grouping documents, it's an ideal solution for our purpose. However, it uses the simple bag of words representation, when handle documents with low frequency words, its interpretability will be affected. To mitigate such problem, an intuitive method is to combine topic model with word embeddings. Lda2vec \cite{moody2016mixing} combines LDA and Word2vec by introducing topic vectors and document vectors. Theoretically, Lda2vec can learn topic, word, document vectors simultaneously while calculating the latent topic distribution, however, in practice we find this model requires massive training time, and the generated topics is hard to understand. Embeded Topic Model (ETM) \cite{dieng2019topic} proposes a novel idea that the word distribution of a topic can be drawn from the Categorical Distribution of the inner production of word embeddings and topic vectors, and it shows how to train the model with back propagation. For our purpose, we need model on short text, hence we take the advantages from both ETM and BTM. The generation of a corpus in our model can be seen as follows, $\alpha$ is the topic matrix with size L $\times$ $|Z|$ (L: lengdith of embedding, $|Z|$: number of topics), $\alpha_k$ denotes the vector of $k_{th}$ topic. $\rho$ denotes the word embeddings matrix with size L $\times$ $|V|$ ($|V|$: the number of words):
 \begin{enumerate}
+    \item For the whole corpus(mini-batch) B:
+    \begin{enumerate}
+        \item draw a topic distribution $\theta$ $\sim$ $logistc\_normal(\mu, \sigma)$
+        \begin{equation}
+            \theta=softmax(\omega); \omega \sim Gussian(\mu, \sigma)
+            \label{eq:lognormal}
+        \end{equation}
+    \end{enumerate} 
     \item For each topic z in topic set Z:
     \begin{enumerate}
         \item draw word distribution $\beta_z$ $\sim$ $softmax(\rho^T\alpha_z)$
     \end{enumerate}
     \item For each biterm b in biterm set B:
     \begin{enumerate}
-        \item draw a topic assignment $z_b$ $\sim$ $logistc\_normal(\mu, \sigma)$.
-        Equation \ref{eq:lognormal} shows the formula of logistc normal. Note that $P(z_{b_i}) = \theta_{b_i}$.
-        \begin{equation}
-            \theta_b=softmax(\omega_b); \omega_b \sim Gussian(\mu_b, \sigma_b)
-            \label{eq:lognormal}
-        \end{equation}
-        \item draw two words $b_{w_1}$, $b_{w_2}$ $\sim$ $Cat(\beta_{z,b})$ ($P(b_{w_i} = \beta_{z,{b_i}})$)
+        \item draw a topic assignment $z_b$ $\sim$ $Cat(\theta)$
+        \item draw two words $b_{w_1}$, $b_{w_2}$ $\sim$ $\beta_{z,b}$ ($P(b_{w_i}) = \beta_{z,{b_i}}$)
     \end{enumerate}
 \end{enumerate} 
 \begin{figure}[!htp]
@@ -314,11 +316,12 @@ Topic model can find representive words of each topic while grouping documents, 
       \node (w-1) [observed] at (0,0.8) {$w_1$};
       \node (w-2) [observed] at (0,-0.2) {$w_2$};
       \node (z-j) [unobserved] at (-1.5,0) {$z$};
-      \node (z-prior) [unobserved] at (-3,0) {$\theta_b$};
-      \node (z-hyper) [label=left:$softmax(\omega_b)$] at (-4.5,0) {};
+      \node (z-prior) [unobserved] at (-3,0) {$\theta$};
+      \node (z-hyper) [label=left:$softmax(\omega)$] at (-4.5,0) {};
       \filldraw [black] (-4.5,0) circle (3pt);
-      \node (w-hyper) [label=right:$softmax(\rho^T\alpha)$] at (2,0) {};
-      \filldraw [black] (2,0) circle (3pt);
+      \node (b-prior) [unobserved] at (2,0) {$\beta$};
+      \node (w-hyper) [label=right:$softmax(\rho^T\alpha)$] at (3.5,0) {};
+      \filldraw [black] (3.5,0) circle (3pt);
       
       \path
       (z-j) edge [post] (w-1)
@@ -327,24 +330,26 @@ Topic model can find representive words of each topic while grouping documents, 
       (z-hyper) edge [post] (z-prior)
       (z-prior) edge [post] (z-j)
   
-      (w-hyper) edge [post] (w-1)
-      (w-hyper) edge [post] (w-2)
+      (b-prior) edge [post] (w-1)
+      (b-prior) edge [post] (w-2)
+      (w-hyper) edge [post] (b-prior)
       ;
   
-      \node [draw,fit=(w-1) (z-prior), inner sep=14pt] (plate-context) {};
+      \node [draw,fit=(w-1) (z-j), inner sep=14pt] (plate-context) {};
       \node [above right] at (plate-context.south west) {$B$};
-      \node [draw,fit=(w-1) (z-j), inner sep=10pt] (plate-token) {};
+      \node [draw,fit=(b-prior) (b-prior), inner sep=14pt] (plate-context) {};
+      \node [above right] at (plate-context.south west) {$K$};
   
     \end{tikzpicture}
     \caption{Plate Diagram of Our Model.}
     \label{fig:nbtm}
 \end{figure}
-Choosing logistc normal instead of Dirichlet function as the topic distribution benefits the further parameters inference (parameters of distribution model can be directly optimized by back propagation). Note that $\mu$ and $\sigma$ are two sets of parameters with the size of the topic number $|K|$, $\omega$ is a set of $|K|$ numbers. Step 2(a) is the same with BTM while in 2(b), each word of a biterm is drawn from the production of word matrix and topic embeddings. $softmax(\rho^T\alpha_z)$ is a probability vector denotes the probability $P(w|z)$ of each word in the whole corpus. The marginal probability of each biterm under topic matrix $\alpha$ and the likelihood of the whole corpus are defined as follows:
+Choosing logistc normal instead of Dirichlet function as the topic distribution benefits the further parameters inference (parameters of distribution model can be directly optimized by back propagation). Note that the whole corpus share a same topic distribution,$\mu$ and $\sigma$ are two parameters needed to be learnt. $softmax(\rho^T\alpha_z)$ is a probability vector denotes the probability $P(w|z)$ of each word in the whole corpus. The marginal probability of each biterm under topic matrix $\alpha$ and the likelihood of the whole corpus are defined as follows:
 \begin{equation}
     \begin{aligned}
         P(b|\alpha) & = P(b_{w_1}|\alpha)P(b_{w_2}|\alpha)\\
-        & = \sum_zP(z)P(b_{w_1}|z,\alpha)P(w_{b_s2}|z,\alpha) \\
-        & = \int P(\omega)P(b_{w_1}|\omega,\alpha)P(w_{b_s2}|\omega,\alpha) d\omega 
+        & = \sum_zP(z)P(b_{w_1}|z,\alpha)P(b_{w_2}|z,\alpha) \\
+        & = \int P(\omega)P(b_{w_1}|\omega,\alpha)P(b_{w_2}|z,\alpha) d\omega 
     \end{aligned}
     \label{eq:biterm}
 \end{equation}
@@ -356,59 +361,61 @@ In the model, word embeddings $\rho$ is pre-defined parameters while topic embed
 To maximize the likelihood is to maximize equation \ref{eq:marginal}:
 \begin{equation}
     \begin{aligned}
-        \log P(B|a) & = \sum_{b}\sum_zP(z)P(b_{w_1}|z,\alpha)P(b_{w_2}|z,\alpha)\\
-        & = \sum_{b}\int P(\omega)P(b_{w_1}|\omega,\alpha)P(b_{w_2}|\omega,\alpha)d\omega
+        \log P(B|a) & = \sum_{b} \log \sum_zP(z)P(b_{w_1}|z,\alpha)P(b_{w_2}|z,\alpha)\\
+        & = \sum_{b}\log \int P(\omega)P(b_{w_1}|\omega,\alpha)P(b_{w_2}|\omega,\alpha)d\omega
     \end{aligned} 
     \label{eq:marginal}
 \end{equation}
 The conditional probability of words $b_{w_1}$ $b_{w_2}$ in biterm b can be calculated by equation \ref{eq:wbi} (the two words belong to one certain topic):
 \begin{equation}
-    P(b_{w_1}|\omega,\alpha)P(b_{w_2}|\omega,\alpha) = \sum_z \theta_{b,z}\beta_{z,b_{w_1}}\theta_{b,z}\beta_{z,b_{w_2}}
+    P(b_{w_1}|\omega,\alpha)P(b_{w_2}|\omega,\alpha) = \theta_z^2\beta_{z,b_{w_1}}\beta_{z,b_{w_2}}
 \label{eq:wbi}
 \end{equation}
-$\theta_{b,z}$ is the topic distribution of biterm b, which is generated by the logistc normal in equation \ref{eq:lognormal}. $\beta_z,b_{w_i}$ is calculated by $softmax(\rho^T\alpha_k)$ in step 1.
+$\theta$ is the topic distribution of the whole corpus, which is generated by the logistc normal in equation \ref{eq:lognormal}. $\beta_z,b_{w_i}$ is calculated by $softmax(\rho^T\alpha_k)$ in step 1.
 \\\\
-The next question is how to infer the parameters. Equation \ref{eq:marginal} can't be directly optimized since the integral of marginal probability $P(b|\alpha)$ is intractable (EM algorithm cannot be used). In LDA and BTM, Gibbs sampling is used to infer parameters. However, such method requires Dirichlet distribution. Since our model draw words based on the production of $\rho^T\alpha$, same method can't be applied. To infer the parameters, we use Variational inference\cite{wainwright2008graphical} instead. Variational inference helps to create a simpler distribution that could best approach the original intractable distribution. By adopting variational inference, the original statistical inference problem becomes an optimization problem. Our goal now is to find a distribution $Q(\omega; \phi)$ that has the least ``difference'' with original untransformed topic distribution of biterm $P(\omega|b)$. Here $\omega$ is the variational distribution and $\phi$ is the variational parameters of q. Once the $Q(\omega; \phi)$ converges, it can replace the real distribution.
-In step 2(a), we assume that the original topic distribution of a biterm is drawn from a Gussian distribution, therefore, q is defined as a Gussian, whose mean and variance is calculated by its parameters. The next step is learning the variational parameters. \cite{kingma2013auto} proposes a method that could automatically learn the variational parameter based on given input (in our model is the biterm set B), the process can be seen as below:
+The next question is how to infer the parameters. Equation \ref{eq:marginal} can't be directly optimized since the integral of marginal probability $P(b|\alpha)$ is intractable (EM algorithm cannot be used). In LDA and BTM, Gibbs sampling is used to infer parameters. However, such method requires Dirichlet distribution. Since our model draw words based on the production of $\rho^T\alpha$, same method can't be applied. To infer the parameters, we use Variational inference\cite{wainwright2008graphical} instead. Variational inference helps to create a simpler distribution that could best approach the original intractable distribution. By adopting variational inference, the original statistical inference problem becomes an optimization problem. Our goal now is to find a distribution $Q(\omega; \phi)$ that has the least ``difference'' with original untransformed topic distribution of the mini-batch $P(\omega|B)$. Here $\omega$ is the variational distribution and $\phi$ is the variational parameters of q. Once the $Q(\omega; \phi)$ converges, it can replace the real distribution.
+In step 2(a), we assume that the original topic distribution of the corpus is drawn from a Gussian distribution, therefore, q is defined as a Gussian, whose mean and variance is calculated by its parameters. The next step is learning the variational parameters. \cite{kingma2013auto} proposes a method that could automatically learn the variational parameter based on given input (in our model is the biterm set B), the process can be seen as below:
 \begin{equation}
-    Q(\omega_b;\phi;b) \leftarrow Gussian(\mu_b,\sigma_b)
+    Q(\omega;B;\phi;) \leftarrow Gussian(\mu,\sigma)
 \label{eq:var1}
 \end{equation}
 \begin{equation}
-    \mu_b = f(\phi_{\mu}, b)
+    \mu = f(\phi_{\mu}, B)
 \label{eq:var2}
 \end{equation}
 \begin{equation}
-    \sigma_b = g(\phi_{\sigma}, b)
+    \sigma = g(\phi_{\sigma}, B)
 \label{eq:var3}
 \end{equation}
-Recall that a biterm is a unordered words pair, and in our model, each word is represented by its embedding. Therefore, in our model, each biterm is defined as the sum of its corresponding words' embeddings (equation \ref{eq:biterm2}). As stated before, the pre-trained word embeddings has semantic and physic meaning (e.g. vec(``phone'') + vec(``apple'') = vec(``iphone'')), such representation uses this good property. Each biterm is assigned with semantic meaning, and this information will be used in parameter inference.
-\begin{equation}
-    b = b_{w_1} + b_{w_2}
-\label{eq:biterm2}
-\end{equation}
-Function $f(\phi_{\mu}, b)$ and $g(\phi_{\sigma}, b)$ are two neural networks with no bias (there is no special requirements of the networks, they could be simple NNs with one linear layer or with more complex structure). They are called ``encoder'' by \cite{kingma2013auto} since they receive a data (or a batch of data) and output the parameters of its corresponding distribution model (in term of Gussian, the outputs are mean and variance). $\phi_{\mu}$ and $\phi_{\sigma}$ are the parameters of this two neural networks respectively, and they will be updated by back propagation.\\\\
-The final step is defining the loss function. Recall that $Q(\omega;b;\phi)$ is the  approximation topic distribution (un-softmaxed) and $P(\omega|b)$ is the posterior probability distribution, $\phi$ is the parameter set of q, we want to minimize their ``difference'' (it's obviously that a simple distribution of $Q(\omega;b;\phi)$ will benefit the inference, which is one reason why we use logistc normal in step 2(a)). The ``difference'' between $P(\omega|b)$ and $Q(\omega;b;\phi)$ is commonly evaluated by the  the Kullback-Leibler (KL) divergence \cite{yang2017understanding}. The KL divergence for variational inference is defined as follows: 
+Recall that a biterm is a unordered words pair, and in our model, each word is represented by its embedding. Therefore, in our model, each biterm is defined as the sum of its corresponding words' embeddings (equation \ref{eq:biterm2}), and the whole corpus is represented by the sum of all the biterms. As stated before, the pre-trained word embeddings has semantic and physic meaning (e.g. vec(``phone'') + vec(``apple'') = vec(``iphone'')), such representation uses this good property. Each biterm is assigned with semantic meaning, and this information will be used in parameter inference.
 \begin{equation}
     \begin{aligned}
-        KL(Q(\omega;b,\phi)||P(\omega|b)) & = \int Q(\omega;b,\phi)\log\frac{Q(\omega;b,\phi)}{P(\omega|b)} d\omega\\
-        & = - \int Q(\omega;b,\phi)\log\frac{P(\omega|b)}{Q(\omega;b,\phi)} d\omega\\
-        & = - \int Q(\omega;b,\phi)\log\frac{P(\omega, b)}{Q(\omega;b,\phi)P(b)} d\omega\\
-        & = - L[Q(\omega;b,\phi)] + \log P(b)\\
+        & b = b_{w_1} + b_{w_2}\\
+    \end{aligned}
+\label{eq:biterm2}
+\end{equation}
+Function $f(\phi_{\mu}, B)$ and $g(\phi_{\sigma}, B)$ are two neural networks (there is no special requirements of the networks, they could be simple NNs with one linear layer or with more complex structure). They are called ``encoder'' by \cite{kingma2013auto} since they receive a data (or a batch of data) and output the parameters of its corresponding distribution model (in term of Gussian, the outputs are mean and variance). $\phi_{\mu}$ and $\phi_{\sigma}$ are the parameters of this two neural networks respectively, and they will be updated by back propagation.\\\\
+The final step is defining the loss function. Recall that $Q(\omega;B;\phi)$ is the  approximation topic distribution (un-softmaxed) and $P(\omega|B)$ is the posterior probability distribution, $\phi$ is the parameter set of q, we want to minimize their ``difference'' (it's obviously that a simple distribution of $Q(\omega;B;\phi)$ will benefit the inference, which is one reason why we use logistc normal in step 2(a)). The ``difference'' between $P(\omega|B)$ and $Q(\omega;B;\phi)$ is commonly evaluated by the  the Kullback-Leibler (KL) divergence \cite{yang2017understanding}. The KL divergence for variational inference is defined as follows: 
+\begin{equation}
+    \begin{aligned}
+        KL(Q(\omega;B,\phi)||P(\omega|B)) & = \int Q(\omega;B,\phi)\log\frac{Q(\omega;B,\phi)}{P(\omega|B)} d\omega\\
+        & = - \int Q(\omega;B,\phi)\log\frac{P(\omega|B)}{Q(\omega;B,\phi)} d\omega\\
+        & = - \int Q(\omega;B,\phi)\log\frac{P(\omega, B)}{Q(\omega;B,\phi)P(B)} d\omega\\
+        & = - L[Q(\omega;B,\phi)] + \log P(B)\\
     \end{aligned} 
     \label{eq:KL}
 \end{equation}
 \begin{equation}
     \begin{aligned}
-    L[Q(\omega;b,\phi)] & = \int Q(\omega;b,\phi)\log P(\omega, b) d\omega + \int Q(\omega;b,\phi) \log Q(\omega;b,\phi) d\omega\\
-    & = \mathbb{E}_q[\log(b|\omega)] - KL(Q(\omega;b,\phi)||P(\omega))
+    L[Q(\omega;B,\phi)] & = \int Q(\omega;B,\phi)\log P(\omega, B) d\omega + \int Q(\omega;B,\phi) \log Q(\omega;B,\phi) d\omega\\
+    & = \mathbb{E}_q[\log P(B|\omega))] - KL(Q(\omega;B,\phi)||P(\omega))
     \end{aligned} 
     \label{eq:elbo}
 \end{equation}
-KL divergence can be treated as information loss, it is always $\geq$ 0. When KL divergence equals 0, $Q(\omega;b,\phi)$ and $P(\omega|b)$ are the same distribution. In our model, we want the KL divergence could be as small as possible, and this equals to maximize $L[Q(\omega;b,\phi)]$ (the Evidence Lower Bound, $\mathbb{E}$ is the expectation). The final loss of the mini-batch is then defined as shown in equation \ref{eq:loss}:
+KL divergence can be treated as information loss, it is always $\geq$ 0. When KL divergence equals 0, $Q(\omega;B,\phi)$ and $P(\omega|B)$ are the same distribution. In our model, we want the KL divergence could be as small as possible, and this equals to maximize $L[Q(\omega;B,\phi)]$ (the Evidence Lower Bound, $\mathbb{E}$ is the expectation). The final loss of the mini-batch is then defined as shown in equation \ref{eq:loss}:
 \begin{equation}
     \begin{aligned}
-        loss(model, B, \rho) & = \frac{\sum_{b \in B}\left[KL(Q(\omega_b;b,\phi_b)||P(\omega_b))- \mathbb{E}_q\log P(b|\omega_b,\alpha)\right]}{|B|}  
+        loss(model, B, \rho) & = KL(Q(\omega;B,\phi_B)||P(\omega)) - \sum_{b \in B}\mathbb{E}_q\left[\log P(b|\omega,\alpha)\right] 
     \end{aligned}    
     \label{eq:loss}
 \end{equation}
@@ -431,16 +438,16 @@ All the variables in equation \ref{eq:loss} can be directly computed. By using t
     Initialise topic embeddings $\alpha$ and variational parameters $\phi$ randomly \\
     \For{$i = 1$ to $max\_iteration$}
     {
-        Compute topic distribution of B: $\beta = softmax(\rho^T\alpha) $\\
+        Compute word distribution of all topics: $\beta = softmax(\rho^T\alpha) $\\
         Split $B$ into smaller batches $B_{batches}$\\
         \For{
             $X \in B_{batches}$
         }{
+            Compute $\mu$ = $f(\phi_{\mu},B)$\\
+            Compute $\sigma$ = $g(\phi_{\sigma},B)$\\
+            Draw $\theta$ $\sim$ $logistc\_normal(\phi_{\mu},\phi_{\sigma})$\\
             \For{$biterm$ b $\in X$}{
-                Compute $\mu_b$ = $f(\phi_{\mu},b)$\\
-                Compute $\sigma_b$ = $g(\phi_{\sigma},b)$\\
-                Draw $\theta_b$ $\sim$ $logistc\_normal(\phi_{\mu},\phi_{\sigma})$\\
-                Compute $P(b_{w_1}|\theta_b)P(b_{w_2}|\theta_b) = (\theta_b^T)^2(\beta_{.,b_{w_1}}*\beta_{.,b_{w_2}})$
+                Compute $P(b_{w_1}|\theta)P(b_{w_2}|\theta) = (\theta^T)^2(\beta_{.,b_{w_1}}*\beta_{.,b_{w_2}})$
                 \label{line:16}
             }
         }
@@ -472,18 +479,18 @@ In equation \ref{eq:doc1}, the topic distribution $P(z|b)$ of a document is repr
     \KwIn{$d$: a document (encoded)}
     \KwOut{$P(z|d)$: the topic distribution of d}
     Count the number of each biterm b in document $d$ $n_d(b)$\\
+    Compute $\mu$ = $f(\phi_{\mu},B)$\\
+    Compute $\sigma$ = $g(\phi_{\sigma},B)$\\ 
+    Draw $\theta$ $\sim$ $logistc\_normal(\mu,\sigma)$\\
     \For{b $\in$ $B_d$}
     {
         Compute $P(b|d) = \frac{n_d(b)}{\sum_bn_d(b)}$\\
-        Compute $\mu_b$ = $f(\phi_{\mu},b)$\\
-        Compute $\sigma_b$ = $g(\phi_{\sigma},b)$\\ 
-        Draw $\theta_b$ $\sim$ $logistc\_normal(\mu_b,\sigma_b)$\\
     }
     \For{topic z $\in$ Z}
     {
         \For{b $\in$ $B_d$
         }{
-            Compute $P(z|b)$ = $\theta_{b_z}\beta_{z,b_{w_1}}\beta_{z,b_{w_2}}$\\
+            Compute $P(z|b)$ = $\theta_{z}\beta_{z,b_{w_1}}\beta_{z,b_{w_2}}$\\
             Compute $temp_b = P(z|b)P(b|d)$
         }
         Compute $P(z|d) = \sum_b temp_b$
@@ -491,15 +498,60 @@ In equation \ref{eq:doc1}, the topic distribution $P(z|b)$ of a document is repr
 \end{algorithm}
 \\\\Our model is still under implementation, topic embeddings $\alpha$ and variational parameters $\phi$ are represented by three fully connected layers rather than matrixes to make them trainable. There are several basic hyperparameters in our implementation:
 \begin{enumerate}
-    \item $|K|$: the number of topics. Same with BTM, $|K|$ is predefined and can't be changed.
+    \item $|Z|$: the number of topics. Same with BTM, $|Z|$ is predefined and can't be changed.
     \item $|V|$: the number of vocabularies. Vocabularies could be from documents outside the corpus. Larger $|V|$ requires more memory and computation cost while the trained model can infer more documents.
     \item $|L|$: the dimensionality of word embeddings. 
     \item $\rho$: the pre-trained word embeddings. In our model description, each column represents a word embedding, however, for the convenience, in our implementation, $\rho$ is transposed ($\rho^T$, with size $|V|\times|L|$). The embeddings can be trained by any algorithms (such as Word2vec, Glove). 
-    \item Hidden size: in our implementation, $f(b,\phi_\mu)$ and $g(b,\phi_\sigma)$ are two fully connected layers whose input size is hidden size and output size is $|K|$. It decides the number of parameters of $\phi$ to be learned.
-    \item Activation function: function that adds nonlinearity to $f(b,\phi_\mu)$ and $g(b,\phi_\sigma)$.
+    \item Hidden size: in our implementation, $f(b,\phi)$ and $g(b,\phi)$ are two fully connected layers whose input size is hidden size and output size is $|Z|$. It decides the number of parameters of $\phi$ to be learned.
+    \item Activation function: function that adds nonlinearity to $f(b,\phi)$ and $g(b,\phi)$.
     \item Batch size: the number of samples fed to the model each time
 \end{enumerate}
+\begin{table}[!htbp]
+    \centering
+    \hspace{0.5cm}
+    \begin{tabular}{|p{45pt}|p{210pt}|p{30pt}|p{30pt}|p{30pt}|p{30pt}|}
+        \hline
+        Topic ID & Top\_words(10) & $C_p$ & $C_a$ & sum\\ \hline
+        1 & digital issue service online resource disease medical comprehensive payment center & 0.238 & 0.188 & 0.426\\\hline
+    2 & university library edu comprehensive chicago wiki britannica school study center & 0.260 & 0.188 & 0.448\\\hline
+    3 & modern publication center journal theoretical study society edu graduate evolutionary & 0.292 & 0.186 & 0.478\\\hline
+    4 & information news online com home page research index edu world & 0.247 & 0.202 & 0.449\\\hline
+    5 & international information library instruction professional definition link marketing community research & -0.037 & 0.139 & 0.102\\\hline
+    6 & geographic grant writing nasa gov link volleyball page reliable history & -0.028 & 0.197 & 0.168\\\hline
+    7 & university graduate resource society directory health undergraduate academic center student & 0.472 & 0.239 & 0.711\\\hline
+    8 & project data graduation event interview congress topic issue expert conflict & 0.150 & 0.116 & 0.266\\\hline
+    & & 1.594 & 1.455 & 3.049\\\hline
+    \end{tabular}
+    \caption{Experimental results of our model}
+    \label{tab:EBTM1}
+\end{table}
+Table \ref{tab:EBTM1} shows the experimental results of our model on SearchSnippets dataset. The word embeddings is trained on the dataset itself through Word2vec with 300 dimension and 200 iteration. Hidden size is set to 800, and ``tanh'' is used as the activation function. The model gets an average 3.103 sum score in 6 round experiments. By analyzing the results, we can found that certain words have higher probability $P(w|z)$ in all topics, and most of the documents are inclined to one topic, leading the similarity among generated topics. For instance, in this table, topic 7 get the higest sum coherence, and it's obviously that this topic is about education, student. However, topic 2 and 3 can also be regarded as education-related, and they share some same words with topic 7. This observation is proven by tracing back the topic distribution $\theta$: more than 99.99\% documents in the whole corpus belongs to one topic. 
+This dataset contains 8 different topics, therefore we want to increase the diversity of generated topics. The improvement is planed to be done in our future work.
 
 
-\section{Integration, evaluation and visualization}
-Since our model is still under implementation, the final model is chosen as an ensemble of our trained TextCNN model and BTM.
+\section{Integration and visualization}
+Since our model is still under experiment, the final integration is chosen as an ensemble of our trained TextCNN model and BTM. The whole process is wrapped into 4 separate Python scripts: preparedata.py, training.py, filtering.py and clustering.py. To see the demo, directly run the last one (to test our model, run with additional command ``\verb|--|model ebtm''). According to the observation in experiments, we split the generated topics into three rudimentary categories based on their ambiguity:
+\begin{enumerate}
+    \item clear topics: topics whose first 10 words (sorted by $P(w|z)$) are highly correlated with each other and their implication can be easily understood by human judgments 
+    \item ambiguous topics: most of whose first 10 words are in one scope while the rest could be from other scopes (such as word ``health'' appears with ``university  graduate  resource  society  directory   undergraduate  academic center student``'). Exclude such words, the topic could be easily understood.
+    \item noise: topics whose first 10 words come from several different scopes and cannot interpret.
+\end{enumerate}
+In terms of the coherence, based on the experimental results and our own judgments, we make a standard that if the sum coherence of a topic is lower than 0.3, the topic is a noise. Roughly when its sum coherence reaches 0.6, the topic can be regarded as clear. Note that the coherence calculation requires an additional corpus as its reference. As mentioned before, in our experiments, the coherence is computed with the help of Palmetto's online service, whose reference is a collection of english Wikis. When use different reference, the standards will change. In our implementation, we exclude all noisy topics, the remains are visualized by following ways:
+\begin{enumerate}
+    \item Word cloud: word cloud is commonly used in text visualization tasks, it can help to identify the key information directly and clearly. The font of a word in a word cloud is decided by its ``weight'', bigger font means the word is more important in the corpus. For each topic, we generate a unique word cloud based on its responding $P(w|z)$.
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[width=3.5in]{healthnews_word_cloud.jpg}
+        \caption{Example of Word Clouds}
+        \label{fig:wordcloud}
+    \end{figure}
+    \\Figure \ref{fig:wordcloud} shows an example of word cloud generated from the our COVID-19 dataset with BTM. For each topic, its key words can be found easily.
+    \item Bar chart: word cloud doesn't contain statistical information while bar chart can directly show the trend. For our purpose, we want to know what are the most discussed topics in the corpus, and there are two responding data containing such information: (1) the theoretical topic distribution $theta$; (2) the real topic distribution after assigning the document to the topic that has the highest $P(z|d)$ in that document.
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[width=5in]{healthnews_distribution.jpg}
+        \caption{Example of Bar chart}
+        \label{fig:barchart}
+    \end{figure}
+    \\Figure \ref{fig:barchart} shows an example of the bar chart, blue bars represents the true distribution while the orange bars represents the theoretical distribution.
+\end{enumerate}

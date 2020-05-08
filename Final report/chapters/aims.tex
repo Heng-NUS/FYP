@@ -1,7 +1,7 @@
-The general aim of this project is analyzing social media data to surveille healthcare condition. It can be detailed as follow:
+The general aim of this project is analyzing social media data to surveil healthcare condition. It can be detailed as follow:
 \begin{enumerate}
-    \item Healthcare-related textual information should be extracted and modeled for the purpose of healthcare surveillance.
-    \item Robust clutering model are required for accurate detection of healthcare events.
+    \item Healthcare-related textual information should be correctly recognized and extracted.
+    \item Robust topic model is required for accurate grouping and naming healthcare events.
 \end{enumerate}
 
 The key objectives of this project are:
@@ -9,7 +9,7 @@ The key objectives of this project are:
 \begin{enumerate}
     \item Collecting data of a certain social media platform. This data can be either extracted from an existing data set or crawled from that platform. If existing data set can’t meet my requirement, my own data set will be made.
     \item Filtering data. In this process, a filtering rule should be established, possible solutions include using related verbal list, using NLP to classify raw data
-    \item Designing algorithm that can successfully predict the outbreak of diseased and its propagation direction with high accuracy, and implementation. This includes (1) setting a benchmark to evaluate the accuracy; (2) finding a suitable model maxing the accuracy.
-    \item Experiment. Testing and evaluating this model, and compare it with others’ work. In this stage, re-implementation may be needed.
-    \item Result visualization. Since the outbreak is dynamic, visualizing the result can be more readable.
+    \item Designing and training a supervised model that can successfully classify whether a document is healthcare-related or not.
+    \item Designing an unsupervised topic model that can generate interpretable topics.
+    \item Result visualization. The final result should be instructive and easy to read. Therefore, some uninterpretable topics should be excluded (based on coherence) and the remaining should be visualized.
 \end{enumerate}

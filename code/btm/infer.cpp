@@ -33,7 +33,6 @@ void Infer::load_para(string model_dir) {
  
   string pt2 = model_dir + "pw_z";
   pw_z.load(pt2);
-  printf("n(z)=%d, n(w)=%d\n", pw_z.rows(), pw_z.cols());
   assert(pw_z.rows() > 0 && abs(pw_z[0].sum() - 1) < 1e-4);
 }
 

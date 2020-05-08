@@ -15,10 +15,15 @@ Autumn semester (weekly):
 Spring semester: due to Covid-19, the progresses were recorded monthly
 \begin{itemize}
     \item Dec 2019: Rewrote the implementation, fixed some bugs and added more functions for preprocessing
-    \item Jan 2019: Spring festival
-    \item Feb 2019: Change the project design, start to do research on topic model, found more healthcare related dataset.
-    \item Mar 2019: Finished the training of supervised model, experimented with some topic modeling algorithms. Wrote sections about this part.
-    \item Apr 2019: designed and implemented our own model and did experiments on it.
+    \item Jan 2020: Spring festival
+    \item Feb 2020: Change the project design, start to do research on topic model, found more healthcare related dataset.
+    \item Mar 2020: Finished the training of supervised model, experimented with some topic modeling algorithms. Wrote sections about this part.
+    \item Apr 2020: designed and implemented our own model and did experiments on it.
+    \item May 2020: implemented the visualization layer and integrated all the components in our design. Finished the dissertation.
 \end{itemize} 
 
 \section{Conclusion and Future work}
+In this project, we collected data from several open-source datasets and created own labeled dataset. In addition, we proposed a complete framework for uncovering healthcare events through analyzing social media data. Especially, our framework uses two separate models to detect unseen topics: one supervised model used to filter out irrelevant data and one unsupervised model used to generate hidden topics. The outcomes then are visualized by word clouds and bar charts. During implementing the framework, we proposed a new topic model designed for modeling short texts. Although it is still under experiments, the experimental results shown that it already outperform the traditional LDA interms of coherence on our dataset. It's worth noting that both supervise algorithm and topic modeling used in our framework have their own limitations: the performance of a supervised model depends highly on its training set, for words that are not in training set, the accuracy will be affected; toping modeling can distinguish topics with obvious difference (such as bussiness and sports), however, it cannot separate topics that are semantically similar with each other without overlaps. 
+
+\subsection{Future work}
+In section \ref{sec:modeling} we proposed a trial version of our topic model, and listed some problems with it. In the future, we will solve those problems (especially the lack of diversity problem) first. After that, we plan to make our model dynamical in two aspects: (1) changing the topic number dynamically and automatically based on the given data; (2) inheriting parameters from last time slice. These are motivated by the fact that the number of discussed topic during each time slice is different, and some topics are be discussed in continuous time slices.
