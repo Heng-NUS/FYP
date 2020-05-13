@@ -10,7 +10,7 @@ This repository contains the complete implementation of my final year project, d
 - nltk 3.4.5
 
 ## Usage ##
-The code has been tested on MacOS, Windows and Ubuntu. For mac users, there is a known bug caused by the multiprocess package of Python, you can ignore the warning message since it doesn't affect the output
+The code has been tested on MacOS, Windows and Ubuntu. For mac users, there is a known bug caused by the multiprocess package of Python, you can ignore the warning message since it doesn't affect the output. The scripts are in the 'code' file, and they are independent from each other.
 
 **1. Preprocess data**   
   	 We provide a python script to preprocess data
