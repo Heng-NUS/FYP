@@ -1,13 +1,17 @@
 import argparse
+import sys
+sys.path.append('./preprocess/')
+
 import gensim
 from gensim.corpora import Dictionary
 from gensim.models.phrases import Phrases
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from wordcloud import STOPWORDS
+
+from config import SUconfig
 from model import *
 from utils import *
-from config import SUconfig
 
 STOP_WORDS = stopwords.words('english')
 

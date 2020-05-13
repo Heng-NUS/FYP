@@ -253,7 +253,7 @@ def extract_and_save_biterm(fname,
     biterms = {}
     i = 0
     doc_bitems = []
-    for count, doc in enumerate(docs):
+    for doc in docs:
         d_bi = {}
         doc = sorted(doc)
         for x in range(len(doc) - 1):
@@ -309,6 +309,7 @@ class UnDataset(object):
         self.biterms = None
         self.vocab = None
         self.embeddings = None
+        self.doc_biterms = None
 
     def __getitem__(self, item):
 
@@ -328,10 +329,11 @@ class UnDataset(object):
         biterm_path = os.path.join(dirc, fname + '_bit.pkl')
         embed_path = os.path.join(dirc, fname + '_emb.pkl')
         doc_path = os.path.join(dirc, fname + '_doc.pkl')
+        doc_biterm_path = os.path.join(dirc, fname + '_doc_bit.pkl')
         if not os.path.exists(dirc) or not os.path.isfile(
                 dic_path) or not os.path.isfile(
                     biterm_path) or not os.path.isfile(
-                        embed_path) or not os.path.isfile(doc_path):
+                        embed_path) or not os.path.isfile(doc_path) or not os.path.isfile(doc_biterm_path):
             extract_and_save_biterm(filename,
                                     embed_size=self.config.embed_size,
                                     min_count=self.config.min_count,
@@ -343,6 +345,7 @@ class UnDataset(object):
         self.biterms = [self.biterm_dic[i]
                         for i in range(len(self.biterm_dic))]
         embeddings = [embeddings[i] for i in range(len(embeddings))]
+        self.doc_biterms = pickle.load(open(doc_biterm_path, 'rb'))
         self.embeddings = embeddings
         print("Loaded {} documents".format(len(self.docs)))
         print("Loaded {} biterms".format(len(self.biterms)))
@@ -551,7 +554,7 @@ class EBTM(nn.Module):
                  t_hidden_size,
                  embeddings,
                  theta_act="tanh",
-                 enc_drop=0.5, 
+                 enc_drop=0.5,
                  batch_size=2048,
                  train_embeddings=False):
         super(EBTM, self).__init__()
@@ -564,6 +567,7 @@ class EBTM(nn.Module):
         self.t_drop = nn.Dropout(enc_drop)
         self.batch_size = batch_size
         self.to(device)
+        self.theta = None
 
         self.theta_act = self.get_activation(theta_act)
 
@@ -672,7 +676,7 @@ class EBTM(nn.Module):
         else:
             kld_theta = None
 
-        self.theta = theta
+        self.theta = theta.detach().cpu().numpy()[0]
         # get \\beta
         beta = self.get_beta()
 
@@ -718,41 +722,35 @@ class EBTM(nn.Module):
     def add_optimizer(self, optimizer):
         self.optimizer = optimizer
 
-    def infer(self, doc, biterm_dic):
+    def infer(self, docs, biterm_dic):
         self.eval()
-        '''infer topic distribution of a document
-        doc: a set of biterm (idx, count)
+        '''infer topic distribution of documents
+        doc: a dictionary of biterms (idx, count)
         '''
-        biterms = list(doc.keys())
+        results = []
         with torch.no_grad():
-            sum_biterms = sum(doc.values())
-            p_b_ds = list(doc.values())
-            p_b_ds = [[x / sum_biterms for x in p_b_ds]]
-            p_b_ds = torch.Tensor(p_b_ds).to(device)
-            # decode p_b_d = p(b|d)
+            theta = torch.Tensor(self.theta.reshape((-1,1)))
+            beta = self.get_beta().detach().cpu()
+            for doc in docs:
+                biterms = list(doc.keys())
+                sum_biterms = sum(doc.values())
+                p_b_ds = list(doc.values())
+                p_b_ds = [[x / sum_biterms for x in p_b_ds]]
+                p_b_ds = torch.Tensor(p_b_ds)
+                # decode p_b_d = p(b|d)
 
-            emb_batch = torch.zeros(len(biterms), self.emb_size).to(device)
-            for i in range(len(biterms)):
-                w1, w2 = biterm_dic[biterms[i]]
-                emb_batch[i] = self.rho[w1] + self.rho[w2]
+                indexes = torch.LongTensor([biterm_dic[x] for x in biterms])
+                temp = beta.T[indexes].prod(1)
+                p_z_bs = temp.T * theta
+                sum_zb = p_z_bs.sum(1, keepdim=True)
+                p_z_bs /= sum_zb
+                #p_z_b = p(z|b)
 
-            theta, kld_theta = self.get_theta(emb_batch)
-            beta = self.get_beta()
-
-            p_z_bs = torch.zeros(self.num_topics, len(biterms)).to(device)
-            for i in range(len(biterms)):
-                w1, w2 = biterm_dic[biterms[i]]
-                for j in range(self.num_topics):
-                    p_z_bs[j][i] = theta[0][j] * beta[j][w1] * beta[j][w2]
-            sum_zb = p_z_bs.sum(1)
-            for i in range(len(sum_zb)):
-                p_z_bs[i] /= sum_zb[i]
-            #p_z_b = p(z|b)
-
-            p_z_ds = torch.softmax(torch.mm(p_z_bs, p_b_ds.T), dim=0)
-            #p_z_d = p(z|d)
-
-            return p_z_ds.cpu().numpy().reshape(-1)
+                p_z_ds = torch.mm(p_z_bs, p_b_ds.T)
+                #p_z_d = p(z|d)
+                
+                results.append(p_z_ds.cpu().numpy().reshape(-1).tolist())
+        return results
 
     def show_topics(self, vocab, max_words):
         '''
@@ -770,21 +768,22 @@ class EBTM(nn.Module):
                 topics.append(' '.join(topic_words))
                 print('Topic {}: {}'.format(k, topic_words))
             return topics
-    
+
     def topics(self, vocab, max_words):
         '''
         Return topics without display on the console
         '''
         self.eval()
-        theta = self.theta.detach().cpu().numpy()[0]
+        theta = self.theta
         with torch.no_grad():
-            betas = self.get_beta()
+            betas = self.get_beta().cpu().numpy()
             topics = []
             for k in range(self.num_topics):
                 beta = betas[k]
-                top_words = list(beta.cpu().numpy().argsort()
+                top_words = list(beta.argsort()
                                  [-max_words:][::-1])
                 topic_words = [(vocab[a], beta[a]) for a in top_words]
-                topics.append(top_words)
-            topics = sorted(zip(theta, topics), key=lambda x: x[0], reverse=True)
+                topics.append(topic_words)
+            topics = sorted(zip(theta, topics),
+                            key=lambda x: x[0], reverse=True)
             return topics

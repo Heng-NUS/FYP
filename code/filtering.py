@@ -9,7 +9,6 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from wordcloud import STOPWORDS
 from model import *
-from utils import *
 from config import SUconfig, UNconfig
 
 parser = argparse.ArgumentParser(description='Filtering Data')
@@ -28,12 +27,11 @@ def filter(fname, vocab, model):
     '''
     docs = []
     data = []
-    prediction = None
     model = model.to(device)
     model.eval()
     if not os.path.exists("./temp/"):
         os.makedirs('./temp/')
-    out_file = './temp/health_tweets.txt'
+    out_file = os.path.join('./temp', args.dataset+'.txt')
     with open(fname, encoding="utf-8") as f:
         for i, line in enumerate(f):
             if line == '\n': 

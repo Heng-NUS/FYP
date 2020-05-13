@@ -66,12 +66,10 @@ def indexFile(pt, res_pt):
         wids = [w2id[w] for w in ws]
         print(' '.join(map(str, wids)), file=wf)
 
-
 def write_w2id(res_pt):
     wf = open(res_pt, 'w')
     for w, wid in sorted(w2id.items(), key=lambda d: d[1]):
         print('%d\t%s' % (wid, w), file=wf)
-
 
 def read_voca(pt):
     voca = {}
@@ -80,10 +78,8 @@ def read_voca(pt):
         voca[int(wid)] = w
     return voca
 
-
 def read_pz(pt):
     return [float(p) for p in open(pt).readline().split()]
-
 
 def read_pzd(pt):
     probabilities = []
@@ -91,7 +87,6 @@ def read_pzd(pt):
         for line in f:
             probabilities.append([float(x) for x in line.split()])
     return probabilities
-
 
 def BTMTopics(pt, vocab, pz, max_words=args.maxwords):
     k = 0
@@ -106,7 +101,6 @@ def BTMTopics(pt, vocab, pz, max_words=args.maxwords):
     # topics = sorted(topics, key=lambda x: x[0], reverse=True)
     return topics
 
-
 def get_request(url):
     for _ in range(5):
         try:
@@ -114,7 +108,6 @@ def get_request(url):
         except:
             pass
     return None
-
 
 def get_coherence(topic):
     try:
@@ -126,7 +119,7 @@ def get_coherence(topic):
 
 
 if __name__ == "__main__":
-    vis_dir = './visual/'
+    vis_dir = './visualization/'
     if not os.path.exists(vis_dir):
             os.makedirs(vis_dir)
     for word in stop_words:
@@ -182,7 +175,7 @@ if __name__ == "__main__":
             if avg_kl < 0.005:
                 break
         topics = ebtm.topics(undataset.vocab, 10)
-
+        p_z_ds = ebtm.infer(undataset.doc_biterms, undataset.biterm_dic)
     elif args.model == 'lda':
         pass
     else:
@@ -237,6 +230,7 @@ if __name__ == "__main__":
     plt.margins(x=0, y=0)
     plt.tight_layout()
     plt.savefig(os.path.join(vis_dir, args.dataset + '_word_cloud.jpg'))
+    plt.show()
 
 
     

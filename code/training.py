@@ -7,8 +7,6 @@ import torch.optim as optim
 
 from config import SUconfig, UNconfig
 from model import *
-from preprocess import *
-from utils import *
 
 parser = argparse.ArgumentParser(description='Train supervised model')
 parser.add_argument('--embed', type=str, help='the path of embeddings')
